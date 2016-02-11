@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Monitorización CPD</string>
+    <string name="hello">Bienvenido</string>
+    <string name="about">About</string>
+    <string name="about_credits"></string>
+    <string name="about_descrip">Esta aplicación de momento sólo recibirá alertas</string>
+
+</resources>
