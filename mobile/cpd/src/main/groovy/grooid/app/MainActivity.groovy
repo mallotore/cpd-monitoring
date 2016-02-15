@@ -1,6 +1,5 @@
 package grooid.app
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,6 +9,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v4.content.LocalBroadcastManager
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -23,74 +23,7 @@ import groovy.transform.CompileStatic
 import com.arasthel.swissknife.annotations.OnUIThread
 
 @CompileStatic
-class MainActivity extends Activity {
-
-
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String PROPERTY_REG_ID = "registration_id";
-
-    String SENDER_ID = "538459826415";
-
-    static final String TAG = "GCMDemo";
-    GoogleCloudMessaging gcm;
-
-    TextView mDisplay;
-    Context context;
-    String regid;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mDisplay = (TextView) findViewById(R.id.display);
-        context = getApplicationContext();
-
-        gcm = GoogleCloudMessaging.getInstance(this);
-
-        new RegisterBackground().execute();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    @Override
-    protected void onResume(){
-        super.onResume();
-
-    }
-    class RegisterBackground extends AsyncTask(String,String,String){
-
-        @Override
-        protected String doInBackground(String... arg0) {
-            // TODO Auto-generated method stub
-            String msg = "";
-            try {
-                if (gcm == null) {
-                    gcm = GoogleCloudMessaging.getInstance(context);
-                }
-                regid = gcm.register(SENDER_ID);
-                msg = "Dvice registered, registration ID=" + regid;
-                Log.d("111", msg);
-                sendRegistrationIdToBackend(regid);
-
-            } catch (IOException ex) {
-                msg = "Error :" + ex.getMessage();
-            }
-            return msg;
-        }
-
-        @Override
-        protected void onPostExecute(String msg) {
-            mDisplay.append(msg + "\n");
-
-        }
-        private void sendRegistrationIdToBackend(String regid) {
-            // this code will send registration id of a device to our own server.
-        }}
-
-
+class MainActivity extends AppCompatActivity {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
@@ -102,7 +35,7 @@ class MainActivity extends Activity {
     @Override
     void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main)
+        setContentView(R.layout.activity_main)
 
         mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {

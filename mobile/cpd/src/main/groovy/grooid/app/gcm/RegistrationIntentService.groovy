@@ -26,14 +26,16 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID
-import grooid.app.R;
+import grooid.app.R
+import groovy.transform.CompileStatic;
 
 import java.io.IOException;
 
+@CompileStatic
 public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
-    private static final String[] TOPICS = {"global"};
+    private static final String[] TOPICS = ["global"];
 
     public RegistrationIntentService() {
         super(TAG);
@@ -51,12 +53,10 @@ public class RegistrationIntentService extends IntentService {
             // See https://developers.google.com/cloud-messaging/android/start for details on this file.
             // [START get_token]
             InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken("584278654489", GoogleCloudMessaging.INSTANCE_ID_SCOPE,null);
+            String token = instanceID.getToken("584278654489",
+                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // [END get_token]
             Log.i(TAG, "GCM Registration Token: " + token);
-
-            sendRegistrationToServer(token);
-            Log.v(TAG,"Token: "+token);
 
             // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
@@ -68,6 +68,7 @@ public class RegistrationIntentService extends IntentService {
             // sent to your server. If the boolean is false, send the token to your server,
             // otherwise your server should have already received the token.
             sharedPreferences.edit().putBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, true).apply();
+            // [END register_for_gcm]
             // [END register_for_gcm]
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);

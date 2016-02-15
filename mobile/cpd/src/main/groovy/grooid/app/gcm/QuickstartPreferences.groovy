@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package grooid.app.gcm;
+package grooid.app.gcm
 
+import groovy.transform.CompileStatic;
+
+@CompileStatic
 public class QuickstartPreferences {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";

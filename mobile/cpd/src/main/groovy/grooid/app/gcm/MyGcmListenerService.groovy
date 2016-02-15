@@ -28,8 +28,10 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService
 import grooid.app.MainActivity
-import grooid.app.R;
+import grooid.app.R
+import groovy.transform.CompileStatic;
 
+@CompileStatic
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
