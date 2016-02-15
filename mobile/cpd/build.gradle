@@ -3,15 +3,17 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
-        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.6'
+        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.8'
         classpath 'net.kaleidos.gradle.plugins:emerger:0.0.2'
+        classpath 'com.google.gms:google-services:1.5.0'
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'groovyx.grooid.groovy-android'
 apply plugin: 'net.kaleidos.gradle.plugins.emerger'
+apply plugin: 'com.google.gms.google-services'
 
 android {
 
@@ -40,7 +42,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-
 }
 
 repositories {
@@ -58,7 +59,7 @@ dependencies {
     compile ('org.codehaus.groovy:groovy-json:2.4.0-rc-1') {
         transitive = false
     }
-
+    compile 'com.google.android.gms:play-services-gcm:8.3.0'
     // Getting rid of boiler plate code
     compile 'com.arasthel:swissknife:1.3.1'
     // Rest handling
@@ -74,5 +75,4 @@ dependencies {
         exclude group: 'org.codehaus.groovy'
         exclude group: 'junit'
     }
-
 }
