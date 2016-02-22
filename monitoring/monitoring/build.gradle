@@ -46,7 +46,7 @@ task extractNativeJar(type: Copy) {
   into 'native-libs'
 }
 
-mainClassName = 'com.mallotore.Monitor'
+mainClassName = 'com.mallotore.Main'
 
 run {
   dependsOn 'extractNativeJar'
@@ -61,5 +61,5 @@ tasks.withType(Test) {
 
 test{
    dependsOn 'extractNativeJar'
-  jvmArgs = [ '-Dorg.hyperic.sigar.path=./native-libs' ] 
+   jvmArgs = [ '-Dorg.hyperic.sigar.path=./native-libs' ] 
 }
