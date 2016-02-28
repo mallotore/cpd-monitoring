@@ -13,7 +13,7 @@ class Main {
         def beans = jmx.export {
             bean(
                 target: new DiskSpace(),
-                name: new ObjectName("com.mallotore.monitoring.DiskSpace:type=Object"),
+                name: new ObjectName("com.mallotore.monitoring.DiskSpace:type=GroovyJmx"),
                 attributes: ["diskRootsSpace"],
                 operations: ["collectInformation"]
             )
@@ -21,7 +21,7 @@ class Main {
         beans += jmx.export {
             bean(
                 target: new OperatingSystem(),
-                name: new ObjectName("com.mallotore.monitoring.OperatingSystem:type=Object"),
+                name: new ObjectName("com.mallotore.monitoring.OperatingSystem:type=GroovyJmx"),
                 attributes: [   "dataModel", \
                                 "cpuEndian", \
                                 "name", \
