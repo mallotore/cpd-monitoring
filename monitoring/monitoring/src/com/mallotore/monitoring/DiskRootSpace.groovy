@@ -1,8 +1,8 @@
 package com.mallotore.monitoring
 
 class DiskRootSpace implements Serializable {
-    def path
-    def totalSpace
-    def freeSpace
-    def usableSpace
+    String path
+    long totalSpace
+    long freeSpace
+    long usableSpace
 }

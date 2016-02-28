@@ -1,14 +1,19 @@
 package com.mallotore.monitoring
 
-class DiskSpace {
+class DiskSpace implements DiskSpaceBean{
     
     def diskRootsSpace
     
     def DiskSpace(){
         diskRootsSpace = [];
     }
+
+    List<DiskSpace> getDiskRootsSpace(){
+        if(!diskRootsSpace) collectInformation()
+        return diskRootsSpace;
+    }
     
-    def collectInformation(){
+    void collectInformation(){
         def roots = File.listRoots()
         
         diskRootsSpace = roots.collect { root ->
@@ -21,7 +26,7 @@ class DiskSpace {
         }
     }
     
-    def printout(){
+    void printout(){
         if(!diskRootsSpace) collectInformation()
         
         diskRootsSpace.each{
