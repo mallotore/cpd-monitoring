@@ -63,3 +63,24 @@ test{
    dependsOn 'extractNativeJar'
    jvmArgs = [ '-Dorg.hyperic.sigar.path=./native-libs' ] 
 }
+
+startScripts {
+    doLast {
+        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-Dorg.hyperic.sigar.path=./native-dependencies"')
+        windowsScript.text = windowsScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-Dorg.hyperic.sigar.path=./native-dependencies"')
+    }
+}
+
+distZip {
+    into("${project.name}-${version}") {
+        from '.'
+        include 'native-dependencies/*'
+    }
+}
+
+distTar {
+    into("${project.name}-${version}") {
+        from '.'
+        include 'native-dependencies/*'
+    }
+}
