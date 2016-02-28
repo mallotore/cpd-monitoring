@@ -36,7 +36,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.11'
 }
 
 task extractNativeJar(type: Copy) {
@@ -50,7 +50,13 @@ mainClassName = 'com.mallotore.Main'
 
 run {
   dependsOn 'extractNativeJar'
-  jvmArgs = [ '-Dorg.hyperic.sigar.path=./native-libs' ]
+  jvmArgs = [ '-Dorg.hyperic.sigar.path=./native-libs', 
+              '-Djava.security.manager', 
+              '-Djava.security.policy=./my.policy',
+              '-Dcom.sun.management.jmxremote',
+              '-Dcom.sun.management.jmxremote.port=1617',
+              '-Dcom.sun.management.jmxremote.authenticate=false',
+              '-Dcom.sun.management.jmxremote.ssl=false']
 }
 
 tasks.withType(Test) {
