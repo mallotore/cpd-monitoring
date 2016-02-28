@@ -66,8 +66,8 @@ test{
 
 startScripts {
     doLast {
-        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-Dorg.hyperic.sigar.path=./native-dependencies"')
-        windowsScript.text = windowsScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-Dorg.hyperic.sigar.path=./native-dependencies"')
+        unixScript.text = unixScript.text.replace('-classpath', ' -Dorg.hyperic.sigar.path=$APP_HOME/native-dependencies -classpath')
+        windowsScript.text = windowsScript.text.replace('-classpath', ' -Dorg.hyperic.sigar.path=$APP_HOME/native-dependencies -classpath')
     }
 }
 
