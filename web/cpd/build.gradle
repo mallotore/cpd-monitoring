@@ -41,6 +41,7 @@ dependencyManagement {
 }
 
 dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.5'
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
