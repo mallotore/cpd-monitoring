@@ -71,3 +71,9 @@ assets {
     minifyJs = true
     minifyCss = true
 }
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+    }
+}
