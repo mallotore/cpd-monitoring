@@ -1,6 +1,8 @@
-package com.mallotore.monitoring
+package com.mallotore.monitoring.jmx.bean
 
-class DiskSpace implements DiskSpaceBean{
+import com.mallotore.monitoring.jmx.dto.*
+
+class DiskSpace {
     
     def diskRootsSpace
     
@@ -9,11 +11,11 @@ class DiskSpace implements DiskSpaceBean{
     }
 
     List<DiskSpace> getDiskRootsSpace(){
-        if(!diskRootsSpace) collectInformation()
+        if(!diskRootsSpace) refreshInformation()
         return diskRootsSpace;
     }
     
-    void collectInformation(){
+    void refreshInformation(){
         def roots = File.listRoots()
         
         diskRootsSpace = roots.collect { root ->
@@ -23,17 +25,6 @@ class DiskSpace implements DiskSpaceBean{
                     freeSpace: root.getFreeSpace(),
                     usableSpace: root.getUsableSpace()
             ])
-        }
-    }
-    
-    void printout(){
-        if(!diskRootsSpace) collectInformation()
-        
-        diskRootsSpace.each{
-            println "File root path: ${it.path}"
-            println "Total space (bytes): ${it.totalSpace}"
-            println "Free space (bytes): ${it.freeSpace}"
-            println "Usable space (bytes): ${it.usableSpace}"
         }
     }
 }

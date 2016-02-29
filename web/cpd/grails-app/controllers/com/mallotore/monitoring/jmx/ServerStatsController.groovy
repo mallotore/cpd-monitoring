@@ -1,11 +1,11 @@
-package cpd.com.mallotore
+package com.mallotore.monitoring.jmx
 
 class ServerStatsController {
 
     def jmxService
     
     def index() { 
-        def stats = jmxService.collectInformation()
+        def stats = jmxService.gatherAllServersStats()
         
         render view:'/serverStats/stats', 
                model: [osInformation: stats.os, 

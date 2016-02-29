@@ -1,4 +1,4 @@
-package com.mallotore.monitoring
+package com.mallotore.monitoring.jmx.dto
 
 class DiskRootSpace implements Serializable {
     String path

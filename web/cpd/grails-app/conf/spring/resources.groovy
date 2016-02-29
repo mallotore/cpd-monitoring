@@ -1,3 +1,3 @@
-// Place your Spring DSL code here
 beans = {
+    serverGatherer(com.mallotore.monitoring.jmx.ServerGatherer)
 }
