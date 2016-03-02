@@ -1,0 +1,1 @@
+Proyecto para monitorizar la temperatura del cpd y datos críticos de los servidores sondeados (conectividad, espacio en disco...)
