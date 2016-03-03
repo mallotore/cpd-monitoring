@@ -1,24 +1,29 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-Vagrant.configure(2) do |config|
+
+VAGRANTFILE_API_VERSION = "2"
+
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+
+if ! File.exists?('./software/jdk-7u79-windows-x64.exe')
+  puts 'jdk installer could not be found!'
+  exit 1
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "opentable/win-2008r2-standard-amd64-nocm"
   config.vm.guest = :windows
   config.vm.communicator = "winrm"
   config.vm.boot_timeout = 600
   
-  config.vm.network "private_network", ip: "192.168.123.123"
-  config.vm.network :forwarded_port, guest: 1617, host: 1617
+  config.vm.network "private_network", ip: "192.168.124.124"
+  config.vm.network :forwarded_port, guest: 1617, host: 1618
   config.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
 
-  config.vm.synced_folder "./shared", "/vagrant_shared"
-
+  config.vm.provision :shell, path: "scripts/install-java.ps1"
   config.vm.provision :shell, path: "scripts/install-iis.cmd"
   config.vm.provision :shell, path: "scripts/delete-default-iis-website.ps1"
-  config.vm.provision :shell, path: "scripts/install-java.ps1"
+  config.vm.provision :shell, path: "scripts/disable-firewall.cmd"
+  config.vm.provision :shell, path: "scripts/run-monitoring-agent.cmd"
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.gui = true
-    vb.cpus = 2
-    vb.memory = 1024
-  end
 end
