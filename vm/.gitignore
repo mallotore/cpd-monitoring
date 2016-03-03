@@ -1,2 +1,5 @@
 # shared application files
 /*/shared/
+
+#vagrant files
+/*/.vagrant/
