@@ -1,5 +1,8 @@
-# shared application files
-/*/shared/
+# agent files
+/*/monitoring-agent/
 
 #vagrant files
 /*/.vagrant/
+
+*.exe
+.DS_Store
