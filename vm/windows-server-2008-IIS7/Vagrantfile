@@ -26,4 +26,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, path: "scripts/disable-firewall.cmd"
   config.vm.provision :shell, path: "scripts/run-monitoring-agent.cmd"
 
+  config.vm.provider "virtualbox" do |v|
+    v.gui = true
+    v.memory = 1024
+    v.cpus = 2
+  end
+
 end
