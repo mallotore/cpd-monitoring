@@ -41,6 +41,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, path: "scripts/install-java.ps1" 
   config.vm.provision :shell, path: "scripts/run-monitoring-agent.cmd"
 
+  config.vm.synced_folder "monitoring-agent/", "/monitoring-agent"
+
   config.vm.provider "virtualbox" do |v|
     v.gui = true
     v.memory = 1024
