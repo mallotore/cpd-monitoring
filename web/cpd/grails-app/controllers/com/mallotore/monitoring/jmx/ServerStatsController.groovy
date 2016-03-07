@@ -9,6 +9,12 @@ class ServerStatsController {
         
         render view:'/serverStats/stats', 
                model: [osInformation: stats.os, 
-                       diskInformation: stats.diskRootsSpace]
+                       diskInformation: stats.diskRootsSpace,
+                       apache2Id: stats.apache2Id,
+			            mysqlId: stats.mysqlId,
+			            iisId: stats.iisId,
+			            tomcatId: stats.tomcatId,
+			            winServicesStatus: stats.winServicesStatus
+                       ]
     }
 }

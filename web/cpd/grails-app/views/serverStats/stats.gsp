@@ -106,6 +106,20 @@
                     <p>usableSpace   ---- ${it.usableSpace}</p>
                 </div>
             </g:each>
+            <g:each in="${winServicesStatus}" var="it">
+                <div>
+                    <h2>winServicesStatus</h2>
+                    <p>name   ---- ${it.name}</p>
+                    <p>status   ---- ${it.status}</p>
+                </div>
+            </g:each>
+            <div>
+                <h2>ProcessInformation</h2>
+                <p>apache2Id   ---- ${apache2Id}</p>
+                <p>mysqlId   ---- ${mysqlId}</p>
+                <p>iisId   ---- ${iisId}</p>
+                <p>tomcatId   ---- ${tomcatId}</p>
+            </div>
         </div>
     </body>
 </html>

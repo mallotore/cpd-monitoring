@@ -55,6 +55,7 @@ dependencies {
     compile "org.hibernate:hibernate-ehcache"
     compile "com.gmongo:gmongo:1.5"
     compile 'org.grails.plugins:quartz:2.0.1'
+    compile 'org.fusesource:sigar:1.6.4'
     
     console "org.grails:grails-console"
     
