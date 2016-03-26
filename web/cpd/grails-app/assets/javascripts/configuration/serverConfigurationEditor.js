@@ -30,7 +30,7 @@ $(document).ready(function(){
 		}
 		function deleteServerHandler(id){
 			var server = editableView.getServerConfiguration(id);
-			client.put("/configuration/servers/${id}/delete".replace("${id}", id),{}, successCallback, errorCallback);
+			client.delete("/configuration/servers/${id}/delete".replace("${id}", id),{}, successCallback, errorCallback);
 			return;
 
 			function successCallback(data){

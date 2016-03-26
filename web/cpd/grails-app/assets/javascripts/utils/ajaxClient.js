@@ -6,22 +6,22 @@ var mallotore = mallotore || {};
 		var self = {};
 
 		self.get = function(url, data, successCallback, errorCallback){
-			doAjaxCall(url, data, "GET", successCallback, errorCallback)
+			doAjaxCall(url, data, "GET", successCallback, errorCallback);
 		};
 
 		self.post = function(url, data, successCallback, errorCallback){
 			var stringifiedData = data ? JSON.stringify(data) : {};
-			doAjaxCall(url, stringifiedData, "POST", successCallback, errorCallback)
+			doAjaxCall(url, stringifiedData, "POST", successCallback, errorCallback);
 		};
 
 		self.put = function(url, data, successCallback, errorCallback){
 			var stringifiedData = data ? JSON.stringify(data) : {};
-			doAjaxCall(url, stringifiedData, "PUT", successCallback, errorCallback)
+			doAjaxCall(url, stringifiedData, "PUT", successCallback, errorCallback);
 		};
 
 		self.delete = function(url, data, successCallback, errorCallback){
 			var stringifiedData = data ? JSON.stringify(data) : {};
-			doAjaxCall(url, stringifiedData, "DELETE", successCallback, errorCallback)
+			doAjaxCall(url, stringifiedData, "DELETE", successCallback, errorCallback);
 		};
 
 		function doAjaxCall(url, data, type, successCallback, errorCallback){
@@ -34,7 +34,7 @@ var mallotore = mallotore || {};
 			    	successCallback(data);
 			    },
 			    error: function(xhr){
-					errorCallback(xhr)
+					errorCallback(xhr);
 			    }
 			});
 		}

@@ -61,7 +61,7 @@ $(document).ready(function(){
 			function addTemplate(){
 				var html = $("#server_configuration_container_template").html();
           		var htmlBuilt = html.replace(new RegExp("#server.id#", 'g'), id);
-	    		$('#serverConfigurationTable').append('<tr id="server_configuration_container_' + data.server.id + '" style="font-weight: normal !important;display:none;">'+htmlBuilt + '</tr>');
+	    		$('#serverConfigurationTable').append('<tr id="server_configuration_container_' + id + '" style="font-weight: normal !important;display:none;">'+htmlBuilt + '</tr>');
 			}
 		};
 
@@ -70,6 +70,10 @@ $(document).ready(function(){
 		};
 
 		this.hide = function(){
+			$("#name_addNewServer").val('');
+			$("#ip_addNewServer").val('');
+			$("#port_addNewServer").val('');
+			$("#service_addNewServer").val('');
 			$("#"+container).hide();
 		};
 
@@ -99,7 +103,8 @@ $(document).ready(function(){
 	function createServerConfigurationCreator(){
 		var view = new ServerConfigurationCreatorView();
 		var notifier = mallotore.utils.notifier;
-		new ServerConfigurationCreator(view, notifier);
+		var client = mallotore.utils.ajaxClient;
+		new ServerConfigurationCreator(view, notifier, client);
 	}
 
 	createServerConfigurationCreator();
