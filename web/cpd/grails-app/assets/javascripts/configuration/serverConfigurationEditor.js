@@ -15,7 +15,8 @@ $(document).ready(function(){
 
 		function showEditHandler(id){
 			readOnlyView.hide(id);
-			editableView.show(id);
+			var server = editableView.getServerConfiguration(id);
+			editableView.show(server, id);
 		}
 		function editServerHandler(id){
 			var server = editableView.getServerConfiguration(id);
@@ -89,7 +90,11 @@ $(document).ready(function(){
 			});
 		};
 
-		this.show = function(id){
+		this.show = function(server, id){
+			$("#name_text_"+server.id).text(server.name);
+			$("#ip_text_" +server.id).text(server.ip);
+			$("#port_text_" +server.id).text(server.port);
+			$("#service_text_" +server.id).text(server.service);
 			_(widgets).forEach(function(widget){
 				$("#"+widget + "_" +id).show();
 			});
