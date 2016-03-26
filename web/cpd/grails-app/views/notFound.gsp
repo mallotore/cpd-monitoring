@@ -1,14 +1,22 @@
 <!doctype html>
 <html>
     <head>
-        <title>Page Not Found</title>
-        <meta name="layout" content="main">
-        <g:if env="development"><asset:stylesheet src="errors.css"/></g:if>
+        <meta name="layout" content="default">
+        <title>Página no encontrada</title>
     </head>
     <body>
-        <ul class="errors">
-            <li>Error: Page Not Found (404)</li>
-            <li>Path: ${request.forwardURI}</li>
-        </ul>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h3 class="errors">¡La página no existe!</h3>
+                        <div class="error-container">
+                            <span>${request.forwardURI}</span>
+                        </div>
+                        <a href="#" onclick="window.history.go(-1); return false;" class="btn btn-default btn-lg" style="margin-top: 10px;">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </body>
 </html>

@@ -1,0 +1,67 @@
+/*
+*= require_self
+*= encoding UTF-8
+*/
+blockquote {
+  color: #808080;
+  font-style: italic;
+}
+hr.small {
+  max-width: 100px;
+  margin: 15px auto;
+  border-width: 4px;
+  border-color: white;
+}
+#default-list ul {
+  list-style-type: square;
+}
+
+#default-list li {
+  list-style-type: square;
+  font-size: 17px;
+  font-style: italic;
+}
+.intro {
+    display: table;
+    width: 100%;
+    height: auto;
+    padding: 100px 0;
+    text-align: center;
+    color: #2c3e50;
+    background-color: white;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.intro .intro-body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.intro .intro-body .brand-heading {
+    font-size: 30px;
+}
+
+.intro .intro-body .intro-text {
+    font-size: 15px;
+}
+
+@media(min-width:768px) {
+    .intro {
+        height: 100%;
+    }
+
+    .intro .intro-body .brand-heading {
+        font-size: 60px;
+    }
+
+    .intro .intro-body .intro-text {
+        font-size: 15px;
+    }
+}
+
+.hide {
+  display: none;
+}
