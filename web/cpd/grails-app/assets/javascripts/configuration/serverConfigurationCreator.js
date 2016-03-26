@@ -1,14 +1,16 @@
-//= require_self
-
 var mallotore = mallotore || {};
 
 $(document).ready(function(){
 
 	function ServerConfigurationCreator(view, notifier, client){
-		
+		var addedServerHandler = function(){};
 		view.subscribeToAddServerRequestedEvent(addServerRequestedHandler);
 		view.subscribeToShowAddServerRequestedEvent(showAddServerRequestedHandler);
 		view.subscribeToHideAddServerRequestedEvent(hideAddServerRequestedHandler);
+
+		this.subscribeToAddedServer = function(handler){
+			addedServerHandler = handler;
+		};
 
 		function addServerRequestedHandler(server){
 			client.post("/configuration/servers", server, successCallback, errorCallback);
@@ -18,6 +20,7 @@ $(document).ready(function(){
 				view.hide();
               	view.addServer(server, data.server.id);
                 notifier.notifySuccess("Servidor", "Creado correctamente");
+                addedServerHandler();
 			}
 
 			function errorCallback(xhr){
@@ -105,8 +108,9 @@ $(document).ready(function(){
 		var view = new ServerConfigurationCreatorView();
 		var notifier = mallotore.utils.notifier;
 		var client = mallotore.utils.ajaxClient;
-		new ServerConfigurationCreator(view, notifier, client);
+		return new ServerConfigurationCreator(view, notifier, client);
 	}
 
-	createServerConfigurationCreator();
+	mallotore.servers = mallotore.servers || {};
+	mallotore.servers.createServerConfigurationCreator = createServerConfigurationCreator;
 });

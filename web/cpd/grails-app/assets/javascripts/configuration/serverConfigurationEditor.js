@@ -2,11 +2,16 @@ var mallotore = mallotore || {};
 
 $(document).ready(function(){
 
-	function ServerConfigurationCoordinator(editableView, readOnlyView, notifier, client){
+	function ServerConfigurationEditor(editableView, readOnlyView, notifier, client){
 		editableView.subscribeToShowEditServerRequestedEvent(showEditHandler);
 		editableView.subscribeToEditServerRequestedEvent(editServerHandler);
 		editableView.subscribeToDeleteServerRequestedEvent(deleteServerHandler);
 		readOnlyView.subscribeToShowReadOnlyServerRequestedEvent(showReadOnlyServerHandler);
+
+		this.refreshTriggeredEvents = function(){
+			editableView.subscribeEvents();
+			readOnlyView.subscribeEvents();
+		};
 
 		function showEditHandler(id){
 			readOnlyView.hide(id);
@@ -64,7 +69,7 @@ $(document).ready(function(){
 			showEditServerRequestedHandler = handler;
 		};
 
-		function subscribeEvents (){
+		this.subscribeEvents = function (){
 			$('button[id^="showEditServerButton_"]').on("click",function(event) {
 			    event.preventDefault();
 			    var id = this.id.substring('showEditServerButton_'.length, this.id.length);
@@ -82,7 +87,7 @@ $(document).ready(function(){
 			    var id = this.id.substring('deleteServerButton_'.length, this.id.length);
 				deleteServerRequestedHandler(id);
 			});
-		}
+		};
 
 		this.show = function(id){
 			_(widgets).forEach(function(widget){
@@ -116,7 +121,7 @@ $(document).ready(function(){
 			};
 		};
 
-		subscribeEvents();
+		this.subscribeEvents();
 	}
 
 	function ReadOnlyServerView(){
@@ -127,13 +132,13 @@ $(document).ready(function(){
 			showReadOnlyServerHandler = handler;
 		};
 
-		function subscribeEvents (){
+		this.subscribeEvents = function (){
 			$('button[id^="cancelServerEditionButton_"]').on("click",function(event) {
 			    event.preventDefault();
 			    var id = this.id.substring('cancelServerEditionButton_'.length, this.id.length);
 			   	showReadOnlyServerHandler(id);
 			});
-		}
+		};
 
 		this.show = function(id){
 			_(widgets).forEach(function(widget){
@@ -157,17 +162,18 @@ $(document).ready(function(){
 			$("#service_label_" +server.id).text(server.service);
 		};
 
-		subscribeEvents();
+		this.subscribeEvents();
 	}
 
-	function createServerConfigurationCoordinator(){
+	function createServerConfigurationEditor(){
 		var editableView = new EditableServerView();
 		var readOnlyView = new ReadOnlyServerView();
 		var notifier =  mallotore.utils.notifier;
 		var client =  mallotore.utils.ajaxClient;
 
-		return new ServerConfigurationCoordinator(editableView, readOnlyView, notifier, client); 
+		return new ServerConfigurationEditor(editableView, readOnlyView, notifier, client); 
 	}
 
-	createServerConfigurationCoordinator();
+	mallotore.servers = mallotore.servers || {};
+	mallotore.servers.createServerConfigurationEditor = createServerConfigurationEditor;
 });

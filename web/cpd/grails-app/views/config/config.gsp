@@ -13,7 +13,7 @@
 
             <div class="container">
                 <div class="panel panel-default">  
-                    <div class="panel-heading">${servers.size()} ${servers.size() == 1 ? 'Servidor' : 'Servidores'}</div>  
+                    <div class="panel-heading"><span id="serversTotal">${servers.size()}</span> ${servers.size() == 1 ? 'Servidor' : 'Servidores'}</div>  
                     <table  class="table"> 
                         <thead> 
                             <tr> 

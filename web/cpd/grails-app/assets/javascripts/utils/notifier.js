@@ -13,7 +13,7 @@ var mallotore = mallotore || {};
 		};
 
 		function showNotification(header, message, type){
-			$.jGrowl.defaults.closerTemplate = '<div class="alert alert-info">Close All</div>';
+			$.jGrowl.defaults.closerTemplate = '<div class="alert alert-info">Cerrar todos</div>';
 	        $('#jGrowl-container').jGrowl({
 	            header: header,
 	            message: message,
