@@ -52,6 +52,7 @@ $(document).ready(function(){
 
 		this.addServer = function(server, id){
 			addTemplate();
+			$("#serversTotal").text($("#serversTotal").text() * 1 + 1);
 	    	$("#name_label_"+id).text(server.name);
 			$("#ip_label_" +id).text(server.ip);
 			$("#port_label_" +id).text(server.port);

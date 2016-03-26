@@ -99,6 +99,9 @@ $(document).ready(function(){
 		};
 
 		this.remove = function(id){
+			var total = $("#serversTotal").text() * 1;
+			total = (total - 1) > 0 ? (total - 1) : 0
+			$("#serversTotal").text(total);
 			$("#server_configuration_container_" +id).toggle( "highlight" );
 	        $("#server_configuration_container_"+ id).fadeOut();
 		}
