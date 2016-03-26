@@ -25,7 +25,12 @@ class ServerConfigurationController {
         
         serverConfigurationService.save(server)
 
-        render([result: 'ok'] as JSON)
+        render([server: new ServerDto([id: server.id,
+											name: server.name,
+											ip:server.ip,
+											port: server.port,
+											service: server.service])
+        ] as JSON)
     }
 
     def edit(ServerDto serverDto){

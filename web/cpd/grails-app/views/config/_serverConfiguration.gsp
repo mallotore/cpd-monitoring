@@ -1,4 +1,4 @@
-<tr style="font-weight: normal !important;"> 
+<tr id="server_configuration_container_${server.id}" style="font-weight: normal !important;"> 
     <th scope="row" style="width: 20%">
         <span>
             <label id="name_label_${server.id}" style="font-weight: normal;">${server.name}</label>

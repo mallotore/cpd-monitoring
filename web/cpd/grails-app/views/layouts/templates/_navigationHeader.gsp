@@ -16,7 +16,7 @@
                     <a href="#page-top"></a>
                 </li>
                 <li>
-                    <a class="page-scroll" href="/config">Configuración</a>
+                    <a class="page-scroll" href="/configuration">Configuración</a>
                 </li>
                 <li>
                     <a class="page-scroll" href="/stats">Estadísticas</a>

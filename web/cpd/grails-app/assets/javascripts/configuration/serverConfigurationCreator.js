@@ -1,29 +1,34 @@
 //= require_self
 
+var mallotore = mallotore || {};
+
 $(document).ready(function(){
 
-	function ServerConfigurationCreator(view){
+	function ServerConfigurationCreator(view, notifier, client){
 		
 		view.subscribeToAddServerRequestedEvent(addServerRequestedHandler);
 		view.subscribeToShowAddServerRequestedEvent(showAddServerRequestedHandler);
 		view.subscribeToHideAddServerRequestedEvent(hideAddServerRequestedHandler);
 
+		function addServerRequestedHandler(server){
+			client.post("/configuration/servers", server, successCallback, errorCallback);
+			return;
+
+			function successCallback(data){
+				view.hide();
+              	view.addServer(server, data.server.id);
+                notifier.notifySuccess("Servidor", "Creado correctamente");
+			}
+
+			function errorCallback(xhr){
+				notifier.notifyError("Servidor", "Error en la creación");
+			}
+		}
 		function hideAddServerRequestedHandler(){
 			view.hide();
 		}
-
 		function showAddServerRequestedHandler(){
 			view.show();
-		}
-
-		function addServerRequestedHandler(server){
-			$.post("/configuration/servers", server,
-                  function(data) {
-                     console.log(data);
-     	            }
-		    ).error(function(xhr){
-					   console.log(xhr);
-			})
 		}
 	}
 
@@ -43,6 +48,21 @@ $(document).ready(function(){
 		};
 		this.subscribeToShowAddServerRequestedEvent = function(handler){
 			showAddServerRequestedHandler = handler;
+		};
+
+		this.addServer = function(server, id){
+			addTemplate();
+	    	$("#name_label_"+id).text(server.name);
+			$("#ip_label_" +id).text(server.ip);
+			$("#port_label_" +id).text(server.port);
+			$("#service_label_" +id).text(server.service);
+			$("#server_configuration_container_" + id).toggle( "highlight" );
+
+			function addTemplate(){
+				var html = $("#server_configuration_container_template").html();
+          		var htmlBuilt = html.replace(new RegExp("#server.id#", 'g'), id);
+	    		$('#serverConfigurationTable').append('<tr id="server_configuration_container_' + data.server.id + '" style="font-weight: normal !important;display:none;">'+htmlBuilt + '</tr>');
+			}
 		};
 
 		this.show = function(){
@@ -78,7 +98,8 @@ $(document).ready(function(){
 
 	function createServerConfigurationCreator(){
 		var view = new ServerConfigurationCreatorView();
-		new ServerConfigurationCreator(view);
+		var notifier = mallotore.utils.notifier;
+		new ServerConfigurationCreator(view, notifier);
 	}
 
 	createServerConfigurationCreator();
