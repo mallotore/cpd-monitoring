@@ -6,6 +6,7 @@ import groovy.transform.Immutable
 class ServerStatsState {
 	String _id
 	String ip
+	Date creationDate
     OperatingSystem operatingSystem
     List<DiskRootSpace> diskRootsSpace
 }

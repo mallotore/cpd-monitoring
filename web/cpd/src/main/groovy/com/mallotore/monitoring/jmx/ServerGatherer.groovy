@@ -3,6 +3,8 @@ package com.mallotore.monitoring.jmx
 import javax.management.remote.*
 import javax.management.*
 import groovy.jmx.builder.*
+import com.mallotore.configuration.*
+import com.mallotore.monitoring.model.*
 
 class ServerGatherer {
     
@@ -18,25 +20,58 @@ class ServerGatherer {
         jmxBuilder = new JmxBuilder()
     }
 
-    def gatherAllServersStats(){
-        def connection = jmxBuilder.client(port: 1618, host: 'localhost')
-        connection.connect()
-        def server = connection.MBeanServerConnection
-        def osBean = new GroovyMBean(server, OPERATING_SYSTEM_BEAN_NAMESPACE)
-        def diskBean = new GroovyMBean(server, DISKSPACE_BEAN_NAMESPACE)
-        def winServicesBean = new GroovyMBean(server, WIN_SERVICES_STATUS_BEAN_NAMESPACE)
-        def winServicesStatus = winServicesBean.getAllServicesStatus()
-        def servicesBean = new GroovyMBean(server, SERVICES_STATUS_BEAN_NAMESPACE)
+    def gatherAllServersStats(ServerConfiguration servers){
 
-        def diskRootsSpace = diskBean.getDiskRootsSpace()
-        [
-            os: osBean,
-            diskRootsSpace: diskRootsSpace,
-            apache2Id: servicesBean.getApache2ProccessId(),
-            mysqlId: servicesBean.getMysqlProccessId(),
-            iisId: servicesBean.getIISProccessId(),
-            tomcatId: servicesBean.getApacheTomcatProccessId(),
-            winServicesStatus: winServicesStatus
-        ]
+        servers.collect {
+            def connection = jmxBuilder.client(port: it.port, host: it.ip)
+            connection.connect()
+            def server = connection.MBeanServerConnection
+            def osBean = new GroovyMBean(server, OPERATING_SYSTEM_BEAN_NAMESPACE)
+            def diskBean = new GroovyMBean(server, DISKSPACE_BEAN_NAMESPACE)
+            def servicesBean = new GroovyMBean(server, SERVICES_STATUS_BEAN_NAMESPACE)
+            def diskRootsSpace = diskBean.getDiskRootsSpace()
+            [
+                ip: it.ip,
+                port: it.port,
+                os: createOperatingSystem(osBean),
+                diskRootsSpace: createDiskRootsSpace(diskRootsSpace),
+                apache2Id: servicesBean.getApache2ProccessId(),
+                mysqlId: servicesBean.getMysqlProccessId(),
+                iisId: servicesBean.getIISProccessId(),
+                tomcatId: servicesBean.getApacheTomcatProccessId(),
+                winServicesStatus: retrieveWinServicesStatus(server)
+            ]    
+        }
+    }
+
+    private createOperatingSystem(operatingSystemBean){
+        return new OperatingSystem( dataModel: operatingSystemBean.DataModel,
+                                    cpuEndian: operatingSystemBean.CpuEndian,
+                                    name: operatingSystemBean.Name,
+                                    version: operatingSystemBean.Version,
+                                    arch: operatingSystemBean.Arch,
+                                    description: operatingSystemBean.Description,
+                                    patchLevel: operatingSystemBean.PatchLevel,
+                                    vendor: operatingSystemBean.Vendor,
+                                    vendorName: operatingSystemBean.VendorName,
+                                    vendorVersion: operatingSystemBean.VendorVersion)
+    }
+
+    private createDiskRootsSpace(diskRootsSpace){
+        return diskRootsSpace?.collect { rootSpace ->
+                    new DiskRootSpace(path: rootSpace?.path,
+                                     totalSpace: rootSpace?.totalSpace,
+                                     freeSpace: rootSpace?.freeSpace,
+                                     usableSpace: rootSpace?.usableSpace)
+                }
+    }
+
+    private retrieveWinServicesStatus(server){
+        try{
+            def winServicesBean = new GroovyMBean(server, WIN_SERVICES_STATUS_BEAN_NAMESPACE)
+            return winServicesBean.getAllServicesStatus()
+        }catch(all){
+            return null
+        }
     }
 }

@@ -85,16 +85,16 @@
             <h1>Elements from server</h1>
             <div>
                 <h2>osInformation</h2>
-                <p>dataModel   ---- ${osInformation.DataModel}</p>
-                <p>cpuEndian   ---- ${osInformation.CpuEndian}</p>
-                <p>name   ---- ${osInformation.Name}</p>
-                <p>version   ---- ${osInformation.Version}</p>
-                <p>arch   ---- ${osInformation.Arch}</p>
-                <p>description   ---- ${osInformation.Description}</p>
-                <p>patchLevel   ---- ${osInformation.PatchLevel}</p>
-                <p>vendor   ---- ${osInformation.Vendor}</p>
-                <p>vendorName   ---- ${osInformation.VendorName}</p>
-                <p>vendorVersion   ---- ${osInformation.VendorVersion}</p>
+                <p>dataModel   ---- ${osInformation.dataModel}</p>
+                <p>cpuEndian   ---- ${osInformation.cpuEndian}</p>
+                <p>name   ---- ${osInformation.name}</p>
+                <p>version   ---- ${osInformation.version}</p>
+                <p>arch   ---- ${osInformation.arch}</p>
+                <p>description   ---- ${osInformation.description}</p>
+                <p>patchLevel   ---- ${osInformation.patchLevel}</p>
+                <p>vendor   ---- ${osInformation.vendor}</p>
+                <p>vendorName   ---- ${osInformation.vendorName}</p>
+                <p>vendorVersion   ---- ${osInformation.vendorVersion}</p>
             </div>
             <div>
              <g:each in="${diskInformation}" var="it">

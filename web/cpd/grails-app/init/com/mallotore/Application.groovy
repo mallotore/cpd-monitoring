@@ -1,4 +1,4 @@
-package cpd
+package com.mallotore
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
