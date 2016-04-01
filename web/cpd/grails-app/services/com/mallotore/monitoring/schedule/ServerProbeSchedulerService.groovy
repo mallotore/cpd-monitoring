@@ -12,9 +12,6 @@ import org.quartz.TriggerKey
 
 class ServerProbeSchedulerService{
 
-	//plugin de monitor
-	//mover a historico stadisticas de servidores borrados y el servidor borrado
-
 	static String GROUP_NAME = "SERVER_PROBE"
 	static String SERVER_PORT = "serverPort"
 	static String SERVER_IP = "serverIp"
