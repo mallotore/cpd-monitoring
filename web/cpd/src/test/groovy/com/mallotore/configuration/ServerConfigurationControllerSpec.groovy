@@ -21,9 +21,10 @@ class ServerConfigurationControllerSpec extends Specification {
 
         then:
         1 * controller.serverConfigurationService.findAllServers() >> [
-            new ServerConfiguration(name: "Sql-1", ip: "127.1.1.1", port: "1617", service: "sql-server")
+            new ServerConfiguration(id: "uuid", name: "Sql-1", ip: "127.1.1.1", port: "1617", service: "sql-server")
         ]
         view == '/config/config'
+        model.servers[0].id == 'uuid'
         model.servers[0].name == 'Sql-1'
         model.servers[0].ip == '127.1.1.1'
         model.servers[0].port == '1617'
