@@ -12,6 +12,15 @@ class ServerConfigurationService {
         }
     }
 
+    def findById(id){
+        def server = Server.findByUuid(id)
+        return  new ServerConfiguration(id: server.uuid, 
+                                    name: server.name, 
+                                    ip: server.ip, 
+                                    port: server.port, 
+                                    service: server.service)
+    }
+
     def save(server){
     	def dbServer = new Server([uuid: server.id, name: server.name, ip: server.ip, 
     		port: server.port, service: server.service])

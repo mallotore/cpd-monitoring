@@ -8,6 +8,7 @@ import static org.quartz.SimpleScheduleBuilder.*
 import org.quartz.TriggerBuilder
 import org.quartz.Trigger
 import org.quartz.JobDataMap
+import org.quartz.TriggerKey
 
 class ServerProbeSchedulerService{
 
@@ -18,6 +19,8 @@ class ServerProbeSchedulerService{
 	static String GROUP_NAME = "SERVER_PROBE"
 	static String SERVER_PORT = "serverPort"
 	static String SERVER_IP = "serverIp"
+
+	def jobManagerService
 
 	def schedule(server, intervalInSeconds = 30){
 		def jobDataMap = new JobDataMap()
@@ -34,5 +37,10 @@ class ServerProbeSchedulerService{
         trigger.setJobDataMap(jobDataMap)
 
         ServerProbeJob.schedule(trigger)
+	}
+
+	def unschedule(name){
+		def triggerKey = TriggerKey.triggerKey(name,GROUP_NAME)
+		jobManagerService.getQuartzScheduler().unscheduleJob(triggerKey)
 	}
 }

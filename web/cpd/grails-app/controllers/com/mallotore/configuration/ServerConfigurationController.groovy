@@ -48,7 +48,9 @@ class ServerConfigurationController {
     }
 
     def delete(String id){
+        def server = serverConfigurationService.findById(id)
         serverConfigurationService.delete(id)
+        serverProbeSchedulerService.unschedule(server.name)
 
         render([result: 'ok'] as JSON)
     }
