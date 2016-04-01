@@ -8,6 +8,7 @@ class ServerConfigurationController {
 	static allowedMethods = [index: "GET", create: "POST", edit: "PUT", delete: "DELETE"]
 
 	def serverConfigurationService
+    def serverProbeSchedulerService
 
 	def index() { 
         def servers = serverConfigurationService.findAllServers()
@@ -24,6 +25,7 @@ class ServerConfigurationController {
 											service: serverDto.service])
         
         serverConfigurationService.save(server)
+        serverProbeSchedulerService.schedule(server)
 
         render([server: new ServerDto([id: server.id,
 											name: server.name,

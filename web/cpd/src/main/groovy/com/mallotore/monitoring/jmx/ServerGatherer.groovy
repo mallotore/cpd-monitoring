@@ -20,28 +20,31 @@ class ServerGatherer {
         jmxBuilder = new JmxBuilder()
     }
 
-    def gatherAllServersStats(ServerConfiguration servers){
-
-        servers.collect {
-            def connection = jmxBuilder.client(port: it.port, host: it.ip)
-            connection.connect()
-            def server = connection.MBeanServerConnection
-            def osBean = new GroovyMBean(server, OPERATING_SYSTEM_BEAN_NAMESPACE)
-            def diskBean = new GroovyMBean(server, DISKSPACE_BEAN_NAMESPACE)
-            def servicesBean = new GroovyMBean(server, SERVICES_STATUS_BEAN_NAMESPACE)
-            def diskRootsSpace = diskBean.getDiskRootsSpace()
-            [
-                ip: it.ip,
-                port: it.port,
-                os: createOperatingSystem(osBean),
-                diskRootsSpace: createDiskRootsSpace(diskRootsSpace),
-                apache2Id: servicesBean.getApache2ProccessId(),
-                mysqlId: servicesBean.getMysqlProccessId(),
-                iisId: servicesBean.getIISProccessId(),
-                tomcatId: servicesBean.getApacheTomcatProccessId(),
-                winServicesStatus: retrieveWinServicesStatus(server)
-            ]    
+    def gatherAllServersStats(servers){
+        servers.collect { server ->
+            gatherServerStats(server)    
         }
+    }
+
+    def gatherServerStats(server){
+        def connection = jmxBuilder.client(port: server.port, host: server.ip)
+        connection.connect()
+        def mbeanServerConnection = connection.MBeanServerConnection
+        def osBean = new GroovyMBean(mbeanServerConnection, OPERATING_SYSTEM_BEAN_NAMESPACE)
+        def diskBean = new GroovyMBean(mbeanServerConnection, DISKSPACE_BEAN_NAMESPACE)
+        def servicesBean = new GroovyMBean(mbeanServerConnection, SERVICES_STATUS_BEAN_NAMESPACE)
+        def diskRootsSpace = diskBean.getDiskRootsSpace()
+        [
+            ip: server.ip,
+            port: server.port,
+            os: createOperatingSystem(osBean),
+            diskRootsSpace: createDiskRootsSpace(diskRootsSpace),
+            apache2Id: servicesBean.getApache2ProccessId(),
+            mysqlId: servicesBean.getMysqlProccessId(),
+            iisId: servicesBean.getIISProccessId(),
+            tomcatId: servicesBean.getApacheTomcatProccessId(),
+            winServicesStatus: retrieveWinServicesStatus(mbeanServerConnection)
+        ]
     }
 
     private createOperatingSystem(operatingSystemBean){

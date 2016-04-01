@@ -7,7 +7,6 @@ class UrlMappings {
             }
         }
 
-        "/myjob" (controller: "Test", action: "index")
         "/"(view:"/home/home")
         "/configuration" (controller: "ServerConfiguration", action: "index")
         "/configuration/servers" (controller: "ServerConfiguration", action: "create")
