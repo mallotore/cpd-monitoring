@@ -1,7 +1,7 @@
 package com.mallotore.configuration
 
 import grails.converters.JSON
-import java.util.UUID
+
 
 class ServerConfigurationController {
 
@@ -18,16 +18,15 @@ class ServerConfigurationController {
     }
 
     def create(ServerDto serverDto){
-		def server = new ServerConfiguration([id: UUID.randomUUID(),
-											name: serverDto.name,
+		def server = new ServerConfiguration([name: serverDto.name,
 											ip:serverDto.ip,
 											port: serverDto.port,
 											service: serverDto.service])
         
-        serverConfigurationService.save(server)
+        def serverId = serverConfigurationService.save(server)
         serverProbeSchedulerService.schedule(server)
 
-        render([server: new ServerDto([id: server.id,
+        render([server: new ServerDto([id: serverId,
 											name: server.name,
 											ip:server.ip,
 											port: server.port,
