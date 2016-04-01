@@ -1,14 +1,20 @@
 package com.mallotore.configuration
 
 import grails.transaction.Transactional
+import java.util.UUID
 
 @Transactional
 class ServerConfigurationService {
 
     def findAllServers(){
         def servers = Server.findAll()
+
         servers?.collect {
-        	new ServerConfiguration(id: it.uuid, name: it.name, ip: it.ip, port: it.port, service: it.service)
+        	new ServerConfiguration(id: it.uuid, 
+                                    name: it.name, 
+                                    ip: it.ip, 
+                                    port: it.port, 
+                                    service: it.service)
         }
     }
 
@@ -22,9 +28,14 @@ class ServerConfigurationService {
     }
 
     def save(server){
-    	def dbServer = new Server([uuid: server.id, name: server.name, ip: server.ip, 
-    		port: server.port, service: server.service])
+        def uuid = UUID.randomUUID()
+    	def dbServer = new Server([uuid: uuid, 
+                                    name: server.name, 
+                                    ip: server.ip, 
+    		                        port: server.port, 
+                                    service: server.service])
     	dbServer.save(failOnError:true)
+        return uuid
     }
 
      def edit(server){
