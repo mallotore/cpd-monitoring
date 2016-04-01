@@ -10,9 +10,9 @@ class ServerProbeJobService{
 	def probe(server){
 		try{
 	        def serverStats = serverGatherer.gatherServerStats(server)
-        	def stats = new ServerStats(ip: serverStats.ip,
-			                            operatingSystem: serverStats.os,
-			                            diskRootsSpace: serverStats.diskRootsSpace)
+        	def stats = new ServerStats(serverStats.ip,
+			                            serverStats.os,
+			                            serverStats.diskRootsSpace)
 
         	serverStatsRepository.save stats
 

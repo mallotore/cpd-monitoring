@@ -12,7 +12,6 @@ import org.quartz.TriggerKey
 
 class ServerProbeSchedulerService{
 
-	//fecha nula
 	//plugin de monitor
 	//mover a historico stadisticas de servidores borrados y el servidor borrado
 

@@ -32,7 +32,8 @@ class ServerStatsRepository {
             def state = new ServerStatsState(_id: it._id, 
                                               ip: it.ip, 
                                               operatingSystem: operatingSystem, 
-                                              diskRootsSpace: diskRootsSpace)
+                                              diskRootsSpace: diskRootsSpace,
+                                              creationDate: it.creationDate)
             new ServerStats(state)
         }
     }

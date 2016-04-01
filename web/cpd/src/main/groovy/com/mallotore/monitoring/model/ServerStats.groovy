@@ -8,9 +8,9 @@ class ServerStats {
     private diskRootsSpace
 
     def ServerStats(ip, operatingSystem, diskRootsSpace){
-        this.ip = state.ip
-        this.operatingSystem = state.operatingSystem
-        this.diskRootsSpace = state.diskRootsSpace
+        this.ip = ip
+        this.operatingSystem = operatingSystem
+        this.diskRootsSpace = diskRootsSpace
         this.creationDate = new Date()
     }
 
