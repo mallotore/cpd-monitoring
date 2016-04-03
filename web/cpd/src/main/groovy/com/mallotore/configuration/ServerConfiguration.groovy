@@ -4,8 +4,8 @@ import groovy.transform.Immutable
 
 @Immutable(copyWith = true)
 class ServerConfiguration {
-	String id
-	String name
+    String id
+    String name
     String ip
     String port
     String service
