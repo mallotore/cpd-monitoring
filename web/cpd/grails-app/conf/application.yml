@@ -114,7 +114,7 @@ environments:
             port: ${MONGODB_PORT_27017_TCP_PORT}
             username: docker
             password: docker
-            stats: content
+            stats: stats
             database: docker
         dataSource:
             dbCreate: update
