@@ -9,3 +9,13 @@ $ sudo usermod -a -G dialout <username>
 $ sudo chmod a+rw /dev/ttyACM0
 
 Where <username> is your user name in Ubuntu, /dev/ttyACM0 is the detected device of your Arduino board.
+
+
+***********************************************************
+on /usr/bin/arduino the line (comment with #)
+
+set_flags -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel
+
+by this
+
+set_flags -Dswing.defaultlaf=com.sun.java.swing.plaf.motif.MotifLookAndFeel
