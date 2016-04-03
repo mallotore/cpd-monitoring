@@ -1,0 +1,11 @@
+Arduino IDE error - avrdude: ser_open(): can't open device "/dev/ttyACM0": Permission denied
+If you run Arduino IDE on Ubuntu most possibly you cannot upload to Arduino board, caused by the error of:
+
+avrdude: ser_open(): can't open device "/dev/ttyACM0": Permission denied
+ioctl("TIOCMGET"): Inappropriate ioctl for device
+
+To fix it, enter the command:
+$ sudo usermod -a -G dialout <username>
+$ sudo chmod a+rw /dev/ttyACM0
+
+Where <username> is your user name in Ubuntu, /dev/ttyACM0 is the detected device of your Arduino board.
