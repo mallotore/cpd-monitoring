@@ -67,6 +67,7 @@ dependencies {
     compile 'org.grails.plugins:quartz:2.0.8'
     compile "com.gmongo:gmongo:1.5"
     compile 'org.fusesource:sigar:1.6.4'
+    compile 'org.rxtx:rxtx:2.1.7'
     
     runtime "org.grails.plugins:asset-pipeline"
     runtime "mysql:mysql-connector-java:5.1.29"
