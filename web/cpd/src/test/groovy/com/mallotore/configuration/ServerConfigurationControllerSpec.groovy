@@ -8,10 +8,8 @@ import com.mallotore.schedule.ServerProbeSchedulerService
 class ServerConfigurationControllerSpec extends Specification {
 
     def setup() {
-        def serverConfigurationServiceMock = Mock(ServerConfigurationService)
-        def serverProbeSchedulerServiceMock = Mock(ServerProbeSchedulerService)
-        controller.serverConfigurationService = serverConfigurationServiceMock
-        controller.serverProbeSchedulerService = serverProbeSchedulerServiceMock
+        controller.serverConfigurationService = Mock(ServerConfigurationService)
+        controller.serverProbeSchedulerService = Mock(ServerProbeSchedulerService)
     }
 
     def "finds all servers"() {
