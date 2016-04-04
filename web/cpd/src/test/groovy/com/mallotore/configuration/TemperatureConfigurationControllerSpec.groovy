@@ -2,12 +2,14 @@ package com.mallotore.configuration
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import com.mallotore.monitoring.temperature.TemperatureProbeSchedulerService
 
 @TestFor(TemperatureConfigurationController)
 class TemperatureConfigurationControllerSpec  extends Specification {
 
 	def setup() {
         controller.temperatureConfigurationService = Mock(TemperatureConfigurationService)
+        controller.temperatureProbeSchedulerService = Mock(TemperatureProbeSchedulerService)
     }
 
     def "renders template with given temperature probe interval"() {
@@ -35,6 +37,9 @@ class TemperatureConfigurationControllerSpec  extends Specification {
         1 * controller
             .temperatureConfigurationService
             .create(60)
+        1 * controller
+        	.temperatureProbeSchedulerService
+        	.schedule(60)
         response.json.result == "ok"
     }
 

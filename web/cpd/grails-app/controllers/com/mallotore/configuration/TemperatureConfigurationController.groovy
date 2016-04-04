@@ -7,6 +7,7 @@ class TemperatureConfigurationController {
 	static allowedMethods = [temperatureView: "GET", create: "POST", edit: "PUT", delete: "DELETE"]
 
 	def temperatureConfigurationService
+    def temperatureProbeSchedulerService
 
 	def temperatureView() { 
         def temperatureProbeInterval = temperatureConfigurationService.findProbeInterval()
@@ -16,6 +17,7 @@ class TemperatureConfigurationController {
 
     def create(int temperatureProbeIntervalInSeconds){
         temperatureConfigurationService.create(temperatureProbeIntervalInSeconds)
+        temperatureProbeSchedulerService.schedule(temperatureProbeIntervalInSeconds)
         render([result: 'ok'] as JSON)
     }
 
