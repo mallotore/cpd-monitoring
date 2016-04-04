@@ -8,8 +8,13 @@ import gnu.io.SerialPort
 import gnu.io.SerialPortEvent
 import gnu.io.SerialPortEventListener
 import java.util.Enumeration
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class TemperatureReader implements SerialPortEventListener {
+
+	static Logger LOG = LoggerFactory.getLogger(TemperatureReader.class)
+
 	SerialPort serialPort
 
 	static final PORT_NAMES = [
@@ -24,40 +29,45 @@ class TemperatureReader implements SerialPortEventListener {
 	private static final int DATA_RATE = 9600
 
 	public void initialize() {
-        System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0")
-		CommPortIdentifier portId = null
-		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers()
-		while (portEnum.hasMoreElements()) {
-			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement()
-			for (String portName : PORT_NAMES) {
-				if (currPortId.getName().equals(portName)) {
-					portId = currPortId
-					break
-				}
+        withPortId(){ portId ->
+        	try {
+				serialPort = (SerialPort) portId.open(this.getClass().getName(),TIME_OUT);
+				serialPort.setSerialPortParams(DATA_RATE,
+						SerialPort.DATABITS_8,
+						SerialPort.STOPBITS_1,
+						SerialPort.PARITY_NONE)
+				input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()))
+				output = serialPort.getOutputStream()
+				serialPort.addEventListener(this)
+				serialPort.notifyOnDataAvailable(true)
+			} catch (Exception e) {
+				LOG.error("Unhandled exception initializing serial port listener",e)
 			}
-		}
-		if (portId == null) {
-			println("Could not find COM port.")
-			return
-		}
+        }
+	}
 
-		try {
-			serialPort = (SerialPort) portId.open(this.getClass().getName(),TIME_OUT);
-			serialPort.setSerialPortParams(DATA_RATE,
-					SerialPort.DATABITS_8,
-					SerialPort.STOPBITS_1,
-					SerialPort.PARITY_NONE)
-			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()))
-			output = serialPort.getOutputStream()
-			serialPort.addEventListener(this)
-			serialPort.notifyOnDataAvailable(true)
-		} catch (Exception e) {
-			println(e.toString())
+	private withPortId(Closure closure){
+		System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0")
+		def portId = findAvailablePort()
+		if(portId)
+			closure(portId)
+		else
+			LOG.error("Could not find COM port.")
+	}
+
+	private findAvailablePort(){
+		for(def portName in PORT_NAMES){
+
+			def portId = CommPortIdentifier.getPortIdentifiers().find{ 
+				it.getName().equals(portName) 
+			}
+
+			if(portId) return portId
 		}
 	}
 
 	public synchronized void close() {
-		if (serialPort != null) {
+		if (serialPort) {
 			serialPort.removeEventListener()
 			serialPort.close()
 		}
@@ -67,9 +77,9 @@ class TemperatureReader implements SerialPortEventListener {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
 				String inputLine=input.readLine()
-				println(inputLine)
+				LOG.error("inputLine ${inputLine}")
 			} catch (Exception e) {
-				println(e.toString())
+				LOG.error("Unhandled exception on serial port event",e)
 			}
 		}
 		// Ignore all the other eventTypes, but you should consider the other ones.
