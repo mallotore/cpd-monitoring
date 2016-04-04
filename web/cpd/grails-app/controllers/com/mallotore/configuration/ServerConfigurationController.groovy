@@ -2,7 +2,6 @@ package com.mallotore.configuration
 
 import grails.converters.JSON
 
-
 class ServerConfigurationController {
 
 	static allowedMethods = [index: "GET", create: "POST", edit: "PUT", delete: "DELETE"]
