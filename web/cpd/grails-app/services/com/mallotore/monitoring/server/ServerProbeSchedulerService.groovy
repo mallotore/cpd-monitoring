@@ -1,4 +1,4 @@
-package com.mallotore.schedule
+package com.mallotore.monitoring.server
 
 import com.mallotore.monitoring.model.*
 import com.mallotore.monitoring.ServerProbeJob

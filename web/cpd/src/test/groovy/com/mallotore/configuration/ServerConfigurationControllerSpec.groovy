@@ -2,7 +2,7 @@ package com.mallotore.configuration
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
-import com.mallotore.schedule.ServerProbeSchedulerService
+import com.mallotore.monitoring.server.ServerProbeSchedulerService
 
 @TestFor(ServerConfigurationController)
 class ServerConfigurationControllerSpec extends Specification {
