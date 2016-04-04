@@ -11,12 +11,21 @@ class MongoDatabaseClient {
     
     private mongo
     private stats
+    private temperatures
 
     def serverStatsCollection() {
         if (stats) return stats
 
         authenticatedInDatabase(){ db ->
             stats = db.getCollection(grailsApplication.config.mongo.stats)
+        }
+    }
+
+    def temperaturesCollection() {
+        if (temperatures) return temperatures
+
+        authenticatedInDatabase(){ db ->
+            temperatures = db.getCollection(grailsApplication.config.mongo.temperatures)
         }
     }
 

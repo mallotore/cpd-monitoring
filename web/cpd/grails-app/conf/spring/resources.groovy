@@ -6,4 +6,7 @@ beans = {
     serverStatsRepository(com.mallotore.monitoring.repository.ServerStatsRepository){
        mongoDatabaseClient = ref('mongoDatabaseClient')
     }
+    temperatureRepository(com.mallotore.monitoring.repository.TemperatureRepository){
+       mongoDatabaseClient = ref('mongoDatabaseClient')
+    }
 }
