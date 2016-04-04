@@ -26,4 +26,39 @@ class TemperatureConfigurationControllerSpec  extends Specification {
         '5000' 					 || 'temperatureProbeInterval=5000'
     }
 
+    def "creates a temperature probe interval"() {
+        when:
+        request.method = 'POST'
+        controller.create(60)
+
+        then:
+        1 * controller
+            .temperatureConfigurationService
+            .create(60)
+        response.json.result == "ok"
+    }
+
+    def "edits a temperature probe interval"() {
+        when:
+        request.method = 'PUT'
+        controller.edit(60)
+
+        then:
+        1 * controller
+            .temperatureConfigurationService
+            .edit(60)
+        response.json.result == "ok"
+    }
+
+    def "deletes a temperature probe interval"() {
+        when:
+        request.method = 'DELETE'
+        controller.delete()
+
+        then:
+        1 * controller
+            .temperatureConfigurationService
+            .delete()
+        response.json.result == "ok"
+    }
 }

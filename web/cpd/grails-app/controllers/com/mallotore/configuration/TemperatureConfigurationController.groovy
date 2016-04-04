@@ -15,11 +15,17 @@ class TemperatureConfigurationController {
     }
 
     def create(int temperatureProbeIntervalInSeconds){
+        temperatureConfigurationService.create(temperatureProbeIntervalInSeconds)
+        render([result: 'ok'] as JSON)
     }
 
     def edit(int temperatureProbeIntervalInSeconds){
+        temperatureConfigurationService.edit(temperatureProbeIntervalInSeconds)
+        render([result: 'ok'] as JSON)
     }
 
     def delete(){
+        temperatureConfigurationService.delete()
+        render([result: 'ok'] as JSON)
     }
 }
