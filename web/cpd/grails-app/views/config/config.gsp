@@ -17,10 +17,10 @@
                     <table  class="table"> 
                         <thead> 
                             <tr> 
-                                <th>Nombre</th> 
-                                <th>Ip</th>
-                                <th>Puerto</th>
-                                <th>Servicio</th> 
+                                <th style="width: 20%">Nombre</th> 
+                                <th style="width: 30%">Ip</th>
+                                <th style="width: 15%">Puerto</th>
+                                <th style="width: 20%">Intervalo en segundos</th> 
                                 <th>
                                     <button id="showAddNewServer" type="button" class="btn btn-default">
                                           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
