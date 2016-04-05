@@ -19,8 +19,8 @@
     </td> 
     <td style="width: 20%">
         <span>
-            <label id="service_label_${server.id}" style="width: 100%;font-weight: normal;">${server.service}</label>
-            <input id="service_text_${server.id}" value="${server.service}" type="text" class="form-control" style="display:none;" placeholder="Servicio">
+            <label id="probeInterval_label_${server.id}" style="width: 100%;font-weight: normal;">${server.probeInterval}</label>
+            <input id="probeInterval_text_${server.id}" value="${server.probeInterval}" type="text" class="form-control" style="display:none;" placeholder="Servicio">
         </span>
     </td>
     <td style="width: 15%">

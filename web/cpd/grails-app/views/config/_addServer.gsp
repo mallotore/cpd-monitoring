@@ -16,7 +16,7 @@
     </td> 
     <td>
         <span>
-            <input id="service_addNewServer" type="text" class="form-control" placeholder="Servicio">
+            <input id="probeInterval_addNewServer" type="text" class="form-control" placeholder="Intervalo">
         </span>
     </td>
     <td>

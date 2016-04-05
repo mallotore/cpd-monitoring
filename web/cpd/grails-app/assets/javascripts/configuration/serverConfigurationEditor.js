@@ -54,7 +54,7 @@ $(document).ready(function(){
 	}
 
 	function EditableServerView(){
-		var widgets = ['name_text', 'ip_text', 'port_text', 'service_text'];
+		var widgets = ['name_text', 'ip_text', 'port_text', 'probeInterval_text'];
 		var editServerRequestedHandler = function(){};
 		var deleteServerRequestedHandler = function(){};
 		var showEditServerRequestedHandler = function(){};
@@ -93,7 +93,7 @@ $(document).ready(function(){
 			$("#name_text_"+server.id).val(server.name);
 			$("#ip_text_" +server.id).val(server.ip);
 			$("#port_text_" +server.id).val(server.port);
-			$("#service_text_" +server.id).val(server.service);
+			$("#probeInterval_text_" +server.id).val(server.probeInterval);
 			_(widgets).forEach(function(widget){
 				$("#"+widget + "_" +id).show();
 			});
@@ -122,7 +122,7 @@ $(document).ready(function(){
 				name: $("#name_text_" +id).val(),
 				ip:$("#ip_text_" +id).val(),
 				port:$("#port_text_" +id).val(),
-				service:$("#service_text_" +id).val(),
+				probeInterval:$("#probeInterval_text_" +id).val(),
 			};
 		};
 
@@ -130,7 +130,7 @@ $(document).ready(function(){
 	}
 
 	function ReadOnlyServerView(){
-		var widgets = ['name_label', 'ip_label', 'port_label', 'service_label'];
+		var widgets = ['name_label', 'ip_label', 'port_label', 'probeInterval_label'];
 		var showReadOnlyServerHandler = function(){};
 
 		this.subscribeToShowReadOnlyServerRequestedEvent = function(handler){
@@ -164,7 +164,7 @@ $(document).ready(function(){
 			$("#name_label_"+server.id).text(server.name);
 			$("#ip_label_" +server.id).text(server.ip);
 			$("#port_label_" +server.id).text(server.port);
-			$("#service_label_" +server.id).text(server.service);
+			$("#probeInterval_label_" +server.id).text(server.probeInterval);
 		};
 
 		this.getServerConfiguration = function(id){
@@ -173,7 +173,7 @@ $(document).ready(function(){
 				name: $("#name_label_" +id).text(),
 				ip:$("#ip_label_" +id).text(),
 				port:$("#port_label_" +id).text(),
-				service:$("#service_label_" +id).text(),
+				probeInterval:$("#probeInterval_label_" +id).text(),
 			};
 		};
 

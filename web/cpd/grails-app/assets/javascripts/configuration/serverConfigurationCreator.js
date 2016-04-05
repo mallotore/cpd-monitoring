@@ -37,7 +37,7 @@ $(document).ready(function(){
 
 	function ServerConfigurationCreatorView(){
 		var container = "addNewServerContainer";
-		var widgets = ['name_addNewServer', 'ip_addNewServer', 'port_addNewServer', 'service_addNewServer'];
+		var widgets = ['name_addNewServer', 'ip_addNewServer', 'port_addNewServer', 'probeInterval_addNewServer'];
 		var self = this;
 		var addServerRequestedHandler = function(){};
 		var showAddServerRequestedHandler = function(){};
@@ -59,7 +59,7 @@ $(document).ready(function(){
 	    	$("#name_label_"+id).text(server.name);
 			$("#ip_label_" +id).text(server.ip);
 			$("#port_label_" +id).text(server.port);
-			$("#service_label_" +id).text(server.service);
+			$("#probeInterval_label_" +id).text(server.probeInterval);
 			$("#server_configuration_container_" + id).toggle( "highlight" );
 
 			function addTemplate(){
@@ -77,7 +77,7 @@ $(document).ready(function(){
 			$("#name_addNewServer").val('');
 			$("#ip_addNewServer").val('');
 			$("#port_addNewServer").val('');
-			$("#service_addNewServer").val('');
+			$("#probeInterval_addNewServer").val('');
 			$("#"+container).hide();
 		};
 
@@ -95,7 +95,7 @@ $(document).ready(function(){
 					name: $("#name_addNewServer").val(),
 					ip: $("#ip_addNewServer").val(),
 					port: $("#port_addNewServer").val(),
-					service: $("#service_addNewServer").val()
+					probeInterval: $("#probeInterval_addNewServer").val()
 				}
 				addServerRequestedHandler(server);
 			});
