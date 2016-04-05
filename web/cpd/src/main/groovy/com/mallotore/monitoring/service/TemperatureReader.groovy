@@ -10,6 +10,8 @@ import gnu.io.SerialPortEventListener
 import java.util.Enumeration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import com.mallotore.monitoring.repository.TemperatureRepository
+import com.mallotore.monitoring.model.Temperature
 
 class TemperatureReader implements SerialPortEventListener {
 
@@ -27,6 +29,16 @@ class TemperatureReader implements SerialPortEventListener {
 	private OutputStream output
 	private static final int TIME_OUT = 2000
 	private static final int DATA_RATE = 9600
+	private TemperatureRepository temperatureRepository
+	private int intervalInSeconds
+
+	public void setRepository(TemperatureRepository temperatureRepository){
+		this.temperatureRepository = temperatureRepository
+	}
+
+	public void setInterval(int intervalInSeconds){
+		this.intervalInSeconds = intervalInSeconds
+	}
 
 	public void initialize() {
         withPortId(){ portId ->
@@ -76,8 +88,8 @@ class TemperatureReader implements SerialPortEventListener {
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
-				String inputLine=input.readLine()
-				LOG.error("inputLine ${inputLine}")
+				String temperature = input.readLine()
+				temperatureRepository.save(new Temperature(temperature:temperature))
 			} catch (Exception e) {
 				LOG.error("Unhandled exception on serial port event",e)
 			}
