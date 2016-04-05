@@ -11,7 +11,6 @@ class ServerConfigurationController {
 
 	def index() { 
         def servers = serverConfigurationService.findAllServers()
-        
         render view:'/config/config', 
                model: [servers: servers]
     }
@@ -20,7 +19,7 @@ class ServerConfigurationController {
 		def server = new ServerConfiguration([name: serverDto.name,
 											ip:serverDto.ip,
 											port: serverDto.port,
-											service: serverDto.service])
+											probeIntervalInSeconds: serverDto.probeInterval])
         
         def serverId = serverConfigurationService.save(server)
         serverProbeSchedulerService.schedule(server)
@@ -29,7 +28,7 @@ class ServerConfigurationController {
 											name: server.name,
 											ip:server.ip,
 											port: server.port,
-											service: server.service])
+											probeInterval: server.probeIntervalInSeconds])
         ] as JSON)
     }
 
@@ -38,8 +37,7 @@ class ServerConfigurationController {
 											name: serverDto.name,
 											ip:serverDto.ip,
 											port: serverDto.port,
-											service: serverDto.service])
-        
+											probeIntervalInSeconds: serverDto.probeInterval])
         serverConfigurationService.edit(server)
 
         render([result: 'ok'] as JSON)
@@ -58,6 +56,6 @@ class ServerDto {
 	String id
 	String name
     String ip
-    String port
-    String service
+    int port
+    int probeInterval
 }

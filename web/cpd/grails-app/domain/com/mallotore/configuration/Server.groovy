@@ -4,8 +4,8 @@ class Server {
 	String uuid
     String name
     String ip
-    String port
-    String service
+    int port
+    int probeIntervalInSeconds
 
     static mapping =  {
 		version false
@@ -16,7 +16,7 @@ class Server {
     static constraints = {
         name blank: false, unique: true
         ip blank: false, unique: true
-        port blank: false
-        service blank: true, nullable: true
+        port nullable: false
+        probeIntervalInSeconds nullable: false, min: 30
     }
 }

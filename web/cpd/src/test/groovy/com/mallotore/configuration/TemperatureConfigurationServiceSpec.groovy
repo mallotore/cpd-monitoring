@@ -10,7 +10,7 @@ class TemperatureConfigurationServiceSpec extends Specification {
 
     def "finds temperature probe interval"() {
         given:
-             new Temperature(intervalInSeconds: 50)
+             new Temperature(probeIntervalInSeconds: 50)
                 .save(failOnError:true)
         when:
         def interval = service.findProbeInterval()
@@ -21,31 +21,31 @@ class TemperatureConfigurationServiceSpec extends Specification {
 
     def "creates temperature probe interval"() {
         given:
-        def intervalInSeconds = 30
+        def probeIntervalInSeconds = 30
         when:
-        service.create(intervalInSeconds)
+        service.create(probeIntervalInSeconds)
 
         then:
         Temperature.findAll().size() == 1
-        Temperature.findAll()[0].intervalInSeconds == 30
+        Temperature.findAll()[0].probeIntervalInSeconds == 30
     }
 
     def "edits temperature probe interval"() {
         given:
-        new Temperature(intervalInSeconds: 50)
+        new Temperature(probeIntervalInSeconds: 50)
                 .save(failOnError:true)
         when:
-        def intervalInSeconds = 30
-        service.edit(intervalInSeconds)
+        def probeIntervalInSeconds = 30
+        service.edit(probeIntervalInSeconds)
 
         then:
         Temperature.findAll().size() == 1
-        Temperature.findAll()[0].intervalInSeconds == 30
+        Temperature.findAll()[0].probeIntervalInSeconds == 30
     }
 
     def "deletes temperature probe interval"() {
         given:
-        new Temperature(intervalInSeconds: 50)
+        new Temperature(probeIntervalInSeconds: 50)
                 .save(failOnError:true)
         when:
         service.delete()

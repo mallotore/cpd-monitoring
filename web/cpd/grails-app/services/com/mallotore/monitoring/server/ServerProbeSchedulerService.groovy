@@ -18,7 +18,7 @@ class ServerProbeSchedulerService{
 
 	def jobManagerService
 
-	def schedule(server, intervalInSeconds = 30){
+	def schedule(server){
 		def jobDataMap = new JobDataMap()
         jobDataMap.put(SERVER_PORT, server.port)
         jobDataMap.put(SERVER_IP, server.ip)
@@ -26,7 +26,7 @@ class ServerProbeSchedulerService{
 		def trigger = TriggerBuilder.newTrigger()
                        .withIdentity(server.name, GROUP_NAME)
                        .withSchedule(simpleSchedule()
-                            .withIntervalInSeconds(intervalInSeconds)
+                            .withIntervalInSeconds(server.probeIntervalInSeconds)
                             .repeatForever())
                        .build()
 

@@ -2,7 +2,7 @@ package com.mallotore.configuration
 
 class Temperature {
 	int id
-    int intervalInSeconds
+    long probeIntervalInSeconds
 
     static mapping =  {
 		version false
@@ -11,6 +11,6 @@ class Temperature {
 	}
 
     static constraints = {
-        intervalInSeconds min: 1
+        probeIntervalInSeconds nullable: false, min: 1
     }
 }

@@ -7,6 +7,6 @@ class ServerConfiguration {
     String id
     String name
     String ip
-    String port
-    String service
+    int port
+    int probeIntervalInSeconds
 }

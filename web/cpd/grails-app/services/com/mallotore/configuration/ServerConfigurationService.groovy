@@ -14,7 +14,7 @@ class ServerConfigurationService {
                                     name: it.name, 
                                     ip: it.ip, 
                                     port: it.port, 
-                                    service: it.service)
+                                    probeIntervalInSeconds: it.probeIntervalInSeconds)
         }
     }
 
@@ -24,7 +24,7 @@ class ServerConfigurationService {
                                     name: server.name, 
                                     ip: server.ip, 
                                     port: server.port, 
-                                    service: server.service)
+                                    probeIntervalInSeconds: server.probeIntervalInSeconds)
     }
 
     def save(server){
@@ -33,8 +33,9 @@ class ServerConfigurationService {
                                     name: server.name, 
                                     ip: server.ip, 
     		                        port: server.port, 
-                                    service: server.service])
-    	dbServer.save(failOnError:true)
+                                    probeIntervalInSeconds: server.probeIntervalInSeconds])
+        dbServer.save(failOnError:true)
+    	
         return uuid
     }
 
@@ -43,7 +44,7 @@ class ServerConfigurationService {
      	dbServer.name = server.name
      	dbServer.ip = server.ip
      	dbServer.port = server.port
-     	dbServer.service = server.service
+     	dbServer.probeIntervalInSeconds = server.probeIntervalInSeconds
     	dbServer.save(failOnError:true)
     }
 

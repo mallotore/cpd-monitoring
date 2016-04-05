@@ -6,17 +6,17 @@ import grails.transaction.Transactional
 class TemperatureConfigurationService {
 
 	def findProbeInterval() { 
-        findTemperatureConfiguration()?.intervalInSeconds
+        findTemperatureConfiguration()?.probeIntervalInSeconds
     }
 
     def create(int temperatureProbeIntervalInSeconds){
-        def temperature = new Temperature([intervalInSeconds: temperatureProbeIntervalInSeconds])
+        def temperature = new Temperature([probeIntervalInSeconds: temperatureProbeIntervalInSeconds])
         temperature.save(failOnError:true)
     }
 
     def edit(int temperatureProbeIntervalInSeconds){
         def temperature = findTemperatureConfiguration()
-        temperature.intervalInSeconds = temperatureProbeIntervalInSeconds
+        temperature.probeIntervalInSeconds = temperatureProbeIntervalInSeconds
         temperature.save(failOnError:true)
     }
 
