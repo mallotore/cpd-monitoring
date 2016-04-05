@@ -15,7 +15,7 @@ $(document).ready(function(){
 
 		function showEditHandler(id){
 			readOnlyView.hide(id);
-			var server = editableView.getServerConfiguration(id);
+			var server = readOnlyView.getServerConfiguration(id);
 			editableView.show(server, id);
 		}
 		function editServerHandler(id){
@@ -35,7 +35,6 @@ $(document).ready(function(){
 			}
 		}
 		function deleteServerHandler(id){
-			var server = editableView.getServerConfiguration(id);
 			client.delete("/configuration/servers/${id}/delete".replace("${id}", id),{}, successCallback, errorCallback);
 			return;
 
@@ -91,10 +90,10 @@ $(document).ready(function(){
 		};
 
 		this.show = function(server, id){
-			$("#name_text_"+server.id).text(server.name);
-			$("#ip_text_" +server.id).text(server.ip);
-			$("#port_text_" +server.id).text(server.port);
-			$("#service_text_" +server.id).text(server.service);
+			$("#name_text_"+server.id).val(server.name);
+			$("#ip_text_" +server.id).val(server.ip);
+			$("#port_text_" +server.id).val(server.port);
+			$("#service_text_" +server.id).val(server.service);
 			_(widgets).forEach(function(widget){
 				$("#"+widget + "_" +id).show();
 			});
@@ -114,15 +113,16 @@ $(document).ready(function(){
 			$("#serversTotal").text(total);
 			$("#server_configuration_container_" +id).toggle( "highlight" );
 	        $("#server_configuration_container_"+ id).fadeOut();
-		}
+	        $("#server_configuration_container_"+ id).remove();
+		};
 
 		this.getServerConfiguration = function(id){
 			return {
 				id: id,
-				name: $("#name_text" + "_" +id).val(),
-				ip:$("#ip_text" + "_" +id).val(),
-				port:$("#port_text" + "_" +id).val(),
-				service:$("#service_text" + "_" +id).val(),
+				name: $("#name_text_" +id).val(),
+				ip:$("#ip_text_" +id).val(),
+				port:$("#port_text_" +id).val(),
+				service:$("#service_text_" +id).val(),
 			};
 		};
 
@@ -165,6 +165,16 @@ $(document).ready(function(){
 			$("#ip_label_" +server.id).text(server.ip);
 			$("#port_label_" +server.id).text(server.port);
 			$("#service_label_" +server.id).text(server.service);
+		};
+
+		this.getServerConfiguration = function(id){
+			return {
+				id: id,
+				name: $("#name_label_" +id).text(),
+				ip:$("#ip_label_" +id).text(),
+				port:$("#port_label_" +id).text(),
+				service:$("#service_label_" +id).text(),
+			};
 		};
 
 		this.subscribeEvents();
