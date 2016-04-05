@@ -39,7 +39,7 @@ class ServicesStatus {
                 finder.findSingleProcess("Pid.Service.eq=${IIS}")    
             }
         }
-        iisProccesId;
+        iisProccesId
     }
     
     long getMysqlProccessId(){
