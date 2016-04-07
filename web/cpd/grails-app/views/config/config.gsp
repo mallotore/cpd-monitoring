@@ -6,16 +6,14 @@
         <asset:javascript src="configuration/configuration.js"/>
     </head>
     <body>
-    <div id="jGrowl-container" class="jGrowl top-right"></div>
+        <div id="jGrowl-container" class="jGrowl top-right"></div>
         <section style="min-height: 721px;">
-            
-            <g:render template="/config/tabs"/> 
-
             <div class="container">
-                <div class="panel panel-default">  
+                <g:render template="/config/temperatureConfiguration"/>
+                <div class="panel panel-default">
                     <div class="panel-heading"><span id="serversTotal">${servers.size()}</span> ${servers.size() == 1 ? 'Servidor' : 'Servidores'}</div>  
                     <table  class="table"> 
-                        <thead> 
+                        <thead>
                             <tr> 
                                 <th style="width: 20%">Nombre</th> 
                                 <th style="width: 30%">Ip</th>
