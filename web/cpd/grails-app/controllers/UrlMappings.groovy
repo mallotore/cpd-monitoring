@@ -8,10 +8,13 @@ class UrlMappings {
         }
 
         "/"(view:"/home/home")
-        "/configuration" (controller: "ServerConfiguration", action: "index")
+        "/configuration" (controller: "Configuration", action: "index")
         "/configuration/servers" (controller: "ServerConfiguration", action: "create")
         "/configuration/servers/edit" (controller: "ServerConfiguration", action: "edit")
         "/configuration/servers/$id/delete" (controller: "ServerConfiguration", action: "delete")
+        "/configuration/temperature" (controller: "TemperatureConfiguration", action: "create")
+        "/configuration/temperature/edit" (controller: "TemperatureConfiguration", action: "edit")
+        "/configuration/temperature/delete" (controller: "TemperatureConfiguration", action: "delete")
         "/stats"(view:"/index")
         "/error"(view:"/error")
         "500"(view:'/error')

@@ -1,28 +1,24 @@
 package com.mallotore.configuration
 
 import grails.converters.JSON
+import com.mallotore.configuration.dto.TemperatureDto
 
 class TemperatureConfigurationController {
 
-	static allowedMethods = [temperatureView: "GET", create: "POST", edit: "PUT", delete: "DELETE"]
+	static allowedMethods = [create: "POST", edit: "PUT", delete: "DELETE"]
 
 	def temperatureConfigurationService
     def temperatureProbeSchedulerService
 
-	def temperatureView() { 
-        def temperatureProbeInterval = temperatureConfigurationService.findProbeInterval()
-        
-        render template: '/config/temperatureConfiguration', model: [temperatureProbeInterval: temperatureProbeInterval]
-    }
-
-    def create(int temperatureProbeIntervalInSeconds){
-        temperatureConfigurationService.create(temperatureProbeIntervalInSeconds)
-        temperatureProbeSchedulerService.schedule(temperatureProbeIntervalInSeconds)
+    def create(TemperatureDto temperature){
+        log.error("temperature ${temperature.probeIntervalInSeconds}")
+        temperatureConfigurationService.create(temperature.probeIntervalInSeconds)
+        temperatureProbeSchedulerService.schedule(temperature.probeIntervalInSeconds)
         render([result: 'ok'] as JSON)
     }
 
-    def edit(int temperatureProbeIntervalInSeconds){
-        temperatureConfigurationService.edit(temperatureProbeIntervalInSeconds)
+    def edit(TemperatureDto temperature){
+        temperatureConfigurationService.edit(temperature.probeIntervalInSeconds)
         render([result: 'ok'] as JSON)
     }
 

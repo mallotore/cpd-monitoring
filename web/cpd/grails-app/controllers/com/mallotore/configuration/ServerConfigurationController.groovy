@@ -1,19 +1,14 @@
 package com.mallotore.configuration
 
 import grails.converters.JSON
+import com.mallotore.configuration.dto.ServerDto
 
 class ServerConfigurationController {
 
-	static allowedMethods = [index: "GET", create: "POST", edit: "PUT", delete: "DELETE"]
+	static allowedMethods = [create: "POST", edit: "PUT", delete: "DELETE"]
 
 	def serverConfigurationService
     def serverProbeSchedulerService
-
-	def index() { 
-        def servers = serverConfigurationService.findAllServers()
-        render view:'/config/config', 
-               model: [servers: servers]
-    }
 
     def create(ServerDto serverDto){
 		def server = new ServerConfiguration([name: serverDto.name,
@@ -50,12 +45,4 @@ class ServerConfigurationController {
 
         render([result: 'ok'] as JSON)
     }
-}
-
-class ServerDto {
-	String id
-	String name
-    String ip
-    int port
-    int probeInterval
 }

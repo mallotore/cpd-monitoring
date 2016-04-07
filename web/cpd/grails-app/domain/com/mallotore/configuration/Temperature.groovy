@@ -2,7 +2,7 @@ package com.mallotore.configuration
 
 class Temperature {
 	int id
-    long probeIntervalInSeconds
+    int probeIntervalInSeconds
 
     static mapping =  {
 		version false
