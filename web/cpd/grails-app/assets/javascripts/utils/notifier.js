@@ -9,7 +9,7 @@ var mallotore = mallotore || {};
 		};
 
 		self.notifyError = function(header, message){
-			showNotification(header, message, 'error');
+			showNotification(header, message, 'danger');
 		};
 
 		function showNotification(header, message, type){
