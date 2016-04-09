@@ -7,7 +7,7 @@ var mallotore = mallotore || {};
 
 $(document).ready(function(){
 
-	function ConfigurationCoordinator(creator, editor){
+	function ServerConfigurationCoordinator(creator, editor){
 		creator.subscribeToAddedServer(addedServerHandler);
 
 		function addedServerHandler(){
@@ -15,11 +15,12 @@ $(document).ready(function(){
 		}
 	}
 
-	function createConfigurationCoordinator(){
+	function createServerConfigurationCoordinator(){
 		var creator = mallotore.servers.createServerConfigurationCreator();
 		var editor = mallotore.servers.createServerConfigurationEditor();
-		new ConfigurationCoordinator(creator, editor);
+		new ServerConfigurationCoordinator(creator, editor);
 	}
 
-	createConfigurationCoordinator();
+	mallotore.temperature.createTemperatureConfigurationCoordinator();
+	createServerConfigurationCoordinator();
 });
