@@ -16,7 +16,6 @@ class Server {
     static constraints = {
         name blank: false, unique: true
         ip blank: false, unique: true
-        port nullable: false
-        probeIntervalInSeconds nullable: false, min: 30, max: Integer.MAX_VALUE
+        probeIntervalInSeconds min: 30, max: Integer.MAX_VALUE
     }
 }

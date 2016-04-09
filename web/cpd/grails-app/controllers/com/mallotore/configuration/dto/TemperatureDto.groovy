@@ -6,6 +6,6 @@ class TemperatureDto implements Validateable{
     int probeIntervalInSeconds
 
     static constraints = {
-        probeIntervalInSeconds nullable: false, min: 1, max: Integer.MAX_VALUE
+        probeIntervalInSeconds min: 1, max: Integer.MAX_VALUE
     }
 }
