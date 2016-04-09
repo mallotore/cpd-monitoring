@@ -11,18 +11,19 @@ class TemperatureConfigurationController {
     def temperatureProbeSchedulerService
 
     def create(TemperatureDto temperature){
-        log.error("temperature ${temperature.probeIntervalInSeconds}")
         temperatureConfigurationService.create(temperature.probeIntervalInSeconds)
         temperatureProbeSchedulerService.schedule(temperature.probeIntervalInSeconds)
         render([result: 'ok'] as JSON)
     }
 
     def edit(TemperatureDto temperature){
+        //todo: update listener
         temperatureConfigurationService.edit(temperature.probeIntervalInSeconds)
         render([result: 'ok'] as JSON)
     }
 
     def delete(){
+        temperatureProbeSchedulerService.unschedule()
         temperatureConfigurationService.delete()
         render([result: 'ok'] as JSON)
     }

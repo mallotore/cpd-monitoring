@@ -82,6 +82,8 @@ class TemperatureReader implements SerialPortEventListener {
 		if (serialPort) {
 			serialPort.removeEventListener()
 			serialPort.close()
+			input.close()
+			output.close()
 		}
 	}
 
@@ -94,6 +96,14 @@ class TemperatureReader implements SerialPortEventListener {
 				LOG.error("Unhandled exception on serial port event",e)
 			}
 		}
-		// Ignore all the other eventTypes, but you should consider the other ones.
+	}
+
+	public synchronized void writeData(String data) {
+	    LOG.info("Sent: ${data}")
+	    try {
+	        output.write(data.getBytes())
+	    } catch (Exception e) {
+	        LOG.error("Unhandled exception writing to port", e)
+	    }
 	}
 }
