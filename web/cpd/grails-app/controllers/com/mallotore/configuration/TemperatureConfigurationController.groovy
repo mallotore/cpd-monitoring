@@ -17,7 +17,8 @@ class TemperatureConfigurationController {
     }
 
     def edit(TemperatureDto temperature){
-        //todo: update listener
+        temperatureProbeSchedulerService.unschedule()
+        temperatureProbeSchedulerService.schedule(temperature.probeIntervalInSeconds)
         temperatureConfigurationService.edit(temperature.probeIntervalInSeconds)
         render([result: 'ok'] as JSON)
     }

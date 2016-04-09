@@ -39,6 +39,12 @@ class TemperatureConfigurationControllerSpec  extends Specification {
         1 * controller
             .temperatureConfigurationService
             .edit(60)
+        1 * controller
+            .temperatureProbeSchedulerService
+            .unschedule()
+        1 * controller
+            .temperatureProbeSchedulerService
+            .schedule(60)
         response.json.result == "ok"
     }
 

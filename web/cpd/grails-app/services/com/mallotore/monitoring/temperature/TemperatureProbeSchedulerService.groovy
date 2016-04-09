@@ -18,6 +18,8 @@ class TemperatureProbeSchedulerService{
 		temperatureReader.setRepository(temperatureRepository)
 		temperatureReader.setInterval(intervalInSeconds)
 		temperatureReader.initialize()
+		Thread.sleep(2000); 
+		temperatureReader.writeData("${intervalInSeconds}")
 	}
 
 	def unschedule(){
