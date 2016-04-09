@@ -25,8 +25,8 @@ class TemperatureReader implements SerialPortEventListener {
 			"/dev/ttyUSB0", // Linux
 			"COM3", // Windows
 	]
-	private BufferedReader input
-	private OutputStream output
+	private BufferedReader inputReader
+	private OutputStream outputStream
 	private static final int TIME_OUT = 2000
 	private static final int DATA_RATE = 9600
 	private TemperatureRepository temperatureRepository
@@ -49,8 +49,8 @@ class TemperatureReader implements SerialPortEventListener {
 						SerialPort.DATABITS_8,
 						SerialPort.STOPBITS_1,
 						SerialPort.PARITY_NONE)
-				input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()))
-				output = serialPort.getOutputStream()
+				inputReader = new BufferedReader(new InputStreamReader(serialPort.getInputStream()))
+				outputStream = serialPort.getOutputStream()
 				serialPort.addEventListener(this)
 				serialPort.notifyOnDataAvailable(true)
 			} catch (Exception e) {
@@ -85,16 +85,15 @@ class TemperatureReader implements SerialPortEventListener {
 		if (serialPort) {
 			serialPort.removeEventListener()
 			serialPort.close()
-			input.close()
-			output.close()
+			inputReader.close()
+			outputStream.close()
 		}
 	}
 
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
-				String temperature = input.readLine()
-				LOG.error("${temperature}")
+				String temperature = inputReader.readLine()
 				temperatureRepository.save(new Temperature(temperature:temperature))
 			} catch (Exception e) {
 				LOG.error("Unhandled exception on serial port event",e)
@@ -105,7 +104,7 @@ class TemperatureReader implements SerialPortEventListener {
 	public synchronized void writeData(String data) {
 	    LOG.info("Sent: ${data}")
 	    try {
-	        output.write(data.getBytes())
+	        outputStream.write(data.getBytes())
 	    } catch (Exception e) {
 	        LOG.error("Unhandled exception writing to port", e)
 	    }

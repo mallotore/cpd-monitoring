@@ -68,6 +68,7 @@ dependencies {
     compile "com.gmongo:gmongo:1.5"
     compile 'org.fusesource:sigar:1.6.4'
     compile files("src/main/ext/rxtx/Current/RXTXcomm.jar")
+    compile "org.codehaus.gpars:gpars:1.2.0"
     
     runtime "org.grails.plugins:asset-pipeline"
     runtime "mysql:mysql-connector-java:5.1.29"
