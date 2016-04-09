@@ -11,6 +11,6 @@ class Temperature {
 	}
 
     static constraints = {
-        probeIntervalInSeconds nullable: false, min: 1
+        probeIntervalInSeconds nullable: false, min: 1, max: Integer.MAX_VALUE
     }
 }
