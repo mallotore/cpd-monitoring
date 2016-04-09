@@ -11,12 +11,13 @@ class TemperatureProbeSchedulerService{
 
 	def temperatureRepository
 
-	def schedule(intervalInSeconds = 30){
-		if(!temperatureReader) temperatureReader = new TemperatureReader()
-		temperatureReader.close()
-		//set properties and inject services
-		temperatureReader.setRepository(temperatureRepository)
-		temperatureReader.setInterval(intervalInSeconds)
+	def schedule(intervalInSeconds){
+		if(!temperatureReader) {
+			temperatureReader = new TemperatureReader(temperatureRepository, intervalInSeconds)
+		}else{
+			temperatureReader.close()	
+		}
+		temperatureReader.updateInterval(intervalInSeconds)
 		temperatureReader.initialize()
 		Thread.sleep(2000); 
 		temperatureReader.writeData("${intervalInSeconds}")

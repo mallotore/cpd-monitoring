@@ -32,12 +32,13 @@ class TemperatureReader implements SerialPortEventListener {
 	private TemperatureRepository temperatureRepository
 	private int intervalInSeconds
 
-	public void setRepository(TemperatureRepository temperatureRepository){
+	public TemperatureReader(TemperatureRepository temperatureRepository, int intervalInSeconds){
 		this.temperatureRepository = temperatureRepository
+		this.intervalInSeconds = intervalInSeconds
 	}
 
-	public void setInterval(int intervalInSeconds){
-		this.intervalInSeconds = intervalInSeconds
+	public void updateInterval(int intervalInSeconds){
+		this.intervalInSeconds = intervalInSeconds	
 	}
 
 	public void initialize() {
@@ -93,6 +94,7 @@ class TemperatureReader implements SerialPortEventListener {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
 				String temperature = input.readLine()
+				LOG.error("${temperature}")
 				temperatureRepository.save(new Temperature(temperature:temperature))
 			} catch (Exception e) {
 				LOG.error("Unhandled exception on serial port event",e)
