@@ -1,7 +1,7 @@
-//= require jquery/jquery-2.2.0.min.js
-//= require jquery/jquery.easing.min.js
-//= require_tree bootstrap
-//= require bootstrapjquery.jgrowl.min.js
+//= require_tree lib/jquery
+//= require_tree lib/bootstrap
+//= require lib/jquery.jgrowl.min.js
+//= require lib/lodash.js
 //= require_self
 
 (function(){
