@@ -3,7 +3,7 @@
 *= require font-awesome/font-awesome.css
 *= require_tree fonts
 *= require customFonts/custom-fonts.css
-*= require jquery.jgrowl.css
+*= require .
 *= require_self
 *= encoding UTF-8
 */
