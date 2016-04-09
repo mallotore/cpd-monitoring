@@ -12,6 +12,6 @@ class ServerDto implements Validateable{
     static constraints = {
         name blank: false, unique: true
         ip blank: false, unique: true
-        probeIntervalInSeconds min: 30, max: Integer.MAX_VALUE
+        probeInterval min: 30, max: Integer.MAX_VALUE
     }
 }
