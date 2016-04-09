@@ -61,8 +61,10 @@ class TemperatureReader implements SerialPortEventListener {
 	private withPortId(Closure closure){
 		System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0")
 		def portId = findAvailablePort()
-		if(portId)
+		if(portId){
+			LOG.info("Connected to COM port ${portId.getName()}")
 			closure(portId)
+		}
 		else
 			LOG.error("Could not find COM port.")
 	}
