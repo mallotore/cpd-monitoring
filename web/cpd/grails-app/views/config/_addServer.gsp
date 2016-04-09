@@ -21,10 +21,10 @@
     </td>
     <td>
         <button id="save_addNewServer" type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-            </button>
+            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+        </button>
         <button id="cancel_addNewServer" type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </button>
+            <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+        </button>
     </td> 
 </tr>

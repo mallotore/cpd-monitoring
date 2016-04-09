@@ -26,7 +26,7 @@
     <td style="width: 15%">
         <div id="actionButtons_#server.id#">
             <button id="showEditServerButton_#server.id#" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
             </button>
             <button id="deleteServerButton_#server.id#" type="button" class="btn btn-default">
                   <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -37,7 +37,7 @@
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </button>
             <button id="cancelServerEditionButton_#server.id#" type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+              <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
             </button>
         </div>
     </td>
