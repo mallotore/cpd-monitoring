@@ -10,7 +10,9 @@ class ServerProbeJob {
 
     def execute(context) {
     	def request = new ServerProbeRequest(ip: context.mergedJobDataMap.serverIp,
-    										 port: context.mergedJobDataMap.serverPort)
+    										 port: context.mergedJobDataMap.serverPort,
+    										 connectivityAlert: context.mergedJobDataMap.serverConnectivityAlert,
+    										 diskPercentageAlert: context.mergedJobDataMap.serverDiskPercentageAlert)
         serverProbeJobService.probe(request)
     }
 }

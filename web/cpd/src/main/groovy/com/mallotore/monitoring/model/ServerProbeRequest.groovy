@@ -6,4 +6,6 @@ import groovy.transform.Immutable
 class ServerProbeRequest {
     String ip
     String port
+    int diskPercentageAlert
+    boolean connectivityAlert
 }

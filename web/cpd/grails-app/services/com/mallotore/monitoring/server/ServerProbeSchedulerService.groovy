@@ -15,6 +15,8 @@ class ServerProbeSchedulerService{
 	static String GROUP_NAME = "SERVER_PROBE"
 	static String SERVER_PORT = "serverPort"
 	static String SERVER_IP = "serverIp"
+	static String SERVER_DISK_PERCENTEGE_ALERT = "serverDiskPercentageAlert"
+	static String SERVER_CONNECTIVITY_ALERT = "serverConnectivityAlert"
 
 	def jobManagerService
 
@@ -22,6 +24,8 @@ class ServerProbeSchedulerService{
 		def jobDataMap = new JobDataMap()
         jobDataMap.put(SERVER_PORT, server.port)
         jobDataMap.put(SERVER_IP, server.ip)
+        jobDataMap.put(SERVER_DISK_PERCENTEGE_ALERT, server.diskPercentageAlert)
+        jobDataMap.put(SERVER_CONNECTIVITY_ALERT, server.connectivityAlert)
 
 		def trigger = TriggerBuilder.newTrigger()
                        .withIdentity(server.name, GROUP_NAME)
