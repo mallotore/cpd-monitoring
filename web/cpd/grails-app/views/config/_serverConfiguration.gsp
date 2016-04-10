@@ -30,8 +30,8 @@
                     <label>Espacio (%)</label>
                 </td>
                 <td>
-                    <label id="diskSpaceAlert_label_${server.id}" style="width: 100%;font-weight: normal;margin-left:10px">${server?.diskPercentageAlert ?: 'Desactivada'}</label>
-                    <input id="diskSpaceAlert_text_${server.id}" style="display:none;margin-left:10px"type="text" class="form-control" placeholder="porcentaje">
+                    <label id="diskSpaceAlert_label_${server.id}" style="width: 100%;font-weight: normal;margin-left:10px">${server.diskPercentageAlert ?: 'Desactivada'}</label>
+                    <input id="diskSpaceAlert_text_${server.id}" style="display:none;margin-left:10px"type="text" class="form-control" placeholder="porcentaje" value="${server.diskPercentageAlert}">
                 </td>
             </tr>
             <tr>
