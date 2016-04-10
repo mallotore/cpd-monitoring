@@ -15,11 +15,12 @@
                     <table  class="table"> 
                         <thead>
                             <tr> 
-                                <th style="width: 20%">Nombre</th> 
-                                <th style="width: 30%">Ip</th>
-                                <th style="width: 15%">Puerto</th>
-                                <th style="width: 20%">Intervalo en segundos</th> 
-                                <th>
+                                <th style="width: 15%">Nombre</th> 
+                                <th style="width: 15%">Ip</th>
+                                <th style="width: 10%">Puerto</th>
+                                <th style="width: 20%">Intervalo en segundos</th>
+                                <th style="width: 25%">Alertas</th> 
+                                <th style="width: 15%">
                                     <button id="showAddNewServer" type="button" class="btn btn-default">
                                           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                     </button>

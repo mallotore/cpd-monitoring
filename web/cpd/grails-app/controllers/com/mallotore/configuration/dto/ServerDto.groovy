@@ -8,6 +8,8 @@ class ServerDto implements Validateable{
     String ip
     int port
     int probeInterval
+    boolean connectivityAlert
+    int diskPercentageAlert
 
     static constraints = {
         name blank: false, unique: true
