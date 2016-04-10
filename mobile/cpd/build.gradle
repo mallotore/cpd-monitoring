@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.0.0'
         classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.8'
         classpath 'net.kaleidos.gradle.plugins:emerger:0.0.2'
         classpath 'com.google.gms:google-services:1.5.0'
