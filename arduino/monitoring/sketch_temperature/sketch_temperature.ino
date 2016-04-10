@@ -17,9 +17,8 @@ void setup() {
 }
 
 void loop() {
-  int sensorVal = analogRead(sensorPin);
-  float voltage = (sensorVal/1024.0) * 5.0;
-  float temperature = (voltage - .5) * 100;
+  float voltage = analogRead(sensorPin) * 0.004882814;
+  float temperature = (voltage - 0.5) * 100.0;
 
   if(temperature < baselineTemp){
     digitalWrite(2, LOW);
