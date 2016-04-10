@@ -54,7 +54,7 @@ $(document).ready(function(){
 	}
 
 	function EditableServerView(){
-		var widgets = ['name_text', 'ip_text', 'port_text', 'probeInterval_text'];
+		var widgets = ['name_text', 'ip_text', 'port_text', 'probeInterval_text', 'connectivityAlert_text', 'diskSpaceAlert_text'];
 		var editServerRequestedHandler = function(){};
 		var deleteServerRequestedHandler = function(){};
 		var showEditServerRequestedHandler = function(){};
@@ -94,6 +94,8 @@ $(document).ready(function(){
 			$("#ip_text_" +server.id).val(server.ip);
 			$("#port_text_" +server.id).val(server.port);
 			$("#probeInterval_text_" +server.id).val(server.probeInterval);
+			$("#diskSpaceAlert_text_" + id).val('');
+			$("#connectivityAlert_text_" + id).prop('checked', false);
 			_(widgets).forEach(function(widget){
 				$("#"+widget + "_" +id).show();
 			});
@@ -123,6 +125,8 @@ $(document).ready(function(){
 				ip:$("#ip_text_" +id).val(),
 				port:$("#port_text_" +id).val(),
 				probeInterval:$("#probeInterval_text_" +id).val(),
+				diskPercentageAlert: $("#diskSpaceAlert_text_" + id).val(),
+				connectivityAlert: $("#connectivityAlert_text_" + id).prop('checked')
 			};
 		};
 
@@ -130,7 +134,7 @@ $(document).ready(function(){
 	}
 
 	function ReadOnlyServerView(){
-		var widgets = ['name_label', 'ip_label', 'port_label', 'probeInterval_label'];
+		var widgets = ['name_label', 'ip_label', 'port_label', 'probeInterval_label', 'connectivityAlert_label', 'diskSpaceAlert_label'];
 		var showReadOnlyServerHandler = function(){};
 
 		this.subscribeToShowReadOnlyServerRequestedEvent = function(handler){
@@ -165,6 +169,10 @@ $(document).ready(function(){
 			$("#ip_label_" +server.id).text(server.ip);
 			$("#port_label_" +server.id).text(server.port);
 			$("#probeInterval_label_" +server.id).text(server.probeInterval);
+			var diskSpaceAlertText = server.diskPercentageAlert || 'Desactivada';
+			$("#diskSpaceAlert_label_" +  server.id).text(diskSpaceAlertText);
+			var connectivityAlerText = server.connectivityAlert || 'Desactivada';
+			$("#connectivityAlert_label_" + server.id).text(connectivityAlerText);
 		};
 
 		this.getServerConfiguration = function(id){
@@ -174,6 +182,8 @@ $(document).ready(function(){
 				ip:$("#ip_label_" +id).text(),
 				port:$("#port_label_" +id).text(),
 				probeInterval:$("#probeInterval_label_" +id).text(),
+				diskPercentageAlert: $("#diskSpaceAlert_label_" + id).val(),
+				connectivityAlert: $("#connectivityAlert_label_" + id).prop('checked')
 			};
 		};
 

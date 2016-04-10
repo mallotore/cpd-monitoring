@@ -37,7 +37,6 @@ $(document).ready(function(){
 
 	function ServerConfigurationCreatorView(){
 		var container = "addNewServerContainer";
-		var widgets = ['name_addNewServer', 'ip_addNewServer', 'port_addNewServer', 'probeInterval_addNewServer'];
 		var self = this;
 		var addServerRequestedHandler = function(){};
 		var showAddServerRequestedHandler = function(){};
@@ -60,6 +59,10 @@ $(document).ready(function(){
 			$("#ip_label_" +id).text(server.ip);
 			$("#port_label_" +id).text(server.port);
 			$("#probeInterval_label_" +id).text(server.probeInterval);
+			var diskSpaceAlertText = server.diskPercentageAlert || 'Desactivada';
+			$("#diskSpaceAlert_label_" + id).text(diskSpaceAlertText);
+			var connectivityAlerText = server.connectivityAlert || 'Desactivada';
+			$("#connectivityAlert_label_" + id).text(connectivityAlerText);
 			$("#server_configuration_container_" + id).toggle( "highlight" );
 
 			function addTemplate(){
@@ -78,6 +81,8 @@ $(document).ready(function(){
 			$("#ip_addNewServer").val('');
 			$("#port_addNewServer").val('');
 			$("#probeInterval_addNewServer").val('');
+			$("#diskSpaceAlert_addNewServer").val('');
+			$("#connectivityAlert_addNewServer").prop('checked', false);
 			$("#"+container).hide();
 		};
 
@@ -95,7 +100,9 @@ $(document).ready(function(){
 					name: $("#name_addNewServer").val(),
 					ip: $("#ip_addNewServer").val(),
 					port: $("#port_addNewServer").val(),
-					probeInterval: $("#probeInterval_addNewServer").val()
+					probeInterval: $("#probeInterval_addNewServer").val(),
+					diskPercentageAlert: $("#diskSpaceAlert_addNewServer").val(),
+					connectivityAlert: $("#connectivityAlert_addNewServer").prop('checked')
 				}
 				addServerRequestedHandler(server);
 			});
