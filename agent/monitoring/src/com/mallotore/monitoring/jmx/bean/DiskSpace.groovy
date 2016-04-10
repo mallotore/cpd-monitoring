@@ -11,7 +11,8 @@ class DiskSpace {
     }
 
     List<DiskSpace> getDiskRootsSpace(){
-        if(!diskRootsSpace) refreshInformation()
+        refreshInformation()
+
         return diskRootsSpace;
     }
     
