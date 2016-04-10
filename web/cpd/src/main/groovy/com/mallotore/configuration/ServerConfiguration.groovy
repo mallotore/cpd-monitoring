@@ -9,4 +9,6 @@ class ServerConfiguration {
     String ip
     int port
     int probeIntervalInSeconds
+    boolean connectivityAlert
+    int diskPercentageAlert
 }

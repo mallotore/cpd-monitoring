@@ -19,7 +19,9 @@ class ServerConfigurationControllerSpec extends Specification {
         def serverDto = new ServerDto(name: "local", 
                                     ip: "127.0.0.1", 
                                     port: 1617, 
-                                    probeInterval: 60)
+                                    probeInterval: 60,
+                                    connectivityAlert: false,
+                                    diskPercentageAlert: 20)
         controller.create(serverDto)
 
         then:
@@ -28,18 +30,24 @@ class ServerConfigurationControllerSpec extends Specification {
             .save(new ServerConfiguration(name: "local", 
                                         ip: "127.0.0.1", 
                                         port: 1617, 
-                                        probeIntervalInSeconds: 60)) >> "uuid"
+                                        probeIntervalInSeconds: 60,
+                                        connectivityAlert: false,
+                                        diskPercentageAlert: 20)) >> "uuid"
         1 * controller
             .serverProbeSchedulerService
             .schedule(new ServerConfiguration(name: "local", 
                                         ip: "127.0.0.1", 
                                         port: 1617, 
-                                        probeIntervalInSeconds: 60))
+                                        probeIntervalInSeconds: 60,
+                                        connectivityAlert: false,
+                                        diskPercentageAlert: 20))
         response.json.server.id == "uuid"
         response.json.server.name == 'local'
         response.json.server.ip == '127.0.0.1'
         response.json.server.port == 1617
         response.json.server.probeInterval == 60
+        response.json.server.connectivityAlert == false
+        response.json.server.diskPercentageAlert == 20
     }
 
     def "edits a server"() {

@@ -6,6 +6,8 @@ class Server {
     String ip
     int port
     int probeIntervalInSeconds
+    boolean connectivityAlert
+    int diskPercentageAlert
 
     static mapping =  {
 		version false
@@ -14,8 +16,9 @@ class Server {
 	}
 
     static constraints = {
-        name blank: false, unique: true
-        ip blank: false, unique: true
+        name blank: false, nullable: false
+        ip blank: false, nullable: false
         probeIntervalInSeconds min: 30, max: Integer.MAX_VALUE
+        diskPercentageAlert max: 99
     }
 }

@@ -14,7 +14,9 @@ class ServerConfigurationServiceSpec extends Specification {
                         name: "Sql-1", 
                         ip: "127.1.1.1", 
                         port: 1617, 
-                        probeIntervalInSeconds: 50)
+                        probeIntervalInSeconds: 50,
+                        connectivityAlert: false,
+                        diskPercentageAlert: 20)
              .save(failOnError:true)
         when:
         def servers = service.findAllServers()
@@ -26,6 +28,8 @@ class ServerConfigurationServiceSpec extends Specification {
         servers[0].ip == '127.1.1.1'
         servers[0].port == 1617
         servers[0].probeIntervalInSeconds == 50
+        servers[0].connectivityAlert == false
+        servers[0].diskPercentageAlert == 20
     }
 
     def "finds by id"() {

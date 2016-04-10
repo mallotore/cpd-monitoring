@@ -14,16 +14,20 @@ class ServerConfigurationController {
 		def server = new ServerConfiguration([name: serverDto.name,
 											ip:serverDto.ip,
 											port: serverDto.port,
-											probeIntervalInSeconds: serverDto.probeInterval])
+											probeIntervalInSeconds: serverDto.probeInterval,
+                                            connectivityAlert: serverDto.connectivityAlert,
+                                            diskPercentageAlert: serverDto.diskPercentageAlert])
         
         def serverId = serverConfigurationService.save(server)
         serverProbeSchedulerService.schedule(server)
 
         render([server: new ServerDto([id: serverId,
-											name: server.name,
-											ip:server.ip,
-											port: server.port,
-											probeInterval: server.probeIntervalInSeconds])
+										name: server.name,
+										ip:server.ip,
+										port: server.port,
+										probeInterval: server.probeIntervalInSeconds,
+                                        connectivityAlert: server.connectivityAlert,
+                                        diskPercentageAlert: server.diskPercentageAlert])
         ] as JSON)
     }
 
@@ -32,7 +36,9 @@ class ServerConfigurationController {
 											name: serverDto.name,
 											ip:serverDto.ip,
 											port: serverDto.port,
-											probeIntervalInSeconds: serverDto.probeInterval])
+											probeIntervalInSeconds: serverDto.probeInterval,
+                                            connectivityAlert: serverDto.connectivityAlert,
+                                            diskPercentageAlert: serverDto.diskPercentageAlert])
         serverConfigurationService.edit(server)
 
         render([result: 'ok'] as JSON)

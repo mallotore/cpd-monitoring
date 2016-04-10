@@ -14,7 +14,9 @@ class ServerConfigurationService {
                                     name: it.name, 
                                     ip: it.ip, 
                                     port: it.port, 
-                                    probeIntervalInSeconds: it.probeIntervalInSeconds)
+                                    probeIntervalInSeconds: it.probeIntervalInSeconds,
+                                    connectivityAlert: it.connectivityAlert,
+                                    diskPercentageAlert: it.diskPercentageAlert)
         }
     }
 
@@ -24,7 +26,9 @@ class ServerConfigurationService {
                                     name: server.name, 
                                     ip: server.ip, 
                                     port: server.port, 
-                                    probeIntervalInSeconds: server.probeIntervalInSeconds)
+                                    probeIntervalInSeconds: server.probeIntervalInSeconds,
+                                    connectivityAlert: server.connectivityAlert,
+                                    diskPercentageAlert: server.diskPercentageAlert)
     }
 
     def save(server){
@@ -33,7 +37,9 @@ class ServerConfigurationService {
                                     name: server.name, 
                                     ip: server.ip, 
     		                        port: server.port, 
-                                    probeIntervalInSeconds: server.probeIntervalInSeconds])
+                                    probeIntervalInSeconds: server.probeIntervalInSeconds,
+                                    connectivityAlert: server.connectivityAlert,
+                                    diskPercentageAlert: server.diskPercentageAlert])
         dbServer.save(failOnError:true)
     	
         return uuid
@@ -45,6 +51,8 @@ class ServerConfigurationService {
      	dbServer.ip = server.ip
      	dbServer.port = server.port
      	dbServer.probeIntervalInSeconds = server.probeIntervalInSeconds
+        dbServer.connectivityAlert = server.connectivityAlert
+        dbServer.diskPercentageAlert = server.diskPercentageAlert
     	dbServer.save(failOnError:true)
     }
 

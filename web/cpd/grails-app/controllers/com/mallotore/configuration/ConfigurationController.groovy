@@ -19,7 +19,9 @@ class ConfigurationController {
                         name: it.name,
                         ip:it.ip,
                         port: it.port,
-                        probeInterval: it.probeIntervalInSeconds)
+                        probeInterval: it.probeIntervalInSeconds,
+                        connectivityAlert: it.connectivityAlert,
+                        diskPercentageAlert: it.diskPercentageAlert)
         }
         render view:'/config/config', 
                model: [servers: serversDto,
