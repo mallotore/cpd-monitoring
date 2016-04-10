@@ -61,9 +61,9 @@ $(document).ready(function(){
 			$("#probeInterval_label_" +id).text(server.probeInterval);
 			var diskSpaceAlertText = server.diskPercentageAlert || 'Desactivada';
 			$("#diskSpaceAlert_label_" + id).text(diskSpaceAlertText);
-			var connectivityAlerText = server.connectivityAlert || 'Desactivada';
+			var connectivityAlerText = server.connectivityAlert ? 'Activada' : 'Desactivada';
 			$("#connectivityAlert_label_" + id).text(connectivityAlerText);
-			$("#server_configuration_container_" + id).toggle( "highlight" );
+			$("#server_configuration_container_" + id).effect("highlight", {}, 3000);;
 
 			function addTemplate(){
 				var html = $("#server_configuration_container_template").html();

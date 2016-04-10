@@ -94,8 +94,8 @@ $(document).ready(function(){
 			$("#ip_text_" +server.id).val(server.ip);
 			$("#port_text_" +server.id).val(server.port);
 			$("#probeInterval_text_" +server.id).val(server.probeInterval);
-			$("#diskSpaceAlert_text_" + id).val('');
-			$("#connectivityAlert_text_" + id).prop('checked', false);
+			$("#diskSpaceAlert_text_" + id).val(server.diskPercentageAlert);
+			$("#connectivityAlert_text_" + id).prop('checked', server.connectivityAlert);
 			_(widgets).forEach(function(widget){
 				$("#"+widget + "_" +id).show();
 			});
@@ -113,7 +113,7 @@ $(document).ready(function(){
 			var total = $("#serversTotal").text() * 1;
 			total = (total - 1) > 0 ? (total - 1) : 0
 			$("#serversTotal").text(total);
-			$("#server_configuration_container_" +id).toggle( "highlight" );
+			$("#server_configuration_container_" +id).effect("highlight", {}, 3000);
 	        $("#server_configuration_container_"+ id).fadeOut();
 	        $("#server_configuration_container_"+ id).remove();
 		};
@@ -134,6 +134,7 @@ $(document).ready(function(){
 	}
 
 	function ReadOnlyServerView(){
+		var disabledAlertText = "Desactivada";
 		var widgets = ['name_label', 'ip_label', 'port_label', 'probeInterval_label', 'connectivityAlert_label', 'diskSpaceAlert_label'];
 		var showReadOnlyServerHandler = function(){};
 
@@ -150,8 +151,8 @@ $(document).ready(function(){
 		};
 
 		this.show = function(id){
+			$("#server_configuration_container_" +id).effect("highlight", {}, 3000);
 			_(widgets).forEach(function(widget){
-				$("#server_configuration_container_" +id).toggle( "highlight" );
 				$("#"+widget + "_" +id).show();
 			});
 			$("#actionButtons_" + id).show();
@@ -169,21 +170,23 @@ $(document).ready(function(){
 			$("#ip_label_" +server.id).text(server.ip);
 			$("#port_label_" +server.id).text(server.port);
 			$("#probeInterval_label_" +server.id).text(server.probeInterval);
-			var diskSpaceAlertText = server.diskPercentageAlert || 'Desactivada';
+			var diskSpaceAlertText = server.diskPercentageAlert || disabledAlertText;
 			$("#diskSpaceAlert_label_" +  server.id).text(diskSpaceAlertText);
-			var connectivityAlerText = server.connectivityAlert || 'Desactivada';
+			var connectivityAlerText = server.connectivityAlert ? 'Activada' : disabledAlertText;
 			$("#connectivityAlert_label_" + server.id).text(connectivityAlerText);
 		};
 
 		this.getServerConfiguration = function(id){
+			var diskPercentageAlert = $("#diskSpaceAlert_label_" + id).text() != disabledAlertText ? $("#diskSpaceAlert_label_" + id).text() : 0;
+			var connectivityAlert = $("#connectivityAlert_label_" + id).text() != disabledAlertText ? $("#connectivityAlert_label_" + id).text() : false ;  
 			return {
 				id: id,
 				name: $("#name_label_" +id).text(),
 				ip:$("#ip_label_" +id).text(),
 				port:$("#port_label_" +id).text(),
 				probeInterval:$("#probeInterval_label_" +id).text(),
-				diskPercentageAlert: $("#diskSpaceAlert_label_" + id).val(),
-				connectivityAlert: $("#connectivityAlert_label_" + id).prop('checked')
+				diskPercentageAlert: diskPercentageAlert,
+				connectivityAlert: connectivityAlert
 			};
 		};
 
