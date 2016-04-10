@@ -40,6 +40,8 @@ class ServerConfigurationController {
                                             connectivityAlert: serverDto.connectivityAlert,
                                             diskPercentageAlert: serverDto.diskPercentageAlert])
         serverConfigurationService.edit(server)
+        serverProbeSchedulerService.unschedule(server.name)
+        serverProbeSchedulerService.schedule(server)
 
         render([result: 'ok'] as JSON)
     }

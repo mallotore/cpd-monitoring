@@ -68,6 +68,17 @@ class ServerConfigurationControllerSpec extends Specification {
                                         ip: "127.0.0.1", 
                                         port: 1617, 
                                         probeIntervalInSeconds: 60))
+        1 * controller
+            .serverProbeSchedulerService
+            .unschedule("local")
+        1 * controller
+            .serverProbeSchedulerService
+            .schedule(new ServerConfiguration(name: "local", 
+                                        ip: "127.0.0.1", 
+                                        port: 1617, 
+                                        probeIntervalInSeconds: 60,
+                                        connectivityAlert: false,
+                                        diskPercentageAlert: 20))
         response.json.result == 'ok'
     }
 
