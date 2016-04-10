@@ -9,6 +9,8 @@ CREATE TABLE  `cpd`.`server_configuration` (
   `port` int NOT NULL,
   `probe_interval_in_seconds` int NOT NULL DEFAULT 0,
   `uuid` varchar(43) NOT NULL,
+  `connectivity_alert` BOOLEAN NULL,
+  `disk_percentage_alert` int NOT NULL DEFAULT 0,
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
