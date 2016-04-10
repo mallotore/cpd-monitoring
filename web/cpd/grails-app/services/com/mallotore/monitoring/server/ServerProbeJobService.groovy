@@ -27,9 +27,7 @@ class ServerProbeJobService{
 	private checkDiskSpaceAlert(server, diskRootsSpace){
 		diskRootsSpace?.each{
 			def multiplier = server.diskPercentageAlert / 100
-			log.error("multiplier ${multiplier}")
 			if(it.usableSpace <= (it.totalSpace * multiplier)){
-				log.error("emits")
 				def message = """El servidor ${server.ip}:${server.port} tiene espacio en disco inferior al ${server.diskPercentageAlert}%.
 					Espacio disponible ${formatDiskSpace(it.usableSpace)}"""
 				alertSenderService.send(message)
