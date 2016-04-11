@@ -5,10 +5,7 @@
     <string name="about">About</string>
     <string name="about_credits"></string>
     <string name="about_descrip">Esta aplicación de momento sólo recibirá alertas</string>
-    <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
-        send downstream messages to this app.</string>
-    <string name="registering_message">Generating InstanceID token...</string>
-    <string name="token_error_message">An error occurred while either fetching the InstanceID token,
-        sending the fetched token to the server or subscribing to the PubSub topic. Please try
-        running the sample again.</string>
+    <string name="gcm_send_message">Aplicación registrada para recibir alertas</string>
+    <string name="registering_message">Generando token para recibir alertas</string>
+    <string name="token_error_message">Hubo un error generando el token para recibir alertas</string>
 </resources>

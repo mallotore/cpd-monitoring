@@ -17,4 +17,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/registrationProgressBar" />
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/receivedMessagesListView"
+        android:choiceMode="none" />
+
 </LinearLayout>

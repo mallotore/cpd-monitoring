@@ -13,87 +13,117 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import com.arasthel.swissknife.annotations.OnItemClick
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import grooid.app.gcm.QuickstartPreferences
+import grooid.app.gcm.Events
 import grooid.app.gcm.RegistrationIntentService
+import grooid.app.messages.ReceivedMessage
+import grooid.app.messages.ReceivedMessagesListAdapter
+import com.arasthel.swissknife.SwissKnife
+import com.arasthel.swissknife.annotations.InjectView
+import com.arasthel.swissknife.annotations.OnClick
 import groovy.transform.CompileStatic
 import com.arasthel.swissknife.annotations.OnUIThread
 
 @CompileStatic
 class MainActivity extends AppCompatActivity {
 
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000
+    private static final String TAG = "MainActivity"
 
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private ProgressBar mRegistrationProgressBar;
-    private TextView mInformationTextView;
+    private BroadcastReceiver mRegistrationBroadcastReceiver
+    private BroadcastReceiver mMessageReceiver
+    @InjectView(R.id.registrationProgressBar) ProgressBar mRegistrationProgressBar
+    @InjectView(R.id.informationTextView) TextView mInformationTextView
+    @InjectView(R.id.receivedMessagesListView) ListView messagesListView
+    ReceivedMessagesListAdapter receivedMessagesListAdapter
+    ArrayList<ReceivedMessage> receivedMessages
 
     @Override
     void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        SwissKnife.inject(this);
+        SwissKnife.restoreState(this, savedInstanceState);
+        SwissKnife.loadExtras(this)
 
-        mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
+        receivedMessages = new ArrayList<ReceivedMessage>()
+        receivedMessagesListAdapter = new ReceivedMessagesListAdapter(this, receivedMessages)
+        messagesListView.setAdapter(receivedMessagesListAdapter)
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                mRegistrationProgressBar.setVisibility(ProgressBar.GONE)
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+                boolean sentToken = sharedPreferences.getBoolean(Events.SENT_TOKEN_TO_SERVER, false)
                 if (sentToken) {
-                    mInformationTextView.setText(getString(R.string.gcm_send_message));
+                    mInformationTextView.setText(getString(R.string.gcm_send_message))
                 } else {
-                    mInformationTextView.setText(getString(R.string.token_error_message));
+                    mInformationTextView.setText(getString(R.string.token_error_message))
                 }
             }
         };
-        mInformationTextView = (TextView) findViewById(R.id.informationTextView);
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                ReceivedMessage message = new ReceivedMessage(message: intent.getStringExtra("message"),
+                                                              title: intent.getStringExtra("title"),
+                                                                date: intent.getStringExtra("date"))
+                receivedMessages.add(message)
+                receivedMessagesListAdapter.notifyDataSetChanged()
+                Log.d("receiver", "Got message: " + message)
+            }
+        };
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
+            Intent intent = new Intent(this, RegistrationIntentService.class)
+            startService(intent)
         }
+    }
+
+    @OnItemClick(R.id.receivedMessagesListView)
+    public void onItemClick(int position) {
+        Object o = messagesListView.getItemAtPosition(position)
+        ReceivedMessage message = (ReceivedMessage) o
+        Toast.makeText(this, "Seleccionado :" + " " + message, Toast.LENGTH_LONG).show()
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume()
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+                new IntentFilter(Events.REGISTRATION_COMPLETE))
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter(Events.MESSAGE_RECEIVED))
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver)
+        super.onPause()
     }
 
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
     private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance()
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this)
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
                 apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
+                        .show()
             } else {
-                Log.i(TAG, "This device is not supported.");
-                finish();
+                Log.i(TAG, "This device is not supported.")
+                finish()
             }
-            return false;
+            return false
         }
-        return true;
+        return true
     }
 
     @Override
@@ -123,5 +153,4 @@ class MainActivity extends AppCompatActivity {
             .create()
             .show()
     }
-    
 }

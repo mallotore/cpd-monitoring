@@ -25,5 +25,4 @@ class SplashScreenActivity extends Activity {
         startActivity(new Intent(this, MainActivity))
         finish()
     }
-
 }
