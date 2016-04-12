@@ -79,7 +79,7 @@ class MainActivity extends AppCompatActivity implements Toastable{
                                                                 date: intent.getStringExtra("date"))
                 receivedMessages.add(message)
                 receivedMessagesListAdapter.notifyDataSetChanged()
-                showToastMessage(message)
+                showToastMessage(message.toString())
             }
         };
 
@@ -93,7 +93,7 @@ class MainActivity extends AppCompatActivity implements Toastable{
     public void onItemClick(int position) {
         Object o = messagesListView.getItemAtPosition(position)
         ReceivedMessage message = (ReceivedMessage) o
-        showToastMessage("Seleccionado :" + " " + message)
+        showToastMessage(message.toString())
     }
 
     @OnClick(R.id.delete_alerts)
