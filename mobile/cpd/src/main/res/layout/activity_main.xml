@@ -12,6 +12,35 @@
         android:id="@+id/informationTextView"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:padding="5dip" >
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Refrescar Alertas"
+            android:id="@+id/refresh_alerts"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="right" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Borrar Alertas"
+            android:id="@+id/delete_alerts"
+            android:gravity="left"
+            android:layout_gravity="left|top"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,3 +53,5 @@
         android:choiceMode="none" />
 
 </LinearLayout>
+
+

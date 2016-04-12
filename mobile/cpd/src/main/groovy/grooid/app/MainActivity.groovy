@@ -16,25 +16,26 @@ import android.view.MenuItem
 import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
+import com.arasthel.swissknife.annotations.OnClick
 import com.arasthel.swissknife.annotations.OnItemClick
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import grooid.app.gcm.Events
 import grooid.app.gcm.RegistrationIntentService
 import grooid.app.messages.ReceivedMessage
+import grooid.app.messages.ReceivedMessageRepository
 import grooid.app.messages.ReceivedMessagesListAdapter
 import com.arasthel.swissknife.SwissKnife
 import com.arasthel.swissknife.annotations.InjectView
-import com.arasthel.swissknife.annotations.OnClick
+import grooid.app.util.Toastable
 import groovy.transform.CompileStatic
 import com.arasthel.swissknife.annotations.OnUIThread
 
 @CompileStatic
-class MainActivity extends AppCompatActivity {
+class MainActivity extends AppCompatActivity implements Toastable{
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000
-    private static final String TAG = "MainActivity"
+    private static final String TAG = MainActivity.class.getSimpleName()
 
     private BroadcastReceiver mRegistrationBroadcastReceiver
     private BroadcastReceiver mMessageReceiver
@@ -43,6 +44,7 @@ class MainActivity extends AppCompatActivity {
     @InjectView(R.id.receivedMessagesListView) ListView messagesListView
     ReceivedMessagesListAdapter receivedMessagesListAdapter
     ArrayList<ReceivedMessage> receivedMessages
+    ReceivedMessageRepository receivedMessageRepository
 
     @Override
     void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,8 @@ class MainActivity extends AppCompatActivity {
         SwissKnife.restoreState(this, savedInstanceState);
         SwissKnife.loadExtras(this)
 
-        receivedMessages = new ArrayList<ReceivedMessage>()
+        receivedMessageRepository = new ReceivedMessageRepository(this)
+        receivedMessages = receivedMessageRepository.findAll()
         receivedMessagesListAdapter = new ReceivedMessagesListAdapter(this, receivedMessages)
         messagesListView.setAdapter(receivedMessagesListAdapter)
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -76,12 +79,11 @@ class MainActivity extends AppCompatActivity {
                                                                 date: intent.getStringExtra("date"))
                 receivedMessages.add(message)
                 receivedMessagesListAdapter.notifyDataSetChanged()
-                Log.d("receiver", "Got message: " + message)
+                showToastMessage(message)
             }
         };
 
         if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class)
             startService(intent)
         }
@@ -91,12 +93,30 @@ class MainActivity extends AppCompatActivity {
     public void onItemClick(int position) {
         Object o = messagesListView.getItemAtPosition(position)
         ReceivedMessage message = (ReceivedMessage) o
-        Toast.makeText(this, "Seleccionado :" + " " + message, Toast.LENGTH_LONG).show()
+        showToastMessage("Seleccionado :" + " " + message)
+    }
+
+    @OnClick(R.id.delete_alerts)
+    public void deleteAlerts(){
+        receivedMessageRepository.deleteAll()
+        receivedMessages = new ArrayList<ReceivedMessage>()
+        receivedMessagesListAdapter.notifyDataSetChanged()
+    }
+
+    @OnClick(R.id.refresh_alerts)
+    public void refreshAlerts(){
+        receivedMessages = receivedMessageRepository.findAll()
+        receivedMessagesListAdapter.notifyDataSetChanged()
     }
 
     @Override
     protected void onResume() {
         super.onResume()
+        if(receivedMessageRepository == null){
+            receivedMessageRepository = new ReceivedMessageRepository(this)
+        }
+        receivedMessages = receivedMessageRepository.findAll()
+        receivedMessagesListAdapter.notifyDataSetChanged()
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Events.REGISTRATION_COMPLETE))
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,

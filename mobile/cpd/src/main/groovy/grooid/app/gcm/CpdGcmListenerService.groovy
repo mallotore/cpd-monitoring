@@ -3,7 +3,8 @@ package grooid.app.gcm;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
+import android.content.Intent
+import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,9 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService
 import grooid.app.MainActivity
 import grooid.app.R
+import grooid.app.messages.ReceivedMessage
+import grooid.app.messages.ReceivedMessageRepository
+import grooid.app.messages.ReceivedMessageSqlLiteHelper
 import groovy.transform.CompileStatic
 
 import java.text.SimpleDateFormat;
@@ -21,7 +25,8 @@ import java.text.SimpleDateFormat;
 @CompileStatic
 public class CpdGcmListenerService extends GcmListenerService {
 
-    private static final String TAG = "CpdGcmListenerService";
+    private static final String TAG = "CpdGcmListenerService"
+    private ReceivedMessageRepository receivedMessageRepository
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
@@ -34,17 +39,34 @@ public class CpdGcmListenerService extends GcmListenerService {
         } else {
             // normal downstream message.
         }
-        updateUI(data)
+        Date date = getCurrentDatetime()
+        saveMessage(data, date)
+        updateUI(data, formatDate(date))
         sendNotification(message)
     }
 
-    private void updateUI(Bundle data){
+    private void saveMessage(Bundle data, Date date){
+        if(receivedMessageRepository == null){
+            receivedMessageRepository = new ReceivedMessageRepository(this)
+        }
+        receivedMessageRepository.save("Alerta", data.getString("message"), date)
+    }
+
+    private Date getCurrentDatetime(){
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault())
+        return cal.getTime()
+    }
+
+    private String formatDate(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault())
+        return sdf.format(date)
+    }
+
+    private void updateUI(Bundle data, String date){
         Intent messageReceivedIntent = new Intent(Events.MESSAGE_RECEIVED)
         messageReceivedIntent.putExtra("message", data.getString("message"))
         messageReceivedIntent.putExtra("title", "Alerta")
-        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
-        messageReceivedIntent.putExtra("date",sdf.format(cal.getTime()))
+        messageReceivedIntent.putExtra("date",date)
         LocalBroadcastManager.getInstance(this).sendBroadcast(messageReceivedIntent)
     }
 
