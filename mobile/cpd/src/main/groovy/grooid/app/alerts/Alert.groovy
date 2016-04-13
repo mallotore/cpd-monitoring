@@ -1,8 +1,8 @@
-package grooid.app.messages;
+package grooid.app.alerts;
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class ReceivedMessage {
+class Alert {
 
     String title
     String message

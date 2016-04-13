@@ -1,4 +1,4 @@
-package grooid.app.messages
+package grooid.app.alerts
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,24 +10,25 @@ import grooid.app.R
 import groovy.transform.CompileStatic
 
 @CompileStatic
-public class ReceivedMessagesListAdapter extends BaseAdapter {
+public class AlertListAdapter extends BaseAdapter {
 
-    private ArrayList<ReceivedMessage> listData
+    private static final int FIRST_POSITION = 0
+    private ArrayList<Alert> alerts
     private LayoutInflater layoutInflater
 
-    public ReceivedMessagesListAdapter(Context context, ArrayList<ReceivedMessage> listData) {
-        this.listData = listData
+    public AlertListAdapter(Context context, ArrayList<Alert> alerts) {
+        this.alerts = alerts
         layoutInflater = LayoutInflater.from(context)
     }
 
     @Override
     public int getCount() {
-        return listData.size()
+        return alerts.size()
     }
 
     @Override
     public Object getItem(int position) {
-        return listData.get(position)
+        return alerts.get(position)
     }
 
     @Override
@@ -35,10 +36,25 @@ public class ReceivedMessagesListAdapter extends BaseAdapter {
         return position
     }
 
+    public void addAlert(Alert alert){
+        this.alerts.add(FIRST_POSITION,alert)
+        this.notifyDataSetChanged()
+    }
+
+    public void updateAlerts(ArrayList<Alert> alerts){
+        this.alerts = alerts
+        this.notifyDataSetChanged()
+    }
+
+    public void clearAlerts(){
+        this.alerts = new ArrayList<Alert>()
+        this.notifyDataSetChanged()
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.received_messages_row_layout, null)
+            convertView = layoutInflater.inflate(R.layout.alerts_row_layout, null)
             holder = new ViewHolder()
             holder.titleView = (TextView) convertView.findViewById(R.id.title)
             holder.messageView = (TextView) convertView.findViewById(R.id.message)
@@ -48,9 +64,9 @@ public class ReceivedMessagesListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag()
         }
 
-        holder.titleView.setText(listData.get(position).title)
-        holder.messageView.setText(listData.get(position).message)
-        holder.dateView.setText(listData.get(position).date)
+        holder.titleView.setText(alerts.get(position).title)
+        holder.messageView.setText(alerts.get(position).message)
+        holder.dateView.setText(alerts.get(position).date)
 
         return convertView
     }

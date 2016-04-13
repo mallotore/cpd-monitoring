@@ -4,7 +4,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,9 +14,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService
 import grooid.app.MainActivity
 import grooid.app.R
-import grooid.app.messages.ReceivedMessage
-import grooid.app.messages.ReceivedMessageRepository
-import grooid.app.messages.ReceivedMessageSqlLiteHelper
+import grooid.app.alerts.AlertRepository
 import groovy.transform.CompileStatic
 
 import java.text.SimpleDateFormat;
@@ -25,8 +22,8 @@ import java.text.SimpleDateFormat;
 @CompileStatic
 public class CpdGcmListenerService extends GcmListenerService {
 
-    private static final String TAG = "CpdGcmListenerService"
-    private ReceivedMessageRepository receivedMessageRepository
+    private static final String TAG = CpdGcmListenerService.class.getSimpleName()
+    private AlertRepository alertRepository
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
@@ -40,16 +37,9 @@ public class CpdGcmListenerService extends GcmListenerService {
             // normal downstream message.
         }
         Date date = getCurrentDatetime()
-        saveMessage(data, date)
-        updateUI(data, formatDate(date))
+        saveAlert(data, date)
+        notifyUI(data, date)
         sendNotification(message)
-    }
-
-    private void saveMessage(Bundle data, Date date){
-        if(receivedMessageRepository == null){
-            receivedMessageRepository = new ReceivedMessageRepository(this)
-        }
-        receivedMessageRepository.save("Alerta", data.getString("message"), date)
     }
 
     private Date getCurrentDatetime(){
@@ -57,17 +47,24 @@ public class CpdGcmListenerService extends GcmListenerService {
         return cal.getTime()
     }
 
-    private String formatDate(Date date){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault())
-        return sdf.format(date)
+    private void saveAlert(Bundle data, Date date){
+        if(alertRepository == null){
+            alertRepository = new AlertRepository(this)
+        }
+        alertRepository.save("Alerta", data.getString("message"), date)
     }
 
-    private void updateUI(Bundle data, String date){
+    private void notifyUI(Bundle data, Date date){
         Intent messageReceivedIntent = new Intent(Events.MESSAGE_RECEIVED)
         messageReceivedIntent.putExtra("message", data.getString("message"))
         messageReceivedIntent.putExtra("title", "Alerta")
-        messageReceivedIntent.putExtra("date",date)
+        messageReceivedIntent.putExtra("date",formatDate(date))
         LocalBroadcastManager.getInstance(this).sendBroadcast(messageReceivedIntent)
+    }
+
+    private String formatDate(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault())
+        return sdf.format(date)
     }
 
     private void sendNotification(String message) {
@@ -78,7 +75,7 @@ public class CpdGcmListenerService extends GcmListenerService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("CPD")
                 .setContentText(message)
                 .setAutoCancel(true)

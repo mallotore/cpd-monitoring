@@ -9,8 +9,13 @@
 
     <TextView android:text="@string/registering_message" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/informationTextView"
+        android:id="@+id/gcmRegistrationTextView"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/registrationProgressBar" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -24,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Refrescar Alertas"
-            android:id="@+id/refresh_alerts"
+            android:id="@+id/refreshAlerts"
             android:layout_alignParentTop="true"
             android:layout_gravity="right" />
 
@@ -33,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Borrar Alertas"
-            android:id="@+id/delete_alerts"
+            android:id="@+id/deleteAlerts"
             android:gravity="left"
             android:layout_gravity="left|top"
             android:layout_alignParentTop="true"
@@ -41,15 +46,10 @@
 
     </RelativeLayout>
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/registrationProgressBar" />
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/receivedMessagesListView"
+        android:id="@+id/alertsListView"
         android:choiceMode="none" />
 
 </LinearLayout>

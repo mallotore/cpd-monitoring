@@ -22,9 +22,9 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import grooid.app.gcm.Events
 import grooid.app.gcm.RegistrationIntentService
-import grooid.app.messages.ReceivedMessage
-import grooid.app.messages.ReceivedMessageRepository
-import grooid.app.messages.ReceivedMessagesListAdapter
+import grooid.app.alerts.Alert
+import grooid.app.alerts.AlertRepository
+import grooid.app.alerts.AlertListAdapter
 import com.arasthel.swissknife.SwissKnife
 import com.arasthel.swissknife.annotations.InjectView
 import grooid.app.util.Toastable
@@ -37,14 +37,17 @@ class MainActivity extends AppCompatActivity implements Toastable{
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000
     private static final String TAG = MainActivity.class.getSimpleName()
 
-    private BroadcastReceiver mRegistrationBroadcastReceiver
-    private BroadcastReceiver mMessageReceiver
-    @InjectView(R.id.registrationProgressBar) ProgressBar mRegistrationProgressBar
-    @InjectView(R.id.informationTextView) TextView mInformationTextView
-    @InjectView(R.id.receivedMessagesListView) ListView messagesListView
-    ReceivedMessagesListAdapter receivedMessagesListAdapter
-    ArrayList<ReceivedMessage> receivedMessages
-    ReceivedMessageRepository receivedMessageRepository
+    @InjectView(R.id.registrationProgressBar)
+    private ProgressBar gmcRegistrationProgressBar
+    @InjectView(R.id.gcmRegistrationTextView)
+    private TextView gcmRegistrationTextView
+    @InjectView(R.id.alertsListView)
+    private ListView alertsListView
+
+    private BroadcastReceiver gcmRegistrationReceiver
+    private BroadcastReceiver alertReceiver
+    private AlertListAdapter alertsListAdapter
+    private AlertRepository alertRepository
 
     @Override
     void onCreate(Bundle savedInstanceState) {
@@ -54,32 +57,31 @@ class MainActivity extends AppCompatActivity implements Toastable{
         SwissKnife.restoreState(this, savedInstanceState);
         SwissKnife.loadExtras(this)
 
-        receivedMessageRepository = new ReceivedMessageRepository(this)
-        receivedMessages = receivedMessageRepository.findAll()
-        receivedMessagesListAdapter = new ReceivedMessagesListAdapter(this, receivedMessages)
-        messagesListView.setAdapter(receivedMessagesListAdapter)
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+        alertRepository = new AlertRepository(this)
+        ArrayList<Alert> alerts = alertRepository.findAll()
+        alertsListAdapter = new AlertListAdapter(this, alerts)
+        alertsListView.setAdapter(alertsListAdapter)
+        gcmRegistrationReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                mRegistrationProgressBar.setVisibility(ProgressBar.GONE)
+                gmcRegistrationProgressBar.setVisibility(ProgressBar.GONE)
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
                 boolean sentToken = sharedPreferences.getBoolean(Events.SENT_TOKEN_TO_SERVER, false)
                 if (sentToken) {
-                    mInformationTextView.setText(getString(R.string.gcm_send_message))
+                    gcmRegistrationTextView.setText(getString(R.string.gcm_send_message))
                 } else {
-                    mInformationTextView.setText(getString(R.string.token_error_message))
+                    gcmRegistrationTextView.setText(getString(R.string.token_error_message))
                 }
             }
         };
-        mMessageReceiver = new BroadcastReceiver() {
+        alertReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                ReceivedMessage message = new ReceivedMessage(message: intent.getStringExtra("message"),
-                                                              title: intent.getStringExtra("title"),
-                                                                date: intent.getStringExtra("date"))
-                receivedMessages.add(message)
-                receivedMessagesListAdapter.notifyDataSetChanged()
-                showToastMessage(message.toString())
+                Alert alert = new Alert(message: intent.getStringExtra("message"),
+                                      title: intent.getStringExtra("title"),
+                                        date: intent.getStringExtra("date"))
+                alertsListAdapter.addAlert(alert)
+                showToastMessage(alert.toString())
             }
         };
 
@@ -89,44 +91,43 @@ class MainActivity extends AppCompatActivity implements Toastable{
         }
     }
 
-    @OnItemClick(R.id.receivedMessagesListView)
-    public void onItemClick(int position) {
-        Object o = messagesListView.getItemAtPosition(position)
-        ReceivedMessage message = (ReceivedMessage) o
-        showToastMessage(message.toString())
+    @OnItemClick(R.id.alertsListView)
+    public void onAlertClick(int position) {
+        Object o = alertsListView.getItemAtPosition(position)
+        Alert alert = (Alert) o
+        showToastMessage(alert.toString())
     }
 
-    @OnClick(R.id.delete_alerts)
+    @OnClick(R.id.deleteAlerts)
     public void deleteAlerts(){
-        receivedMessageRepository.deleteAll()
-        receivedMessages = new ArrayList<ReceivedMessage>()
-        receivedMessagesListAdapter.notifyDataSetChanged()
+        alertRepository.deleteAll()
+        alertsListAdapter.clearAlerts()
     }
 
-    @OnClick(R.id.refresh_alerts)
+    @OnClick(R.id.refreshAlerts)
     public void refreshAlerts(){
-        receivedMessages = receivedMessageRepository.findAll()
-        receivedMessagesListAdapter.notifyDataSetChanged()
+        ArrayList<Alert> alerts = alertRepository.findAll()
+        alertsListAdapter.updateAlerts(alerts)
     }
 
     @Override
     protected void onResume() {
         super.onResume()
-        if(receivedMessageRepository == null){
-            receivedMessageRepository = new ReceivedMessageRepository(this)
-        }
-        receivedMessages = receivedMessageRepository.findAll()
-        receivedMessagesListAdapter.notifyDataSetChanged()
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+        LocalBroadcastManager.getInstance(this).registerReceiver(gcmRegistrationReceiver,
                 new IntentFilter(Events.REGISTRATION_COMPLETE))
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+        LocalBroadcastManager.getInstance(this).registerReceiver(alertReceiver,
                 new IntentFilter(Events.MESSAGE_RECEIVED))
+        if(alertRepository == null){
+            alertRepository = new AlertRepository(this)
+        }
+        ArrayList<Alert> alerts = alertRepository.findAll()
+        alertsListAdapter.updateAlerts(alerts)
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(gcmRegistrationReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(alertReceiver)
         super.onPause()
     }
 
