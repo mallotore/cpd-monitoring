@@ -21,9 +21,15 @@ class JmxBeanExporterSpec extends Specification {
         and: "a cpu info bean imported from the local server"
             def cpuInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
                                         JmxBeanExporter.CPU_INFO_BEAN_NAMESPACE)
+
+         and: "a mem info bean imported from the local server"
+            def memInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
+                                        JmxBeanExporter.MEM_INFO_BEAN_NAMESPACE)
+
         expect:
             osBean.getVersion() != ""
             diskSpaceBean.getDiskRootsSpace() instanceof List<DiskRootSpace>
             cpuInfoBean.getStats() instanceof CpuStats
+            memInfoBean.getStats() instanceof MemStats
     }
 }
