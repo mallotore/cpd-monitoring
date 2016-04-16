@@ -57,7 +57,9 @@ class ServerConfigurationControllerSpec extends Specification {
                                     name: "local", 
                                     ip: "127.0.0.1", 
                                     port: 1617, 
-                                    probeInterval: 60)
+                                    probeInterval: 60,
+                                    connectivityAlert: false,
+                                    diskPercentageAlert: 20)
         controller.edit(serverDto)
 
         then:
@@ -67,13 +69,16 @@ class ServerConfigurationControllerSpec extends Specification {
                                         name: "local", 
                                         ip: "127.0.0.1", 
                                         port: 1617, 
-                                        probeIntervalInSeconds: 60))
+                                        probeIntervalInSeconds: 60,
+                                        connectivityAlert: false,
+                                        diskPercentageAlert: 20))
         1 * controller
             .serverProbeSchedulerService
             .unschedule("local")
         1 * controller
             .serverProbeSchedulerService
-            .schedule(new ServerConfiguration(name: "local", 
+            .schedule(new ServerConfiguration(id: "uuid",
+                                        name: "local", 
                                         ip: "127.0.0.1", 
                                         port: 1617, 
                                         probeIntervalInSeconds: 60,

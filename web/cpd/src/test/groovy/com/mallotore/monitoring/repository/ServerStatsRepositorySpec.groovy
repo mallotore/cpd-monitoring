@@ -15,7 +15,7 @@ class ServerStatsRepositorySpec extends Specification {
     def serverStatsRepository = new ServerStatsRepository(mongoDatabaseClient: mongoDatabaseClient)
 
     def setup() {
-        serverStatsRepository.removeAll()
+       serverStatsRepository.removeAll()
     }
 
     def cleanup() {
@@ -36,15 +36,40 @@ class ServerStatsRepositorySpec extends Specification {
                 stats[0].operatingSystem.name == 'Linux'
                 stats[0].diskRootsSpace[0].path == '/'
                 stats[0].diskRootsSpace[0].freeSpace == 123
+                stats[0].cpuStats.cacheSize == 123
+                stats[0].cpuStats.model == "model1"
                 stats[0].class == com.mallotore.monitoring.model.ServerStats
     }
 
     def buildServerStats(ip, name, path, freeSpace){
-        return new ServerStats(ip: ip,
-                            operatingSystem: new OperatingSystem(name: name),
-                            diskRootsSpace: [ new DiskRootSpace(path: path,
-                                                                totalSpace: 12,
-                                                                freeSpace: freeSpace,
-                                                                usableSpace: 12)])
+        return new ServerStats(ip, 
+                              new OperatingSystem(name: name),
+                              [ new DiskRootSpace(path: path,totalSpace: 12,
+                                                 freeSpace: freeSpace, usableSpace: 12)],
+                              createCpuStats())
+    }
+
+    private createCpuStats(){
+        return new CpuStats(cacheSize: 123,
+                            vendor: "vendor1",
+                            model: "model1",
+                            mhz: "mhz1",
+                            totalCpus: 1,
+                            physicalCpus: 0,
+                            coresPerCpu: 0,
+                            cpusPercentages: [createCpuPercentage()],
+                            totals: createCpuPercentage())
+    }
+
+    private createCpuPercentage(){
+        return new CpuPercentage(userTime: "userTime1",
+                                sysTime: "sysTime1",
+                                idleTime: "idleTime1",
+                                waitTime: "waitTime1",
+                                niceTime: "niceTime1",
+                                combined: "combined1",
+                                irqTime: "irqTime1",
+                                softIrqTime: "softIrqTime1",
+                                stolenTime: "stolenTime1")
     }
 }

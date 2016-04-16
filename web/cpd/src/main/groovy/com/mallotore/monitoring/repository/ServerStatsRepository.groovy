@@ -26,16 +26,49 @@ class ServerStatsRepository {
     def findByIp(ip){
         statsCollection().find([ip: ip]).collect{
             def operatingSystem = new OperatingSystem(it.operatingSystem)
+            def cpuStats = createCpuStats(it?.cpuStats)
             def diskRootsSpace = it?.diskRootsSpace?.collect { rootSpace ->
                 new DiskRootSpace(rootSpace)
             }
+            def date = Date.parse( "yyyy-MM-dd'T'HH:mm:ss", it.creationDate )
             def state = new ServerStatsState(_id: it._id, 
                                               ip: it.ip, 
                                               operatingSystem: operatingSystem, 
                                               diskRootsSpace: diskRootsSpace,
-                                              creationDate: it.creationDate)
+                                              cpuStats: cpuStats,
+                                              creationDate: date)
             new ServerStats(state)
         }
+    }
+
+    private createCpuStats(stats){
+        def cpusPercentages = stats.cpusPercentages.collect{
+            createCpuPercentage(it)
+        }
+        def totals = createCpuPercentage(stats.totals)
+        return new CpuStats(cacheSize: stats.cacheSize,
+                        vendor: stats.vendor,
+                        model: stats.model,
+                        mhz: stats.mhz,
+                        totalCpus: stats.totalCpus,
+                        physicalCpus: stats.physicalCpus,
+                        coresPerCpu: stats.coresPerCpu,
+                        cpusPercentages: cpusPercentages,
+                        totals: totals)
+    }
+
+    private createCpuPercentage(percentage){
+        return new CpuPercentage([
+                    userTime: percentage.userTime,
+                    sysTime: percentage.sysTime,
+                    idleTime: percentage.idleTime,
+                    waitTime: percentage.waitTime,
+                    niceTime: percentage.niceTime,
+                    combined: percentage.combined,
+                    irqTime: percentage.irqTime,
+                    softIrqTime: percentage.softIrqTime,
+                    stolenTime: percentage.stolenTime
+            ])
     }
 
     private statsCollection() {

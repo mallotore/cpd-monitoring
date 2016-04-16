@@ -1,11 +1,12 @@
-package com.mallotore.monitoring.jmx
+package com.mallotore.monitoring
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import com.mallotore.monitoring.jmx.*
 import com.mallotore.monitoring.jmx.dto.*
 
-@TestFor(ServerStatsController)
-class ServerStatsControllerSpec extends Specification {
+@TestFor(OverviewStatsController)
+class OverviewStatsControllerSpec extends Specification {
 
     def jmxServiceMock
 

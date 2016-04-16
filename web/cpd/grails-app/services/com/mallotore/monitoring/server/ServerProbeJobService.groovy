@@ -13,7 +13,8 @@ class ServerProbeJobService{
 	        def serverStats = serverGatherer.gatherServerStats(server)
         	def stats = new ServerStats(serverStats.ip,
 			                            serverStats.os,
-			                            serverStats.diskRootsSpace)
+			                            serverStats.diskRootsSpace,
+			                            serverStats.cpuStats)
 
         	serverStatsRepository.save stats
         	if(server.diskPercentageAlert){

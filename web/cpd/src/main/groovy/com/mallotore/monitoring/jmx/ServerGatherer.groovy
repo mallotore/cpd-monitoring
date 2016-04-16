@@ -11,6 +11,7 @@ class ServerGatherer {
     static final BEAN_NAMESPACE = "com.mallotore.monitoring.jmx.bean"
     static final DISKSPACE_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.DiskSpace:type=DiskSpace"
     static final OPERATING_SYSTEM_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.OperatingSystem:type=OperatingSystem"
+    static final CPU_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=CpuInfo"
     static final WIN_SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.WinServicesStatus:type=WinServicesStatus"
     static final SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.ServicesStatus:type=ServicesStatus"
     
@@ -31,6 +32,7 @@ class ServerGatherer {
         connection.connect()
         def mbeanServerConnection = connection.MBeanServerConnection
         def osBean = new GroovyMBean(mbeanServerConnection, OPERATING_SYSTEM_BEAN_NAMESPACE)
+        def cpuInfoBean = new GroovyMBean(mbeanServerConnection, CPU_INFO_BEAN_NAMESPACE)
         def diskBean = new GroovyMBean(mbeanServerConnection, DISKSPACE_BEAN_NAMESPACE)
         def servicesBean = new GroovyMBean(mbeanServerConnection, SERVICES_STATUS_BEAN_NAMESPACE)
         def diskRootsSpace = diskBean.getDiskRootsSpace()
@@ -43,7 +45,8 @@ class ServerGatherer {
             mysqlId: servicesBean.getMysqlProccessId(),
             iisId: servicesBean.getIISProccessId(),
             tomcatId: servicesBean.getApacheTomcatProccessId(),
-            winServicesStatus: retrieveWinServicesStatus(mbeanServerConnection)
+            winServicesStatus: retrieveWinServicesStatus(mbeanServerConnection),
+            cpuStats: createCpuStats(cpuInfoBean.getStats())
         ]
     }
 
@@ -58,6 +61,32 @@ class ServerGatherer {
                                     vendor: operatingSystemBean.Vendor,
                                     vendorName: operatingSystemBean.VendorName,
                                     vendorVersion: operatingSystemBean.VendorVersion)
+    }
+
+    private createCpuStats(cpuInfoBean){
+        return new CpuStats(cacheSize: cpuInfoBean.cacheSize,
+                        vendor: cpuInfoBean.vendor,
+                        model: cpuInfoBean.model,
+                        mhz: cpuInfoBean.mhz,
+                        totalCpus: cpuInfoBean.totalCpus,
+                        physicalCpus: cpuInfoBean.physicalCpus,
+                        coresPerCpu: cpuInfoBean.coresPerCpu,
+                        cpusPercentages: cpuInfoBean.cpusPercentages.collect{createCpuPercentage(it)},
+                        totals: createCpuPercentage(cpuInfoBean.totals))
+    }
+
+    private createCpuPercentage(percentage){
+        return new CpuPercentage([
+                    userTime: percentage.userTime,
+                    sysTime: percentage.sysTime,
+                    idleTime: percentage.idleTime,
+                    waitTime: percentage.waitTime,
+                    niceTime: percentage.niceTime,
+                    combined: percentage.combined,
+                    irqTime: percentage.irqTime,
+                    softIrqTime: percentage.softIrqTime,
+                    stolenTime: percentage.stolenTime
+            ])
     }
 
     private createDiskRootsSpace(diskRootsSpace){

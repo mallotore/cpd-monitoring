@@ -8,5 +8,6 @@ class ServerStatsState {
 	String ip
 	Date creationDate
     OperatingSystem operatingSystem
+    CpuStats cpuStats
     List<DiskRootSpace> diskRootsSpace
 }

@@ -1,6 +1,6 @@
-package com.mallotore.monitoring.jmx
+package com.mallotore.monitoring
 
-class ServerStatsController {
+class OverviewStatsController {
 
     def jmxService
     
