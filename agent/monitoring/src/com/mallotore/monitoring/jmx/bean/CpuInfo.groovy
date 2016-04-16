@@ -10,7 +10,7 @@ import org.hyperic.sigar.CpuInfo
 class CpuInfo {
     
     private final Sigar sigar
-    private final int NOT_DESIRED = 0
+    private final int NOT_DESIRED = -1
     public CpuStats stats
     
     def CpuInfo(){
@@ -32,13 +32,13 @@ class CpuInfo {
         def cpusPercentages = cpus.collect{ cpu ->
             gatherCpuPercentage(cpu)
         }
-        stats = new CpuStats(cacheSize: Sigar.FIELD_NOTIMPL ? NOT_DESIRED : info.getCacheSize(),
+        stats = new CpuStats(cacheSize: Sigar.FIELD_NOTIMPL ? info.getCacheSize() : NOT_DESIRED,
         				vendor: info.getVendor(),
         				model: info.getModel(),
 	        			mhz: info.getMhz(),
-	        			totalCpus: isValidData ? NOT_DESIRED : info.getTotalCores(),
-	        			physicalCpus: isValidData ? NOT_DESIRED : info.getTotalSockets(),
-	        			coresPerCpu: isValidData ? NOT_DESIRED : info.getCoresPerSocket(),
+	        			totalCpus: isValidData ? info.getTotalCores() : NOT_DESIRED,
+	        			physicalCpus: isValidData ? info.getTotalSockets() : NOT_DESIRED,
+	        			coresPerCpu: isValidData ? info.getCoresPerSocket() : NOT_DESIRED,
 	        			cpusPercentages: cpusPercentages, 
 	        			totals: gatherCpuPercentage(this.sigar.getCpuPerc()))
     }
@@ -56,8 +56,8 @@ class CpuInfo {
 				    niceTime: CpuPerc.format(cpu.getNice()),
 				    combined: CpuPerc.format(cpu.getCombined()),
 				    irqTime: CpuPerc.format(cpu.getIrq()),
-				    softIrqTime: SigarLoader.IS_LINUX ?: CpuPerc.format(cpu.getSoftIrq()),
-				    stolenTime: SigarLoader.IS_LINUX ?: CpuPerc.format(cpu.getStolen())
+				    softIrqTime: SigarLoader.IS_LINUX ? CpuPerc.format(cpu.getSoftIrq()) : NOT_DESIRED,
+				    stolenTime: SigarLoader.IS_LINUX ? CpuPerc.format(cpu.getStolen()) : NOT_DESIRED
             ])
     }
 }
