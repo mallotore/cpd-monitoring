@@ -1,9 +1,6 @@
 package com.mallotore.monitoring.jmx
 
-import com.mallotore.monitoring.jmx.bean.DiskSpace
-import com.mallotore.monitoring.jmx.bean.OperatingSystem
-import com.mallotore.monitoring.jmx.bean.ServicesStatus
-import com.mallotore.monitoring.jmx.bean.WinServicesStatus
+import com.mallotore.monitoring.jmx.bean.*
 import groovy.jmx.builder.JmxBuilder
 import javax.management.ObjectName
 
@@ -12,6 +9,7 @@ class JmxBeanExporter {
     static final BEAN_NAMESPACE = "com.mallotore.monitoring.jmx.bean"
     static final DISKSPACE_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.DiskSpace:type=DiskSpace"
     static final OPERATING_SYSTEM_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.OperatingSystem:type=OperatingSystem"
+    static final CPU_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=CpuInfo"
     static final SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.ServicesStatus:type=ServicesStatus"
     static final WIN_SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.WinServicesStatus:type=WinServicesStatus"
     
@@ -24,6 +22,7 @@ class JmxBeanExporter {
     def export(){
         exportDiskSpaceBean()
         exportOperatingSystemBean()
+        exportCpuInfoBean()
         exportServicesStatusBean()
         exportWinServicesStatusBean()
     }
@@ -56,6 +55,17 @@ class JmxBeanExporter {
                                 "vendorVersion"]
             )
         } 
+    }
+
+    private exportCpuInfoBean(){
+        jmx.export {
+            bean(
+                target: new CpuInfo(),
+                name: new ObjectName(CPU_INFO_BEAN_NAMESPACE),
+                attributes: ["stats"],
+                operations: ["refreshInformation"]
+            )
+        }   
     }
     
     private exportServicesStatusBean(){

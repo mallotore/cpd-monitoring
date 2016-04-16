@@ -10,10 +10,10 @@ class DiskSpace {
         diskRootsSpace = [];
     }
 
-    List<DiskSpace> getDiskRootsSpace(){
+    List<DiskRootSpace> getDiskRootsSpace(){
         refreshInformation()
 
-        return diskRootsSpace;
+        return diskRootsSpace
     }
     
     void refreshInformation(){

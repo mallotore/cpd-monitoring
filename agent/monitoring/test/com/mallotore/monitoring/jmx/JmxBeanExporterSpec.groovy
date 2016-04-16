@@ -2,6 +2,7 @@ package com.mallotore.monitoring.jmx
 
 import spock.lang.Specification
 import java.lang.management.ManagementFactory
+import com.mallotore.monitoring.jmx.dto.*
 
 class JmxBeanExporterSpec extends Specification {
 
@@ -16,8 +17,13 @@ class JmxBeanExporterSpec extends Specification {
         and: "a disk space bean imported from the local server"
             def diskSpaceBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(), 
                                         JmxBeanExporter.DISKSPACE_BEAN_NAMESPACE)
+
+        and: "a cpu info bean imported from the local server"
+            def cpuInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
+                                        JmxBeanExporter.CPU_INFO_BEAN_NAMESPACE)
         expect:
             osBean.getVersion() != ""
-            diskSpaceBean.getDiskRootsSpace() instanceof List<DiskSpace>
+            diskSpaceBean.getDiskRootsSpace() instanceof List<DiskRootSpace>
+            cpuInfoBean.getStats() instanceof CpuStats
     }
 }
