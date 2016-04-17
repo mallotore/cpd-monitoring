@@ -15,6 +15,7 @@ class ServerGatherer {
     static final MEM_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.MemInfo:type=MemInfo"
     static final NET_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.NetInfo:type=NetInfo"
     static final UPTIME_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.UptimeInfo:type=UptimeInfo"
+    static final WHOLIST_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.Wholist:type=Wholist"
     static final WIN_SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.WinServicesStatus:type=WinServicesStatus"
     static final SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.ServicesStatus:type=ServicesStatus"
     
@@ -40,6 +41,7 @@ class ServerGatherer {
         def memInfoBean = new GroovyMBean(mbeanServerConnection, MEM_INFO_BEAN_NAMESPACE)
         def netInfoBean = new GroovyMBean(mbeanServerConnection, NET_INFO_BEAN_NAMESPACE)
         def uptimeInfoBean = new GroovyMBean(mbeanServerConnection, UPTIME_INFO_BEAN_NAMESPACE)
+        def wholistInfoBean = new GroovyMBean(mbeanServerConnection, WHOLIST_INFO_BEAN_NAMESPACE)
         def servicesBean = new GroovyMBean(mbeanServerConnection, SERVICES_STATUS_BEAN_NAMESPACE)
         def diskRootsSpace = diskBean.getDiskRootsSpace()
         [
@@ -55,8 +57,18 @@ class ServerGatherer {
             cpuStats: createCpuStats(cpuInfoBean.getStats()),
             memStats: createMemStats(memInfoBean.getStats()),
             netStats: createNetStats(netInfoBean.getStats()),
-            uptimeStats: createUptimeStats(uptimeInfoBean.getStats())
+            uptimeStats: createUptimeStats(uptimeInfoBean.getStats()),
+            wholistStats: createWholistStats(wholistInfoBean.getStats())
         ]
+    }
+
+    private createWholistStats(statsBean){
+        statsBean.collect { stats ->
+            new WholistStats(user: stats.user,
+                                device: stats.device,
+                                time: stats.time,
+                                host: stats.host)
+        }
     }
 
     private createUptimeStats(stats){

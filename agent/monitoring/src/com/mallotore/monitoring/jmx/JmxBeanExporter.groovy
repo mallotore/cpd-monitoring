@@ -13,6 +13,7 @@ class JmxBeanExporter {
     static final MEM_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.MemInfo:type=MemInfo"
     static final NET_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.NetInfo:type=NetInfo"
     static final UPTIME_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.UptimeInfo:type=UptimeInfo"
+    static final WHOLIST_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.Wholist:type=Wholist"
     static final SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.ServicesStatus:type=ServicesStatus"
     static final WIN_SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.WinServicesStatus:type=WinServicesStatus"
     
@@ -29,6 +30,7 @@ class JmxBeanExporter {
         exportMemInfoBean()
         exportNetInfoBean()
         exportUptimeInfoBean()
+        exportWholistInfoBean()
         exportServicesStatusBean()
         exportWinServicesStatusBean()
     }
@@ -77,6 +79,10 @@ class JmxBeanExporter {
 
     private exportUptimeInfoBean(){
         exportDefaultBean(new UptimeInfo(), UPTIME_INFO_BEAN_NAMESPACE)
+    }
+
+    private exportWholistInfoBean(){
+        exportDefaultBean(new WholistInfo(), WHOLIST_INFO_BEAN_NAMESPACE)
     }
 
     private exportDefaultBean(clazz, namespace){

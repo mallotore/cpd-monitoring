@@ -34,6 +34,10 @@ class JmxBeanExporterSpec extends Specification {
             def uptimeInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
                                         JmxBeanExporter.UPTIME_INFO_BEAN_NAMESPACE)
 
+        and: "a wholist info bean imported from the local server"
+            def wholistInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
+                                        JmxBeanExporter.WHOLIST_INFO_BEAN_NAMESPACE)
+
         expect:
             osBean.getVersion() != ""
             diskSpaceBean.getDiskRootsSpace() instanceof List<DiskRootSpace>
@@ -41,5 +45,6 @@ class JmxBeanExporterSpec extends Specification {
             memInfoBean.getStats() instanceof MemStats
             netInfoBean.getStats() instanceof NetStats
             uptimeInfoBean.getStats() instanceof UptimeStats
+            wholistInfoBean.getStats() instanceof List<WholistStats>
     }
 }

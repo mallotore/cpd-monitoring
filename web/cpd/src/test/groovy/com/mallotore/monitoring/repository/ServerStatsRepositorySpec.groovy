@@ -56,7 +56,15 @@ class ServerStatsRepositorySpec extends Specification {
                               createCpuStats(),
                               createMemStats(),
                               createNetStats(),
-                              createUptimeStats())
+                              createUptimeStats(),
+                              createWholistStats())
+    }
+
+    private createWholistStats(){
+        return [new WholistStats(user: "a",
+                                device: "device",
+                                time: "time",
+                                host: "host")]
     }
 
     private createUptimeStats(){

@@ -39,6 +39,7 @@ class ServerStatsRepository {
                                               memStats: createMemStats(it.memStats),
                                               netStats: createNetStats(it.netStats),
                                               uptimeStats: createUptimeStats(it.uptimeStats),
+                                              wholistStats: createWholistStats(it.wholistStats),
                                               creationDate: date)
             new ServerStats(state)
         }
@@ -46,6 +47,15 @@ class ServerStatsRepository {
 
     private static Long formatToMB(long value) {
         return new Long(value / 1024);
+    }
+
+    private createWholistStats(statsBean){
+        statsBean.collect { stats ->
+            new WholistStats(user: stats.user,
+                                device: stats.device,
+                                time: stats.time,
+                                host: stats.host)
+        }
     }
 
     private createUptimeStats(stats){

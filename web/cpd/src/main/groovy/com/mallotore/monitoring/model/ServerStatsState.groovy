@@ -13,4 +13,5 @@ class ServerStatsState {
     MemStats memStats
     NetStats netStats
     UptimeStats uptimeStats
+    List<WholistStats> wholistStats
 }

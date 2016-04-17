@@ -17,7 +17,8 @@ class ServerProbeJobService{
 			                            serverStats.cpuStats,
 			                            serverStats.memStats,
 			                            serverStats.netStats,
-			                            serverStats.uptimeStats)
+			                            serverStats.uptimeStats,
+			                            serverStats.wholistStats)
 
         	serverStatsRepository.save stats
         	if(server.diskPercentageAlert){
