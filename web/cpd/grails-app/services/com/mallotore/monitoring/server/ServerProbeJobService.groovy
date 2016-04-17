@@ -14,7 +14,8 @@ class ServerProbeJobService{
         	def stats = new ServerStats(serverStats.ip,
 			                            serverStats.os,
 			                            serverStats.diskRootsSpace,
-			                            serverStats.cpuStats)
+			                            serverStats.cpuStats,
+			                            serverStats.memStats)
 
         	serverStatsRepository.save stats
         	if(server.diskPercentageAlert){

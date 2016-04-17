@@ -34,11 +34,16 @@ class ServerStatsRepositorySpec extends Specification {
                 stats[0]._id == id
                 stats[0].ip == '127.0.0.1'
                 stats[0].operatingSystem.name == 'Linux'
+                stats[0].class == com.mallotore.monitoring.model.ServerStats
                 stats[0].diskRootsSpace[0].path == '/'
                 stats[0].diskRootsSpace[0].freeSpace == 123
+                stats[0].diskRootsSpace[0].class == com.mallotore.monitoring.model.DiskRootSpace
                 stats[0].cpuStats.cacheSize == 123
+                stats[0].cpuStats.class == com.mallotore.monitoring.model.CpuStats
                 stats[0].cpuStats.model == "model1"
-                stats[0].class == com.mallotore.monitoring.model.ServerStats
+                stats[0].memStats.memTotal == 11
+                stats[0].memStats.swapTotal == 14
+                stats[0].memStats.class == com.mallotore.monitoring.model.MemStats
     }
 
     def buildServerStats(ip, name, path, freeSpace){
@@ -46,7 +51,8 @@ class ServerStatsRepositorySpec extends Specification {
                               new OperatingSystem(name: name),
                               [ new DiskRootSpace(path: path,totalSpace: 12,
                                                  freeSpace: freeSpace, usableSpace: 12)],
-                              createCpuStats())
+                              createCpuStats(),
+                              createMemStats())
     }
 
     private createCpuStats(){
@@ -71,5 +77,14 @@ class ServerStatsRepositorySpec extends Specification {
                                 irqTime: "irqTime1",
                                 softIrqTime: "softIrqTime1",
                                 stolenTime: "stolenTime1")
+    }
+
+    private createMemStats(){
+        return new MemStats(memTotal: 11,
+                        memUsed: 12,
+                        memFree: 13,
+                        swapTotal: 14,
+                        swapUsed: 15,
+                        swapFree: 16)
     }
 }

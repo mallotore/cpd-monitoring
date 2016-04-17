@@ -12,6 +12,7 @@ class ServerGatherer {
     static final DISKSPACE_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.DiskSpace:type=DiskSpace"
     static final OPERATING_SYSTEM_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.OperatingSystem:type=OperatingSystem"
     static final CPU_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=CpuInfo"
+    static final MEM_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=MemInfo"
     static final WIN_SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.WinServicesStatus:type=WinServicesStatus"
     static final SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.ServicesStatus:type=ServicesStatus"
     
@@ -34,6 +35,7 @@ class ServerGatherer {
         def osBean = new GroovyMBean(mbeanServerConnection, OPERATING_SYSTEM_BEAN_NAMESPACE)
         def cpuInfoBean = new GroovyMBean(mbeanServerConnection, CPU_INFO_BEAN_NAMESPACE)
         def diskBean = new GroovyMBean(mbeanServerConnection, DISKSPACE_BEAN_NAMESPACE)
+        def memInfoBean = new GroovyMBean(mbeanServerConnection, MEM_INFO_BEAN_NAMESPACE)
         def servicesBean = new GroovyMBean(mbeanServerConnection, SERVICES_STATUS_BEAN_NAMESPACE)
         def diskRootsSpace = diskBean.getDiskRootsSpace()
         [
@@ -46,8 +48,18 @@ class ServerGatherer {
             iisId: servicesBean.getIISProccessId(),
             tomcatId: servicesBean.getApacheTomcatProccessId(),
             winServicesStatus: retrieveWinServicesStatus(mbeanServerConnection),
-            cpuStats: createCpuStats(cpuInfoBean.getStats())
+            cpuStats: createCpuStats(cpuInfoBean.getStats()),
+            memStats: createMemStats(memInfoBean.getStats())
         ]
+    }
+
+    private createMemStats(stats){
+        return new MemStats(memTotal: stats.memTotal,
+                            memUsed: stats.memUsed ,
+                            memFree: stats.memFree ,
+                            swapTotal: stats.swapTotal,
+                            swapUsed: stats.swapUsed,
+                            swapFree: stats.swapFree)
     }
 
     private createOperatingSystem(operatingSystemBean){

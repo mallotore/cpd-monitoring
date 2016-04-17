@@ -36,9 +36,24 @@ class ServerStatsRepository {
                                               operatingSystem: operatingSystem, 
                                               diskRootsSpace: diskRootsSpace,
                                               cpuStats: cpuStats,
+                                              memStats: createMemStats(it.memStats),
                                               creationDate: date)
             new ServerStats(state)
         }
+    }
+
+    private static Long formatToMB(long value) {
+        return new Long(value / 1024);
+    }
+
+    private createMemStats(stats){
+
+        return new MemStats(memTotal: stats.memTotal, // formatToMB(value) + MB
+                        memUsed: stats.memUsed,
+                        memFree: stats.memFree,
+                        swapTotal: stats.swapTotal,
+                        swapUsed: stats.swapUsed,
+                        swapFree: stats.swapFree)
     }
 
     private createCpuStats(stats){
