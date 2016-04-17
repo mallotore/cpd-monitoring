@@ -15,7 +15,7 @@ class UrlMappings {
         "/configuration/temperature" (controller: "TemperatureConfiguration", action: "create")
         "/configuration/temperature/edit" (controller: "TemperatureConfiguration", action: "edit")
         "/configuration/temperature/delete" (controller: "TemperatureConfiguration", action: "delete")
-        name overviewstats:"/stats"(controller: "OverviewStats", action: "findAll")
+        name overviewstats:"/stats"(controller: "OverviewStats", action: "home")
         "/error"(view:"/error")
         "500"(view:'/error')
         "404"(view:'/notFound')

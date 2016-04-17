@@ -11,9 +11,9 @@ class OverviewStatsControllerSpec extends Specification {
     def setup() {
     }
 
-    def "finds all stats"() {
+    def "shows overview"() {
         when:
-        controller.findAll()
+        controller.home()
 
         then:
         view == '/monitoring/overview'

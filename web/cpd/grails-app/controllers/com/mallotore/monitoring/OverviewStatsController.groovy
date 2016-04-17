@@ -2,10 +2,9 @@ package com.mallotore.monitoring
 
 class OverviewStatsController {
 
-    static allowedMethods = [findAll: "GET"]
+    static allowedMethods = [home: "GET"]
 
-    def findAll() { 
-        
+    def home() { 
         render view:'/monitoring/overview'
     }
 }
