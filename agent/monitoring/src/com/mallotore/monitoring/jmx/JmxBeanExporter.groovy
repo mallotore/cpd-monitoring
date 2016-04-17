@@ -11,6 +11,7 @@ class JmxBeanExporter {
     static final OPERATING_SYSTEM_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.OperatingSystem:type=OperatingSystem"
     static final CPU_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=CpuInfo"
     static final MEM_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=MemInfo"
+    static final NET_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=NetInfo"
     static final SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.ServicesStatus:type=ServicesStatus"
     static final WIN_SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.WinServicesStatus:type=WinServicesStatus"
     
@@ -25,6 +26,7 @@ class JmxBeanExporter {
         exportOperatingSystemBean()
         exportCpuInfoBean()
         exportMemInfoBean()
+        exportNetInfoBean()
         exportServicesStatusBean()
         exportWinServicesStatusBean()
     }
@@ -75,6 +77,17 @@ class JmxBeanExporter {
             bean(
                 target: new MemInfo(),
                 name: new ObjectName(MEM_INFO_BEAN_NAMESPACE),
+                attributes: ["stats"],
+                operations: ["refreshInformation"]
+            )
+        }   
+    }
+
+    private exportNetInfoBean(){
+        jmx.export {
+            bean(
+                target: new NetInfo(),
+                name: new ObjectName(NET_INFO_BEAN_NAMESPACE),
                 attributes: ["stats"],
                 operations: ["refreshInformation"]
             )

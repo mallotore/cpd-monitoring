@@ -26,10 +26,15 @@ class JmxBeanExporterSpec extends Specification {
             def memInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
                                         JmxBeanExporter.MEM_INFO_BEAN_NAMESPACE)
 
+        and: "a net info bean imported from the local server"
+            def netInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
+                                        JmxBeanExporter.NET_INFO_BEAN_NAMESPACE)
+
         expect:
             osBean.getVersion() != ""
             diskSpaceBean.getDiskRootsSpace() instanceof List<DiskRootSpace>
             cpuInfoBean.getStats() instanceof CpuStats
+            memInfoBean.getStats() instanceof MemStats
             memInfoBean.getStats() instanceof MemStats
     }
 }

@@ -9,7 +9,6 @@ import org.hyperic.sigar.Sigar
 class MemInfo {
 
     private final Sigar sigar
-    private final int NOT_DESIRED = -1
     public MemStats stats
     
     def MemInfo(){
