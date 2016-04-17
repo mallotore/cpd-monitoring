@@ -11,4 +11,5 @@ class ServerStatsState {
     CpuStats cpuStats
     List<DiskRootSpace> diskRootsSpace
     MemStats memStats
+    NetStats netStats
 }

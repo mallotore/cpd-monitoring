@@ -35,6 +35,6 @@ class JmxBeanExporterSpec extends Specification {
             diskSpaceBean.getDiskRootsSpace() instanceof List<DiskRootSpace>
             cpuInfoBean.getStats() instanceof CpuStats
             memInfoBean.getStats() instanceof MemStats
-            memInfoBean.getStats() instanceof MemStats
+            netInfoBean.getStats() instanceof NetStats
     }
 }

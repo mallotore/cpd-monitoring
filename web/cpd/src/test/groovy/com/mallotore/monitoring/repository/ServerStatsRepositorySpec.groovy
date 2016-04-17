@@ -44,6 +44,7 @@ class ServerStatsRepositorySpec extends Specification {
                 stats[0].memStats.memTotal == 11
                 stats[0].memStats.swapTotal == 14
                 stats[0].memStats.class == com.mallotore.monitoring.model.MemStats
+                stats[0].netStats.class == com.mallotore.monitoring.model.NetStats
     }
 
     def buildServerStats(ip, name, path, freeSpace){
@@ -52,7 +53,20 @@ class ServerStatsRepositorySpec extends Specification {
                               [ new DiskRootSpace(path: path,totalSpace: 12,
                                                  freeSpace: freeSpace, usableSpace: 12)],
                               createCpuStats(),
-                              createMemStats())
+                              createMemStats(),
+                              createNetStats())
+    }
+
+    private createNetStats(){
+        return new NetStats(primaryInterface: "primaryInterface",
+                            primaryIpAddress: "primaryIpAddress",
+                            primaryMacAddress: "primaryMacAddress",
+                            primaryNetMAsk: "primaryNetMAsk",
+                            hostName: "hostName",
+                            domainName: "domainName",
+                            defaultGateway: "defaultGateway",
+                            primaryDns: "primaryDns",
+                            secondaryDns: "secondaryDns",)
     }
 
     private createCpuStats(){

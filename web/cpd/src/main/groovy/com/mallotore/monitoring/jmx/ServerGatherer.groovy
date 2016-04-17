@@ -13,6 +13,7 @@ class ServerGatherer {
     static final OPERATING_SYSTEM_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.OperatingSystem:type=OperatingSystem"
     static final CPU_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=CpuInfo"
     static final MEM_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=MemInfo"
+    static final NET_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=NetInfo"
     static final WIN_SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.WinServicesStatus:type=WinServicesStatus"
     static final SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.ServicesStatus:type=ServicesStatus"
     
@@ -36,6 +37,7 @@ class ServerGatherer {
         def cpuInfoBean = new GroovyMBean(mbeanServerConnection, CPU_INFO_BEAN_NAMESPACE)
         def diskBean = new GroovyMBean(mbeanServerConnection, DISKSPACE_BEAN_NAMESPACE)
         def memInfoBean = new GroovyMBean(mbeanServerConnection, MEM_INFO_BEAN_NAMESPACE)
+        def netInfoBean = new GroovyMBean(mbeanServerConnection, NET_INFO_BEAN_NAMESPACE)
         def servicesBean = new GroovyMBean(mbeanServerConnection, SERVICES_STATUS_BEAN_NAMESPACE)
         def diskRootsSpace = diskBean.getDiskRootsSpace()
         [
@@ -49,8 +51,21 @@ class ServerGatherer {
             tomcatId: servicesBean.getApacheTomcatProccessId(),
             winServicesStatus: retrieveWinServicesStatus(mbeanServerConnection),
             cpuStats: createCpuStats(cpuInfoBean.getStats()),
-            memStats: createMemStats(memInfoBean.getStats())
+            memStats: createMemStats(memInfoBean.getStats()),
+            netStats: createNetStats(netInfoBean.getStats())
         ]
+    }
+
+    private createNetStats(stats){
+        return new NetStats(primaryInterface: stats.primaryInterface,
+                            primaryIpAddress: stats.primaryIpAddress,
+                            primaryMacAddress: stats.primaryMacAddress,
+                            primaryNetMAsk: stats.primaryNetMAsk,
+                            hostName: stats.hostName,
+                            domainName: stats.domainName,
+                            defaultGateway: stats.defaultGateway,
+                            primaryDns: stats.primaryDns,
+                            secondaryDns: stats.secondaryDns)
     }
 
     private createMemStats(stats){

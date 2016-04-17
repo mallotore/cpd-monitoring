@@ -37,6 +37,7 @@ class ServerStatsRepository {
                                               diskRootsSpace: diskRootsSpace,
                                               cpuStats: cpuStats,
                                               memStats: createMemStats(it.memStats),
+                                              netStats: createNetStats(it.netStats),
                                               creationDate: date)
             new ServerStats(state)
         }
@@ -46,8 +47,19 @@ class ServerStatsRepository {
         return new Long(value / 1024);
     }
 
-    private createMemStats(stats){
+    private createNetStats(stats){
+        return new NetStats(primaryInterface: stats.primaryInterface,
+                            primaryIpAddress: stats.primaryIpAddress,
+                            primaryMacAddress: stats.primaryMacAddress,
+                            primaryNetMAsk: stats.primaryNetMAsk,
+                            hostName: stats.hostName,
+                            domainName: stats.domainName,
+                            defaultGateway: stats.defaultGateway,
+                            primaryDns: stats.primaryDns,
+                            secondaryDns: stats.secondaryDns)
+    }
 
+    private createMemStats(stats){
         return new MemStats(memTotal: stats.memTotal, // formatToMB(value) + MB
                         memUsed: stats.memUsed,
                         memFree: stats.memFree,

@@ -1,6 +1,9 @@
-package com.mallotore.monitoring.jmx.dto
+package com.mallotore.monitoring.model
 
-class NetStats implements Serializable {
+import groovy.transform.Immutable
+
+@Immutable(copyWith = true)
+class NetStats {
     String primaryInterface
     String primaryIpAddress
     String primaryMacAddress

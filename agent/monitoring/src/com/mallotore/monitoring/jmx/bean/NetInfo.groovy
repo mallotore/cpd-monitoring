@@ -24,15 +24,15 @@ class NetInfo {
 
     void refreshInformation(){
         NetInterfaceConfig config = this.sigar.getNetInterfaceConfig(null)
+        org.hyperic.sigar.NetInfo info = this.sigar.getNetInfo();
         stats = new NetStats(primaryInterface: config.getName(),
                                 primaryIpAddress: config.getAddress(),
                                 primaryMacAddress: config.getHwaddr(),
                                 primaryNetMAsk: config.getNetmask(),
-                                hostName: config.getHostName(),
-                                domainName: config.getDomainName(),
-                                defaultGatewayInterface: config.getDefaultGatewayInterface(),
-                                defaultGateway: config.getDefaultGateway(),
-                                primaryDns: config.getPrimaryDns(),
-                                secondaryDns: config.getSecondaryDns())
+                                hostName: info.getHostName(),
+                                domainName: info.getDomainName(),
+                                defaultGateway: info.getDefaultGateway(),
+                                primaryDns: info.getPrimaryDns(),
+                                secondaryDns: info.getSecondaryDns())
     }
 }
