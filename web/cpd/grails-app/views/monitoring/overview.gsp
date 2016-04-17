@@ -11,7 +11,7 @@
         <div id="jGrowl-container" class="jGrowl top-right"></div>
         <section style="min-height: 721px;">
             <div class="container">
-                <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                <div id="diskPercentage" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
             </div>
         </section>
     </body>
