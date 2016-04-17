@@ -5,12 +5,12 @@ import com.mallotore.configuration.dto.*
 
 class ConfigurationController {
 
-	static allowedMethods = [index: "GET"]
+	static allowedMethods = [findAll: "GET"]
 
 	def serverConfigurationService
     def temperatureConfigurationService
 
-	def index() { 
+	def findAll() { 
         def servers = serverConfigurationService.findAllServers()
         def temperature = temperatureConfigurationService.findProbeInterval()
 

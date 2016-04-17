@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="default">
+        <parameter name="defConfig" value="1" />
         <asset:stylesheet src="config/config.css"/>
         <asset:javascript src="configuration/configuration.js"/>
     </head>

@@ -15,7 +15,7 @@ class ConfigurationControllerSpec extends Specification {
     def "finds all servers"() {
         when:
         request.method = 'GET'
-        controller.index()
+        controller.findAll()
 
         then:
         1 * controller.serverConfigurationService.findAllServers() >> [

@@ -8,24 +8,14 @@ import com.mallotore.monitoring.jmx.dto.*
 @TestFor(OverviewStatsController)
 class OverviewStatsControllerSpec extends Specification {
 
-    def jmxServiceMock
-
     def setup() {
-        jmxServiceMock = Mock(JmxService)
-        controller.jmxService = jmxServiceMock
     }
 
-    def "retrieves server information"() {
+    def "finds all stats"() {
         when:
-        controller.index()
+        controller.findAll()
 
         then:
-        1 * controller.jmxService.gatherAllServersStats() >> [
-            os: new OperatingSystem([version: '3.19.0-031900-generic']),
-            diskRootsSpace: []
-        ]
-        view == '/serverStats/stats'
-        model.osInformation.version == '3.19.0-031900-generic'
-        model.diskInformation == []
+        view == '/monitoring/overview'
     }
 }
