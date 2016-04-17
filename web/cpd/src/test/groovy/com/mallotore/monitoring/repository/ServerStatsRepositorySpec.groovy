@@ -45,6 +45,7 @@ class ServerStatsRepositorySpec extends Specification {
                 stats[0].memStats.swapTotal == 14
                 stats[0].memStats.class == com.mallotore.monitoring.model.MemStats
                 stats[0].netStats.class == com.mallotore.monitoring.model.NetStats
+                stats[0].uptimeStats.class == com.mallotore.monitoring.model.UptimeStats
     }
 
     def buildServerStats(ip, name, path, freeSpace){
@@ -54,8 +55,15 @@ class ServerStatsRepositorySpec extends Specification {
                                                  freeSpace: freeSpace, usableSpace: 12)],
                               createCpuStats(),
                               createMemStats(),
-                              createNetStats())
+                              createNetStats(),
+                              createUptimeStats())
     }
+
+    private createUptimeStats(){
+        return new UptimeStats(uptime:"34",
+                            loadAverage: "12")
+    }
+
 
     private createNetStats(){
         return new NetStats(primaryInterface: "primaryInterface",

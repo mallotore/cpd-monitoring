@@ -38,6 +38,7 @@ class ServerStatsRepository {
                                               cpuStats: cpuStats,
                                               memStats: createMemStats(it.memStats),
                                               netStats: createNetStats(it.netStats),
+                                              uptimeStats: createUptimeStats(it.uptimeStats),
                                               creationDate: date)
             new ServerStats(state)
         }
@@ -45,6 +46,11 @@ class ServerStatsRepository {
 
     private static Long formatToMB(long value) {
         return new Long(value / 1024);
+    }
+
+    private createUptimeStats(stats){
+        return new UptimeStats(uptime: stats.uptime,
+                            loadAverage: stats.loadAverage)
     }
 
     private createNetStats(stats){

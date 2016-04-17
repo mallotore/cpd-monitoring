@@ -12,8 +12,9 @@ class ServerGatherer {
     static final DISKSPACE_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.DiskSpace:type=DiskSpace"
     static final OPERATING_SYSTEM_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.OperatingSystem:type=OperatingSystem"
     static final CPU_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=CpuInfo"
-    static final MEM_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=MemInfo"
-    static final NET_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.CpuInfo:type=NetInfo"
+    static final MEM_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.MemInfo:type=MemInfo"
+    static final NET_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.NetInfo:type=NetInfo"
+    static final UPTIME_INFO_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.UptimeInfo:type=UptimeInfo"
     static final WIN_SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.WinServicesStatus:type=WinServicesStatus"
     static final SERVICES_STATUS_BEAN_NAMESPACE = "${BEAN_NAMESPACE}.ServicesStatus:type=ServicesStatus"
     
@@ -38,6 +39,7 @@ class ServerGatherer {
         def diskBean = new GroovyMBean(mbeanServerConnection, DISKSPACE_BEAN_NAMESPACE)
         def memInfoBean = new GroovyMBean(mbeanServerConnection, MEM_INFO_BEAN_NAMESPACE)
         def netInfoBean = new GroovyMBean(mbeanServerConnection, NET_INFO_BEAN_NAMESPACE)
+        def uptimeInfoBean = new GroovyMBean(mbeanServerConnection, UPTIME_INFO_BEAN_NAMESPACE)
         def servicesBean = new GroovyMBean(mbeanServerConnection, SERVICES_STATUS_BEAN_NAMESPACE)
         def diskRootsSpace = diskBean.getDiskRootsSpace()
         [
@@ -52,8 +54,14 @@ class ServerGatherer {
             winServicesStatus: retrieveWinServicesStatus(mbeanServerConnection),
             cpuStats: createCpuStats(cpuInfoBean.getStats()),
             memStats: createMemStats(memInfoBean.getStats()),
-            netStats: createNetStats(netInfoBean.getStats())
+            netStats: createNetStats(netInfoBean.getStats()),
+            uptimeStats: createUptimeStats(uptimeInfoBean.getStats())
         ]
+    }
+
+    private createUptimeStats(stats){
+        return new UptimeStats(uptime: stats.uptime,
+                            loadAverage: stats.loadAverage)
     }
 
     private createNetStats(stats){

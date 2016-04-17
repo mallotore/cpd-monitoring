@@ -30,11 +30,16 @@ class JmxBeanExporterSpec extends Specification {
             def netInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
                                         JmxBeanExporter.NET_INFO_BEAN_NAMESPACE)
 
+        and: "a uptime info bean imported from the local server"
+            def uptimeInfoBean = new GroovyMBean(ManagementFactory.getPlatformMBeanServer(),
+                                        JmxBeanExporter.UPTIME_INFO_BEAN_NAMESPACE)
+
         expect:
             osBean.getVersion() != ""
             diskSpaceBean.getDiskRootsSpace() instanceof List<DiskRootSpace>
             cpuInfoBean.getStats() instanceof CpuStats
             memInfoBean.getStats() instanceof MemStats
             netInfoBean.getStats() instanceof NetStats
+            uptimeInfoBean.getStats() instanceof UptimeStats
     }
 }

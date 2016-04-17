@@ -9,14 +9,16 @@ class ServerStats {
     private cpuStats
     private memStats
     private netStats
+    private uptimeStats
 
-    def ServerStats(ip, operatingSystem, diskRootsSpace, cpuStats, memStats, netStats){
+    def ServerStats(ip, operatingSystem, diskRootsSpace, cpuStats, memStats, netStats, uptimeStats){
         this.ip = ip
         this.operatingSystem = operatingSystem
         this.diskRootsSpace = diskRootsSpace
         this.cpuStats = cpuStats
         this.memStats = memStats
         this.netStats = netStats
+        this.uptimeStats = uptimeStats
         this.creationDate = new Date()
     }
 
@@ -29,6 +31,7 @@ class ServerStats {
         cpuStats = state.cpuStats
         memStats = state.memStats
         netStats = state.netStats
+        uptimeStats = state.uptimeStats
     }
 
     def state(){
@@ -38,6 +41,7 @@ class ServerStats {
                             creationDate: creationDate,
                             cpuStats: cpuStats,
                             memStats: memStats,
-                            netStats: netStats)
+                            netStats: netStats,
+                            uptimeStats: uptimeStats)
     }
 }

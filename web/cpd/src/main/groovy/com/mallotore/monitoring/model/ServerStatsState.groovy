@@ -12,4 +12,5 @@ class ServerStatsState {
     List<DiskRootSpace> diskRootsSpace
     MemStats memStats
     NetStats netStats
+    UptimeStats uptimeStats
 }
