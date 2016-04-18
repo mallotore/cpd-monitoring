@@ -1,6 +1,5 @@
 package com.mallotore.configuration
 
-import grails.converters.JSON
 import com.mallotore.configuration.dto.*
 
 class ConfigurationController {
