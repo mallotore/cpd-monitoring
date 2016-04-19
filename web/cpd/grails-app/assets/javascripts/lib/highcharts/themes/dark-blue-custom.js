@@ -23,7 +23,7 @@ Highcharts.theme = {
 	},
 	title: {
 		style: {
-			color: '#C0C0C0',
+			color: '#F0F0F3',
 			font: 'bold 16px "Trebuchet MS", Verdana, sans-serif'
 		}
 	},
@@ -247,6 +247,7 @@ Highcharts.theme = {
 	background2: 'rgb(35, 35, 70)',
 	dataLabelsColor: '#444',
 	textColor: '#C0C0C0',
+	contrastTextColor: '#F0F0F3',
 	maskColor: 'rgba(255,255,255,0.3)'
 };
 
