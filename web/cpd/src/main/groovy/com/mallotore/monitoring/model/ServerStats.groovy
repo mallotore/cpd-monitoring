@@ -38,7 +38,8 @@ class ServerStats {
     }
 
     def state(){
-        new ServerStatsState(ip: ip,
+        new ServerStatsState(_id: _id,
+                            ip: ip,
                             operatingSystem: operatingSystem,
                             diskRootsSpace: diskRootsSpace,
                             creationDate: creationDate,

@@ -55,10 +55,6 @@ class ServerStatsRepository {
         return new ServerStats(state)
     }
 
-    private static Long formatToMB(long value) {
-        return new Long(value / 1024);
-    }
-
     private createWholistStats(dbStats){
         dbStats.collect { stats ->
             new WholistStats(user: stats.user,
@@ -86,7 +82,7 @@ class ServerStatsRepository {
     }
 
     private createMemStats(stats){
-        return new MemStats(memTotal: stats.memTotal, // formatToMB(value) + MB
+        return new MemStats(memTotal: stats.memTotal,
                         memUsed: stats.memUsed,
                         memFree: stats.memFree,
                         swapTotal: stats.swapTotal,

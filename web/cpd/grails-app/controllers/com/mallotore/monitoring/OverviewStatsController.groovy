@@ -9,21 +9,15 @@ class OverviewStatsController {
 	def temperatureRepository
 	def serverStatsRepository
 
-    static allowedMethods = [home: "GET", findServerStatsOverviewByIp: "GET", findTemperatureStatsOverview: "GET", ]
+    static allowedMethods = [home: "GET", findServerStatsOverviewByIp: "GET", 
+                            findTemperatureStatsOverview: "GET", findServers: "GET"]
 
     def home() { 
-    	def servers = serverConfigurationService.findAllServers()
-    	def serversDto = servers?.collect{
-            new ServerDto(id: it.id,
-                        name: it.name,
-                        ip:it.ip,
-                        port: it.port,
-                        probeInterval: it.probeIntervalInSeconds,
-                        connectivityAlert: it.connectivityAlert,
-                        diskPercentageAlert: it.diskPercentageAlert)
-        }
+        render view:'/monitoring/overview', model: [servers: findAllServers()]
+    }
 
-        render view:'/monitoring/overview', model: [servers: servers]
+    def findServers(){
+        render(findAllServers() as JSON)
     }
 
     def findServerStatsOverviewByIp(String ip) { 
@@ -36,5 +30,18 @@ class OverviewStatsController {
     	def stats = temperatureRepository.findLast()
 
     	render([temperatureStats: stats.state()] as JSON)
+    }
+
+    private findAllServers(){
+        def servers = serverConfigurationService.findAllServers()
+        servers?.collect{
+            new ServerDto(id: it.id,
+                        name: it.name,
+                        ip:it.ip,
+                        port: it.port,
+                        probeInterval: it.probeIntervalInSeconds,
+                        connectivityAlert: it.connectivityAlert,
+                        diskPercentageAlert: it.diskPercentageAlert)
+        }
     }
 }

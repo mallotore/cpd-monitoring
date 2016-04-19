@@ -7,10 +7,16 @@ var mallotore = mallotore || {};
 
 $(document).ready(function(){
 
-	function createDiskPercentage(){
+	function createDiskPercentage(server, diskRootSpace){
+		var formatter = mallotore.utils.bytesFormatter;
+		var usedSpace = diskRootSpace.totalSpace - diskRootSpace.freeSpace;
+		var seriesData = [
+			{name: "Libre", y: diskRootSpace.freeSpace}, 
+			{name: "Ocupado", y: usedSpace}
+		];
 		var chart = new Highcharts.Chart({
 	        chart: {
-	        	renderTo : 'diskPercentage',
+	        	renderTo : 'diskPercentage_' + server.id + diskRootSpace.path,
 	            plotBackgroundColor: null,
 	            plotBorderWidth: null,
 	            plotShadow: false,
@@ -20,7 +26,7 @@ $(document).ready(function(){
 	    		enabled: false
 	  		},
 	        title: {
-	            text: 'Espacio en disco'
+	            text: 'Espacio en disco en ' + diskRootSpace.path + ' ' + formatter.format(diskRootSpace.totalSpace)
 	        },
 	        tooltip: {
 	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -39,32 +45,55 @@ $(document).ready(function(){
 	            }
 	        },
 	        series: [{
-	            name: 'Brands',
+	            name: 'Espacio',
 	            colorByPoint: true,
-	            data: [{
-	                name: 'Microsoft Internet Explorer',
-	                y: 56.33
-	            }, {
-	                name: 'Chrome',
-	                y: 24.03,
-	                sliced: true,
-	                selected: true
-	            }, {
-	                name: 'Firefox',
-	                y: 10.38
-	            }, {
-	                name: 'Safari',
-	                y: 4.77
-	            }, {
-	                name: 'Opera',
-	                y: 0.91
-	            }, {
-	                name: 'Proprietary or Undetectable',
-	                y: 0.2
-	            }]
+	            data: seriesData
 	        }]
 	    });
 	}
 
-	createDiskPercentage();
+	function OverviewStatsPresenter(client, notifier){
+		
+		function findServers(){
+			client.get("/stats/overview/servers", {}, successCallback, errorCallback);
+			return;
+
+			function successCallback(servers){
+				_(servers).forEach(function(server) {
+					client.get("/stats/overview/servers/" + server.ip, {}, serverStatsSuccessCallback, serverStatsErrorCallback);
+				    
+				    function serverStatsSuccessCallback(data){
+				    	var serverStats = data.serverStats;
+				    	_(serverStats.diskRootsSpace).forEach(function(diskRootSpace) {
+				    		createDiv(server.id, diskRootSpace.path);
+							createDiskPercentage(server, diskRootSpace);
+						});
+					}
+
+					function serverStatsErrorCallback(){
+						notifier.notifyError("Estadísticas", "Error recibiendo estadísticas del servidor");
+					}
+				});
+			}
+
+			function errorCallback(xhr){
+				notifier.notifyError("Estadísticas", "Error recibiendo los servidores");
+			}
+		}
+
+		findServers();
+	}
+
+	function createDiv(id, path){
+		$('#overviewStats_' + id).append('<div id="diskPercentage_' + id + path + '"'+ 'style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>');
+	}
+
+	function createOverviewStatsPresenter(){
+		var client =  mallotore.utils.ajaxClient;
+		var notifier = mallotore.utils.notifier;
+
+		return new OverviewStatsPresenter(client, notifier); 
+	}
+
+	createOverviewStatsPresenter();
 });
