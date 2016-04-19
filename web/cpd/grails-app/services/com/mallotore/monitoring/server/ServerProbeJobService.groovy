@@ -1,6 +1,7 @@
 package com.mallotore.monitoring.server
 
 import com.mallotore.monitoring.model.*
+import com.mallotore.utils.BytesFormatter
 
 class ServerProbeJobService{
 
@@ -34,23 +35,9 @@ class ServerProbeJobService{
 			def multiplier = server.diskPercentageAlert / 100
 			if(it.usableSpace <= (it.totalSpace * multiplier)){
 				def message = """El servidor ${server.ip}:${server.port} tiene espacio en disco inferior al ${server.diskPercentageAlert}%.
-					Espacio disponible ${formatDiskSpace(it.usableSpace)}"""
+					Espacio disponible ${BytesFormatter.format(it.usableSpace)}"""
 				alertSenderService.send(message)
 			}
 		}
-	}
-
-	private formatDiskSpace = { spaceInBytes ->
-		def labels = [ ' bytes', 'KB', 'MB', 'GB', 'TB' ]
-		def label = labels.find {
-			if( spaceInBytes < 1024 ) {
-				true
-			}
-			else {
-				spaceInBytes /= 1024  
-				false
-			}
-		}
-		"${new java.text.DecimalFormat( '0.##' ).format( spaceInBytes )}$label"
 	}
 }
