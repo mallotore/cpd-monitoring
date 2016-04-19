@@ -5,12 +5,11 @@ import com.mongodb.DBObject
 import groovy.json.*
 import com.mongodb.util.JSON
 import com.mallotore.storage.nosql.mongo.MongoDatabaseClient
+import static com.mallotore.storage.nosql.mongo.MongoDatabaseClient.*
+import com.mallotore.utils.DateTools
 import com.mallotore.monitoring.model.*
 
 class TemperatureRepository {
-
-    static final Integer DESC = -1
-    static final Integer ASC  = 1
 
     def mongoDatabaseClient
 
@@ -40,7 +39,7 @@ class TemperatureRepository {
     private convertToModel(stats){
         new Temperature(_id: stats._id, 
                           temperature: stats.temperature,
-                          creationDate: stats.creationDate)
+                          creationDate: DateTools.convertToYYYYMMDDHHMMSS(stats.creationDate))
     }
 
     private temperaturesCollection() {

@@ -5,12 +5,11 @@ import com.mongodb.DBObject
 import groovy.json.*
 import com.mongodb.util.JSON
 import com.mallotore.storage.nosql.mongo.MongoDatabaseClient
+import com.mallotore.utils.DateTools
+import static com.mallotore.storage.nosql.mongo.MongoDatabaseClient.*
 import com.mallotore.monitoring.model.*
 
 class ServerStatsRepository {
-
-    static final Integer DESC = -1
-    static final Integer ASC  = 1
 
     def mongoDatabaseClient
 
@@ -43,7 +42,6 @@ class ServerStatsRepository {
         def diskRootsSpace = dbStats?.diskRootsSpace?.collect { rootSpace ->
             new DiskRootSpace(rootSpace)
         }
-        def creationDate = Date.parse( "yyyy-MM-dd'T'HH:mm:ss", dbStats.creationDate )
         def state = new ServerStatsState(_id: dbStats._id, 
                                           ip: dbStats.ip, 
                                           operatingSystem: operatingSystem, 
@@ -53,7 +51,7 @@ class ServerStatsRepository {
                                           netStats: createNetStats(dbStats.netStats),
                                           uptimeStats: createUptimeStats(dbStats.uptimeStats),
                                           wholistStats: createWholistStats(dbStats.wholistStats),
-                                          creationDate: creationDate)
+                                          creationDate: DateTools.convertToYYYYMMDDHHMMSS(dbStats.creationDate))
         return new ServerStats(state)
     }
 

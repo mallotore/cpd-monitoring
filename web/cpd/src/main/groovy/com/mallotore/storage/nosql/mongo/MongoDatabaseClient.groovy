@@ -6,6 +6,8 @@ import com.mongodb.WriteConcern
 class MongoDatabaseClient {
 
     static final ID = '_id'
+    static final Integer DESC = -1
+    static final Integer ASC  = 1
 
     def grailsApplication
     
