@@ -52,6 +52,94 @@ $(document).ready(function(){
 	    });
 	}
 
+	function createRamMemoryPercentage(server, memStats){
+		var formatter = mallotore.utils.bytesFormatter;
+		var seriesData = [
+			{name: "Libre", y: memStats.memFree}, 
+			{name: "Ocupado", y: memStats.memUsed}
+		];
+		var chart = new Highcharts.Chart({
+	        chart: {
+	        	renderTo : 'ramPercentage_' + server.id,
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false,
+	            type: 'pie'
+	        },
+	        credits: {
+	    		enabled: false
+	  		},
+	        title: {
+	            text: 'RAM ' + formatter.format(memStats.memTotal)
+	        },
+	        tooltip: {
+	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: true,
+	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	                    style: {
+	                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+	                    }
+	                }
+	            }
+	        },
+	        series: [{
+	            name: 'RAM',
+	            colorByPoint: true,
+	            data: seriesData
+	        }]
+	    });
+	}
+
+	function createSwapMemoryPercentage(server, memStats){
+		var formatter = mallotore.utils.bytesFormatter;
+		var seriesData = [
+			{name: "Libre", y: memStats.swapFree}, 
+			{name: "Ocupado", y: memStats.swapUsed}
+		];
+		var chart = new Highcharts.Chart({
+	        chart: {
+	        	renderTo : 'swapPercentage_' + server.id,
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false,
+	            type: 'pie'
+	        },
+	        credits: {
+	    		enabled: false
+	  		},
+	        title: {
+	            text: 'SWAP ' + formatter.format(memStats.swapTotal)
+	        },
+	        tooltip: {
+	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: true,
+	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	                    style: {
+	                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+	                    }
+	                }
+	            }
+	        },
+	        series: [{
+	            name: 'SWAP',
+	            colorByPoint: true,
+	            data: seriesData
+	        }]
+	    });
+	}
+
 	function OverviewStatsPresenter(client, notifier){
 		
 		function findServers(){
@@ -65,9 +153,13 @@ $(document).ready(function(){
 				    function serverStatsSuccessCallback(data){
 				    	var serverStats = data.serverStats;
 				    	_(serverStats.diskRootsSpace).forEach(function(diskRootSpace) {
-				    		createDiv(server.id, diskRootSpace.path);
+				    		createDiskPercentageContainer(server.id, diskRootSpace.path);
 							createDiskPercentage(server, diskRootSpace);
 						});
+						createRamPercentageContainer(server.id);
+						createRamMemoryPercentage(server, serverStats.memStats);
+						createSwapPercentageContainer(server.id);
+						createSwapMemoryPercentage(server, serverStats.memStats);
 					}
 
 					function serverStatsErrorCallback(){
@@ -84,8 +176,16 @@ $(document).ready(function(){
 		findServers();
 	}
 
-	function createDiv(id, path){
+	function createDiskPercentageContainer(id, path){
 		$('#overviewStats_' + id).append('<div id="diskPercentage_' + id + path + '"'+ 'style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>');
+	}
+
+	function createRamPercentageContainer(id){
+		$('#overviewStats_' + id).append('<div id="ramPercentage_' + id + '"'+ 'style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>');
+	}
+
+	function createSwapPercentageContainer(id){
+		$('#overviewStats_' + id).append('<div id="swapPercentage_' + id + '"'+ 'style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>');
 	}
 
 	function createOverviewStatsPresenter(){
