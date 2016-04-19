@@ -9,6 +9,9 @@ import com.mallotore.monitoring.model.*
 
 class ServerStatsRepository {
 
+    static final Integer DESC = -1
+    static final Integer ASC  = 1
+
     def mongoDatabaseClient
 
     def save(stats){
@@ -23,34 +26,43 @@ class ServerStatsRepository {
         statsCollection().remove([:])
     }
 
+    def findLastByIp(ip){
+        def cursor = statsCollection().find([ip: ip]).sort([creationDate: DESC]).limit(1)
+        return convertToModel(cursor.first())
+    }
+
     def findByIp(ip){
-        statsCollection().find([ip: ip]).collect{
-            def operatingSystem = new OperatingSystem(it.operatingSystem)
-            def cpuStats = createCpuStats(it?.cpuStats)
-            def diskRootsSpace = it?.diskRootsSpace?.collect { rootSpace ->
-                new DiskRootSpace(rootSpace)
-            }
-            def date = Date.parse( "yyyy-MM-dd'T'HH:mm:ss", it.creationDate )
-            def state = new ServerStatsState(_id: it._id, 
-                                              ip: it.ip, 
-                                              operatingSystem: operatingSystem, 
-                                              diskRootsSpace: diskRootsSpace,
-                                              cpuStats: cpuStats,
-                                              memStats: createMemStats(it.memStats),
-                                              netStats: createNetStats(it.netStats),
-                                              uptimeStats: createUptimeStats(it.uptimeStats),
-                                              wholistStats: createWholistStats(it.wholistStats),
-                                              creationDate: date)
-            new ServerStats(state)
+        statsCollection().find([ip: ip]).collect{ dbStats ->
+            convertToModel(dbStats)
         }
+    }
+
+    private convertToModel(dbStats){
+        def operatingSystem = new OperatingSystem(dbStats.operatingSystem)
+        def cpuStats = createCpuStats(dbStats?.cpuStats)
+        def diskRootsSpace = dbStats?.diskRootsSpace?.collect { rootSpace ->
+            new DiskRootSpace(rootSpace)
+        }
+        def creationDate = Date.parse( "yyyy-MM-dd'T'HH:mm:ss", dbStats.creationDate )
+        def state = new ServerStatsState(_id: dbStats._id, 
+                                          ip: dbStats.ip, 
+                                          operatingSystem: operatingSystem, 
+                                          diskRootsSpace: diskRootsSpace,
+                                          cpuStats: cpuStats,
+                                          memStats: createMemStats(dbStats.memStats),
+                                          netStats: createNetStats(dbStats.netStats),
+                                          uptimeStats: createUptimeStats(dbStats.uptimeStats),
+                                          wholistStats: createWholistStats(dbStats.wholistStats),
+                                          creationDate: creationDate)
+        return new ServerStats(state)
     }
 
     private static Long formatToMB(long value) {
         return new Long(value / 1024);
     }
 
-    private createWholistStats(statsBean){
-        statsBean.collect { stats ->
+    private createWholistStats(dbStats){
+        dbStats.collect { stats ->
             new WholistStats(user: stats.user,
                                 device: stats.device,
                                 time: stats.time,

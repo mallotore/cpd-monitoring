@@ -31,4 +31,15 @@ class TemperatureRepositorySpec extends Specification {
                 temperatures[0].temperature == "25"
                 temperatures[0].class == com.mallotore.monitoring.model.Temperature
     }
+
+    def "finds last"() {
+        given:  temperatureRepository.save(new Temperature(temperature:"25", creationDate: Date.parse( "yyyy-MM-dd'T'HH:mm:ss", "2016-03-05T19:45:00" )))
+                temperatureRepository.save(new Temperature(temperature:"28", creationDate: Date.parse( "yyyy-MM-dd'T'HH:mm:ss", "2016-03-05T19:46:00" )))
+                temperatureRepository.save(new Temperature(temperature:"26", creationDate: Date.parse( "yyyy-MM-dd'T'HH:mm:ss", "2016-03-05T19:45:30" )))
+
+        when:   def stats = temperatureRepository.findLast()
+
+        then:   stats.temperature == "28"
+                stats.class == com.mallotore.monitoring.model.Temperature
+    }
 }

@@ -48,8 +48,33 @@ class ServerStatsRepositorySpec extends Specification {
                 stats[0].uptimeStats.class == com.mallotore.monitoring.model.UptimeStats
     }
 
-    def buildServerStats(ip, name, path, freeSpace){
-        return new ServerStats(ip, 
+    def "finds last by ip"() {
+        given:  2.times{
+                    serverStatsRepository.save buildServerStats('127.0.0.1', "unexpectedname", "unexpectedpath", 0, 14)
+                }
+                def id = serverStatsRepository.save buildServerStats("127.0.0.1", "Linux", "/", 123, 15)
+
+        when:   def stats = serverStatsRepository.findLastByIp '127.0.0.1'
+
+        then:   stats.class == com.mallotore.monitoring.model.ServerStats
+                stats._id == id
+                stats.ip == '127.0.0.1'
+                stats.operatingSystem.name == 'Linux'
+                stats.diskRootsSpace[0].path == '/'
+                stats.diskRootsSpace[0].freeSpace == 123
+                stats.diskRootsSpace[0].class == com.mallotore.monitoring.model.DiskRootSpace
+                stats.cpuStats.cacheSize == 123
+                stats.cpuStats.class == com.mallotore.monitoring.model.CpuStats
+                stats.cpuStats.model == "model1"
+                stats.memStats.memTotal == 11
+                stats.memStats.swapTotal == 14
+                stats.memStats.class == com.mallotore.monitoring.model.MemStats
+                stats.netStats.class == com.mallotore.monitoring.model.NetStats
+                stats.uptimeStats.class == com.mallotore.monitoring.model.UptimeStats
+    }
+
+    def buildServerStats(ip, name, path, freeSpace, creationDateMinute = 12){
+        def stats = new ServerStats(ip, 
                               new OperatingSystem(name: name),
                               [ new DiskRootSpace(path: path,totalSpace: 12,
                                                  freeSpace: freeSpace, usableSpace: 12)],
@@ -58,6 +83,8 @@ class ServerStatsRepositorySpec extends Specification {
                               createNetStats(),
                               createUptimeStats(),
                               createWholistStats())
+        stats.creationDate = Date.parse( "yyyy-MM-dd'T'HH:mm:ss", "2016-03-04T19:${creationDateMinute}:00" )
+        return stats
     }
 
     private createWholistStats(){

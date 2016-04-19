@@ -9,6 +9,9 @@ import com.mallotore.monitoring.model.*
 
 class TemperatureRepository {
 
+    static final Integer DESC = -1
+    static final Integer ASC  = 1
+
     def mongoDatabaseClient
 
     def save(temperature){
@@ -21,14 +24,23 @@ class TemperatureRepository {
 
     def findAll(){
         temperaturesCollection().find().collect{
-            new Temperature(_id: it._id, 
-                          temperature: it.temperature,
-                          creationDate: it.creationDate)
+            convertToModel(it)
         }
+    }
+
+    def findLast(){
+        def cursor = temperaturesCollection().find().sort([creationDate: DESC]).limit(1)
+        return convertToModel(cursor.first())
     }
 
     def removeAll() {
         temperaturesCollection().remove([:])
+    }
+
+    private convertToModel(stats){
+        new Temperature(_id: stats._id, 
+                          temperature: stats.temperature,
+                          creationDate: stats.creationDate)
     }
 
     private temperaturesCollection() {
