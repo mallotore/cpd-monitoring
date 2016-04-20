@@ -14,6 +14,12 @@
                 <table  class="table"> 
                     <tbody id="serverConfigurationTable">
                         <g:each var="server" in="${servers}">
+                            <th>
+                                <td>
+                                    <ul>
+                                    </ul>
+                                </td>
+                            </th>
                             <tr>
                                 <td scope="row" style="width: 25%">
                                     <div id="diskPercentage_${server.id}" style="height: 250px;"></div>
@@ -23,6 +29,9 @@
                                 </td>
                                 <td scope="row" style="width: 25%">
                                     <div id="swapPercentage_${server.id}" style="height: 250px;"></div>
+                                </td>
+                                <td scope="row" style="width: 25%">
+                                    <div id="cpuPercentage_${server.id}" style="height: 250px;"></div>
                                 </td>
                             </tr>
                         </g:each>

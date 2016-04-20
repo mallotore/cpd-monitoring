@@ -49,6 +49,28 @@ $(document).ready(function(){
 		createPieChart(domId, title, name, seriesData);
 	}
 
+	function createCpuTotalsPercentage(server, cpuStats){
+		var seriesData = [
+			{name: "IrqTime", y: format(cpuStats.irqTime)}, 
+			{name: "Combined", y: format(cpuStats.combined)}, 
+			{name: "UserTime", y: format(cpuStats.userTime)},
+			{name: "StolenTime", y: format(cpuStats.stolenTime)}, 
+			{name: "NiceTime", y: format(cpuStats.niceTime)}, 
+			{name: "IdleTime", y: format(cpuStats.idleTime)},
+			{name: "SysTime", y: format(cpuStats.sysTime)}, 
+			{name: "SoftIrqTime", y: format(cpuStats.softIrqTime)}, 
+			{name: "WaitTime", y: format(cpuStats.waitTime)}
+		];
+		var domId = 'cpuPercentage_' + server.id;
+		var name = 'CPU';
+		var title = 'CPU ';
+		createPieChart(domId, title, name, seriesData);
+
+		function format(value){
+			return value.replace("%", "") * 1;
+		}
+	}
+
 	function createPieChart(domId, title, name, seriesData){
 		new Highcharts.Chart({
 	        chart: {
@@ -105,6 +127,7 @@ $(document).ready(function(){
 						});
 						createRamMemoryPercentage(server, serverStats.memStats);
 						createSwapMemoryPercentage(server, serverStats.memStats);
+						createCpuTotalsPercentage(server, serverStats.cpuStats.totals);
 					}
 
 					function serverStatsErrorCallback(){
