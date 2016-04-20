@@ -96,7 +96,6 @@ class JmxBeanExporter {
         } 
     }
 
-
     private exportServicesStatusBean(){
        jmx.export {
             bean(
