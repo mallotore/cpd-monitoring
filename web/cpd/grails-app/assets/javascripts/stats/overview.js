@@ -10,48 +10,20 @@ $(document).ready(function(){
 	function createDiskPercentage(server, diskRootSpace){
 		var formatter = mallotore.utils.bytesFormatter;
 		var usedSpace = diskRootSpace.totalSpace - diskRootSpace.freeSpace;
+		var domId = 'diskPercentage_' + server.id + diskRootSpace.path;
+		var title = 'Espacio en ' + diskRootSpace.path + ' ' + formatter.format(diskRootSpace.totalSpace);
+		var name = 'Espacio';
 		var seriesData = [
 			{name: "Libre", y: diskRootSpace.freeSpace}, 
 			{name: "Ocupado", y: usedSpace}
 		];
-		var chart = new Highcharts.Chart({
-	        chart: {
-	        	renderTo : 'diskPercentage_' + server.id + diskRootSpace.path,
-	            plotBackgroundColor: null,
-	            plotBorderWidth: null,
-	            plotShadow: false,
-	            type: 'pie'
-	        },
-	        credits: {
-	    		enabled: false
-	  		},
-	        title: {
-	            text: 'Espacio en ' + diskRootSpace.path + ' ' + formatter.format(diskRootSpace.totalSpace)
-	        },
-	        tooltip: {
-	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-	        },
-	        plotOptions: {
-	            pie: {
-	                allowPointSelect: true,
-	                cursor: 'pointer',
-	                dataLabels: {
-	                    enabled: true,
-	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-	                    style: {
-	                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-	                    }
-	                }
-	            }
-	        },
-	        series: [{
-	            name: 'Espacio',
-	            colorByPoint: true,
-	            data: seriesData
-	        }]
-	    });
-	}
+		createDiskPercentageContainer();
+		createPieChart(domId, title, name, seriesData);
 
+		function createDiskPercentageContainer(){
+			$('#diskPercentage_' + server.id).append('<div id="' + domId + '" style="height: 250px;"></div>');
+		}
+	}
 
 	function createRamMemoryPercentage(server, memStats){
 		var formatter = mallotore.utils.bytesFormatter;
@@ -59,42 +31,10 @@ $(document).ready(function(){
 			{name: "Libre", y: memStats.memFree}, 
 			{name: "Ocupado", y: memStats.memUsed}
 		];
-		var chart = new Highcharts.Chart({
-	        chart: {
-	        	renderTo : 'ramPercentage_' + server.id,
-	            plotBackgroundColor: null,
-	            plotBorderWidth: null,
-	            plotShadow: false,
-	            type: 'pie'
-	        },
-	        credits: {
-	    		enabled: false
-	  		},
-	        title: {
-	            text: 'RAM ' + formatter.format(memStats.memTotal)
-	        },
-	        tooltip: {
-	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-	        },
-	        plotOptions: {
-	            pie: {
-	                allowPointSelect: true,
-	                cursor: 'pointer',
-	                dataLabels: {
-	                    enabled: true,
-	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-	                    style: {
-	                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-	                    }
-	                }
-	            }
-	        },
-	        series: [{
-	            name: 'RAM',
-	            colorByPoint: true,
-	            data: seriesData
-	        }]
-	    });
+		var domId = 'ramPercentage_' + server.id;
+		var name = 'RAM';
+		var title = 'RAM ' + formatter.format(memStats.memTotal);
+		createPieChart(domId, title, name, seriesData);
 	}
 
 	function createSwapMemoryPercentage(server, memStats){
@@ -103,9 +43,16 @@ $(document).ready(function(){
 			{name: "Libre", y: memStats.swapFree}, 
 			{name: "Ocupado", y: memStats.swapUsed}
 		];
-		var chart = new Highcharts.Chart({
+		var domId = 'swapPercentage_' + server.id;
+		var name = 'SWAP';
+		var title = 'SWAP ' + formatter.format(memStats.swapTotal);
+		createPieChart(domId, title, name, seriesData);
+	}
+
+	function createPieChart(domId, title, name, seriesData){
+		new Highcharts.Chart({
 	        chart: {
-	        	renderTo : 'swapPercentage_' + server.id,
+	        	renderTo : domId,
 	            plotBackgroundColor: null,
 	            plotBorderWidth: null,
 	            plotShadow: false,
@@ -115,7 +62,7 @@ $(document).ready(function(){
 	    		enabled: false
 	  		},
 	        title: {
-	            text: 'SWAP ' + formatter.format(memStats.swapTotal)
+	            text: title
 	        },
 	        tooltip: {
 	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -134,7 +81,7 @@ $(document).ready(function(){
 	            }
 	        },
 	        series: [{
-	            name: 'SWAP',
+	            name: name,
 	            colorByPoint: true,
 	            data: seriesData
 	        }]
@@ -154,7 +101,6 @@ $(document).ready(function(){
 				    function serverStatsSuccessCallback(data){
 				    	var serverStats = data.serverStats;
 				    	_(serverStats.diskRootsSpace).forEach(function(diskRootSpace) {
-				    		createDiskPercentageContainer(server.id, diskRootSpace.path);
 							createDiskPercentage(server, diskRootSpace);
 						});
 						createRamMemoryPercentage(server, serverStats.memStats);
@@ -173,10 +119,6 @@ $(document).ready(function(){
 		}
 
 		findServers();
-	}
-
-	function createDiskPercentageContainer(id, path){
-		$('#diskPercentage_' + id).append('<div id="diskPercentage_' + id + path +'" style="height: 250px;"></div>');
 	}
 
 	function createOverviewStatsPresenter(){
