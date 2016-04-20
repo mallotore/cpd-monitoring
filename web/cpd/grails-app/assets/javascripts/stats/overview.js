@@ -26,7 +26,7 @@ $(document).ready(function(){
 	    		enabled: false
 	  		},
 	        title: {
-	            text: 'Espacio en disco en ' + diskRootSpace.path + ' ' + formatter.format(diskRootSpace.totalSpace)
+	            text: 'Espacio en ' + diskRootSpace.path + ' ' + formatter.format(diskRootSpace.totalSpace)
 	        },
 	        tooltip: {
 	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -51,6 +51,7 @@ $(document).ready(function(){
 	        }]
 	    });
 	}
+
 
 	function createRamMemoryPercentage(server, memStats){
 		var formatter = mallotore.utils.bytesFormatter;
@@ -156,9 +157,7 @@ $(document).ready(function(){
 				    		createDiskPercentageContainer(server.id, diskRootSpace.path);
 							createDiskPercentage(server, diskRootSpace);
 						});
-						createRamPercentageContainer(server.id);
 						createRamMemoryPercentage(server, serverStats.memStats);
-						createSwapPercentageContainer(server.id);
 						createSwapMemoryPercentage(server, serverStats.memStats);
 					}
 
@@ -177,15 +176,7 @@ $(document).ready(function(){
 	}
 
 	function createDiskPercentageContainer(id, path){
-		$('#overviewStats_' + id).append('<div id="diskPercentage_' + id + path + '"'+ 'style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>');
-	}
-
-	function createRamPercentageContainer(id){
-		$('#overviewStats_' + id).append('<div id="ramPercentage_' + id + '"'+ 'style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>');
-	}
-
-	function createSwapPercentageContainer(id){
-		$('#overviewStats_' + id).append('<div id="swapPercentage_' + id + '"'+ 'style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>');
+		$('#diskPercentage_' + id).append('<div id="diskPercentage_' + id + path +'" style="height: 250px;"></div>');
 	}
 
 	function createOverviewStatsPresenter(){

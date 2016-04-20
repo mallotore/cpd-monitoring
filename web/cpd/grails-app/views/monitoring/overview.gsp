@@ -11,9 +11,23 @@
         <div id="jGrowl-container" class="jGrowl top-right"></div>
         <section style="min-height: 721px;">
             <div class="container">
-                <g:each var="server" in="${servers}">
-                    <div id="overviewStats_${server.id}"></div>
-                </g:each>
+                <table  class="table"> 
+                    <tbody id="serverConfigurationTable">
+                        <g:each var="server" in="${servers}">
+                            <tr>
+                                <td scope="row" style="width: 25%">
+                                    <div id="diskPercentage_${server.id}" style="height: 250px;"></div>
+                                </td>
+                                <td scope="row" style="width: 25%">
+                                    <div id="ramPercentage_${server.id}" style="height: 250px;"></div>
+                                </td>
+                                <td scope="row" style="width: 25%">
+                                    <div id="swapPercentage_${server.id}" style="height: 250px;"></div>
+                                </td>
+                            </tr>
+                        </g:each>
+                    </tbody> 
+                </table>
             </div>
         </section>
     </body>
