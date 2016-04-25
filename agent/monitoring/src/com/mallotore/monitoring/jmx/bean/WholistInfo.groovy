@@ -33,7 +33,7 @@ class WholistInfo {
             }
             stats << new WholistStats(user: who[i].getUser(),
                             device: who[i].getDevice(),
-                            time: getTime(who),
+                            time: getTime(who[i]),
                             host: host)
         }
         stats 
@@ -41,13 +41,13 @@ class WholistInfo {
 
     private String getTime(who) {
         try{
-            def time = who[i]?.getTime() * 1000
+            def time = who?.getTime() * 1000
             if (time == 0) {
-            return "unknown";
+                return "unknown";
             }
             String fmt = "MMM dd HH:mm";
             return new SimpleDateFormat(fmt).format(new Date(time));
-            }
+        }
         catch(all){
             return "unknown"
         }
