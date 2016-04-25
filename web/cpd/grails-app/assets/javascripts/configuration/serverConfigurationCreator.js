@@ -1,6 +1,6 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
-$(document).ready(function(){
+(function(mallotore){
 
 	function ServerConfigurationCreator(view, notifier, client){
 		var addedServerHandler = function(){};
@@ -120,4 +120,5 @@ $(document).ready(function(){
 
 	mallotore.servers = mallotore.servers || {};
 	mallotore.servers.createServerConfigurationCreator = createServerConfigurationCreator;
-});
+	
+})(window.mallotore);

@@ -1,4 +1,4 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
 (function(mallotore){
 
@@ -124,4 +124,4 @@ var mallotore = mallotore || {};
 	mallotore.stats = mallotore.stats || {};
 	mallotore.stats.createOverviewStatsChartsPresenter = createOverviewStatsChartsPresenter;
 
-})(mallotore);
+})(window.mallotore);

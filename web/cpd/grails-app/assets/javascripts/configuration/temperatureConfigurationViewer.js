@@ -1,6 +1,6 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
-$(document).ready(function(){
+(function(mallotore){
 
 	function TemperatureConfigurationViewerPresenter(view){
 		this.show = function(){
@@ -55,4 +55,5 @@ $(document).ready(function(){
 
 	mallotore.temperature = mallotore.temperature || {};
 	mallotore.temperature.createTemperatureConfigurationViewerPresenter = createTemperatureConfigurationViewerPresenter;
-});
+	
+})(window.mallotore);

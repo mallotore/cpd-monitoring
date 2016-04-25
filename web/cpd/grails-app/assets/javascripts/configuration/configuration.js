@@ -2,8 +2,6 @@
 //= require_tree . 
 //= require_self
 
-var mallotore = mallotore || {};
-
 $(document).ready(function(){
 
 	function ServerConfigurationCoordinator(creator, editor){

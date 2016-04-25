@@ -1,4 +1,4 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
 (function(mallotore){
 
@@ -17,4 +17,4 @@ var mallotore = mallotore || {};
 	mallotore.utils = (mallotore.utils || {});
 	mallotore.utils.bytesFormatter = new BytesFormatter();
 
-})(mallotore);
+})(window.mallotore);

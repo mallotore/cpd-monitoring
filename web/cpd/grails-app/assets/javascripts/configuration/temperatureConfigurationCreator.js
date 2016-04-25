@@ -1,6 +1,6 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
-$(document).ready(function(){
+(function(mallotore){
 
 	function TemperatureConfigurationCreatorPresenter(view, client, notifier){
 		var createdTemperatureIntervalEventHandler = function(){};
@@ -75,4 +75,5 @@ $(document).ready(function(){
 
 	mallotore.temperature = mallotore.temperature || {};
 	mallotore.temperature.createTemperatureConfigurationCreatorPresenter = createTemperatureConfigurationCreatorPresenter;
-});
+	
+})(window.mallotore);

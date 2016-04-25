@@ -1,6 +1,6 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
-$(document).ready(function(){
+(function(mallotore){
 
 	function ServerConfigurationEditor(editableView, readOnlyView, notifier, client){
 		editableView.subscribeToShowEditServerRequestedEvent(showEditHandler);
@@ -204,4 +204,5 @@ $(document).ready(function(){
 
 	mallotore.servers = mallotore.servers || {};
 	mallotore.servers.createServerConfigurationEditor = createServerConfigurationEditor;
-});
+	
+})(window.mallotore);

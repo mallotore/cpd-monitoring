@@ -1,4 +1,4 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
 (function(mallotore){
 
@@ -41,7 +41,7 @@ var mallotore = mallotore || {};
 		return self;
 	}
 
-	mallotore.utils = (mallotore.utils || {});
+	mallotore.utils = mallotore.utils || {};
 	mallotore.utils.ajaxClient = new AjaxClient();
 
-})(mallotore);
+})(window.mallotore);

@@ -1,4 +1,4 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
 (function(mallotore){
 
@@ -24,7 +24,7 @@ var mallotore = mallotore || {};
 		return self;
 	}
 
-	mallotore.utils = (mallotore.utils || {});
+	mallotore.utils = mallotore.utils || {};
 	mallotore.utils.notifier = new Notifier();
 
-})(mallotore);
+})(window.mallotore);

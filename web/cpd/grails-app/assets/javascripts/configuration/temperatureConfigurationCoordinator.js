@@ -1,6 +1,6 @@
-var mallotore = mallotore || {};
+window.mallotore = window.mallotore || {};
 
-$(document).ready(function(){
+(function(mallotore){
 
 	function TemperatureConfigurationCoordinator(creator, remover, editor, viewer, view){
 		creator.subscribeToCreatedTemperatureIntervalEvent(createdTemperatureIntervalEventHandler);
@@ -161,4 +161,5 @@ $(document).ready(function(){
 
 	mallotore.temperature = mallotore.temperature || {};
 	mallotore.temperature.createTemperatureConfigurationCoordinator = createTemperatureConfigurationCoordinator;
-});
+	
+})(window.mallotore);
