@@ -39,3 +39,5 @@ Thumbs.db
 .asscache
 
 node_modules/*
+
+grails-app/assets/javascripts/dist/*
