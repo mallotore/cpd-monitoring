@@ -1,4 +1,5 @@
 //= require_tree ../lib/highcharts
+//= require_tree ../lib/react
 //= require_tree ../utils
 //= require overview-charts.js
 //= require ../dist/overview-info.min.js
@@ -19,6 +20,9 @@ $(document).ready(function(){
 				    function serverStatsSuccessCallback(data){
 				    	var serverStats = data.serverStats;
 				    	chartsPresenter.render(server, serverStats);
+				    	mallotore.stats.renderOverviewNetStatsInformation(server, serverStats);
+				    	mallotore.stats.renderOverviewOperatingSystemInfo(server, serverStats);
+				    	mallotore.stats.renderOverviewStatsCreationDate(server, serverStats);
 					}
 
 					function serverStatsErrorCallback(){
