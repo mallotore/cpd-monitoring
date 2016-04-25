@@ -4,18 +4,18 @@ class BytesFormatter {
 
 	static final LABELS = [ ' bytes', 'KB', 'MB', 'GB', 'TB' ]
 
-	static String format = { bytes ->
+	static format = { spaceInBytes ->
 
 		def label = LABELS.find {
-			if( bytes < 1024 ) {
+			if( spaceInBytes < 1024 ) {
 				true
 			}
 			else {
-				bytes /= 1024  
+				spaceInBytes /= 1024  
 				false
 			}
 		}
-		"${new java.text.DecimalFormat( '0.##' ).format( bytes )}$label"
+		"${new java.text.DecimalFormat( '0.##' ).format( spaceInBytes )}$label"
 	}
 
 	static String formatToMB(long value) {
