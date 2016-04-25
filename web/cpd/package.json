@@ -1,0 +1,29 @@
+{
+  "name": "cpd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-react": "6.5.0",
+    "babelify": "7.2.0",
+    "browserify": "13.0.0",
+    "del": "2.2.0",
+    "globby": "4.0.0",
+    "gulp": "3.9.1",
+    "gulp-notify": "2.2.0",
+    "gulp-rename": "1.2.2",
+    "gulp-sourcemaps": "2.0.0-alpha",
+    "gulp-uglify": "1.5.3",
+    "gulp-util": "3.0.7",
+    "lodash": "4.11.1",
+    "path": "0.12.7",
+    "vinyl-buffer": "1.0.0",
+    "vinyl-source-stream": "1.1.0",
+    "watchify": "3.7.0"
+  }
+}
