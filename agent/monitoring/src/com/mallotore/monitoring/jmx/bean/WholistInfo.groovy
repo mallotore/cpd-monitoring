@@ -45,8 +45,7 @@ class WholistInfo {
             if (time == 0) {
                 return "unknown";
             }
-            String fmt = "MMM dd HH:mm";
-            return new SimpleDateFormat(fmt).format(new Date(time));
+            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date(time));
         }
         catch(all){
             return "unknown"
