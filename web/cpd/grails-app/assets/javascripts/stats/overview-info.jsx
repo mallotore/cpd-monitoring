@@ -51,6 +51,15 @@ window.mallotore = window.mallotore || {};
         }
     });
 
+    var OverviewStatsUptime = React.createClass({
+        render: function() {
+            var uptime = this.props.serverStats.uptimeStats.uptime;
+            return (
+                    <div>(Uptime: {uptime})</div>
+                   );
+        }
+    });
+
     function renderOverviewNetStatsInformation(server, serverStats){
         ReactDOM.render(
             <OverviewNetStats server={server} serverStats={serverStats} />,
@@ -71,10 +80,18 @@ window.mallotore = window.mallotore || {};
             document.getElementById('statsCreationDate_' + server.id)
         );
     }
+
+    function renderOverviewStatsUptime(server, serverStats){
+        ReactDOM.render(
+            <OverviewStatsUptime server={server} serverStats={serverStats} />,
+            document.getElementById('uptime_' + server.id)
+        );
+    }
     
     mallotore.stats = mallotore.stats || {};
     mallotore.stats.renderOverviewNetStatsInformation = renderOverviewNetStatsInformation;
     mallotore.stats.renderOverviewOperatingSystemInfo = renderOverviewOperatingSystemInfo;
     mallotore.stats.renderOverviewStatsCreationDate = renderOverviewStatsCreationDate;
+    mallotore.stats.renderOverviewStatsUptime = renderOverviewStatsUptime;
 
 })(window.mallotore);

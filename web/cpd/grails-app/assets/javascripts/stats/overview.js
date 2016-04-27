@@ -24,6 +24,7 @@ $(document).ready(function(){
 				    	mallotore.stats.renderOverviewNetStatsInformation(server, serverStats);
 				    	mallotore.stats.renderOverviewOperatingSystemInfo(server, serverStats);
 				    	mallotore.stats.renderOverviewStatsCreationDate(server, serverStats);
+				    	mallotore.stats.renderOverviewStatsUptime(server, serverStats);
 					}
 
 					function serverStatsErrorCallback(){

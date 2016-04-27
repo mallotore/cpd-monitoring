@@ -16,7 +16,10 @@
                         <g:each var="server" in="${servers}">
                             <tr>
                                 <td style="width: 50%">
-                                    <h3>${server.name}</h3>
+                                    <h3>
+                                        <div style="float: left;">${server.name}</div>
+                                        <div style="margin-left: 10px; float: left;" id="uptime_${server.id}"></div>
+                                    </h3>
                                 </td>
                                 <td style="width: 50%">
                                     <h3>
@@ -48,9 +51,6 @@
                             <tr>
                                 <td scope="row" style="width: 50%">
                                     <div id="whoList_${server.id}" style="height: 250px;"></div>
-                                </td>
-                                <td scope="row" style="width: 50%">
-                                    <div id="uptime_${server.id}" style="height: 250px;"></div>
                                 </td>
                             </tr>
                             <tr>
