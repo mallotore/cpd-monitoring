@@ -46,6 +46,14 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td scope="row" style="width: 50%">
+                                    <div id="whoList_${server.id}" style="height: 250px;"></div>
+                                </td>
+                                <td scope="row" style="width: 50%">
+                                    <div id="uptime_${server.id}" style="height: 250px;"></div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td><br/></td>
                             </tr>
                         </g:each>

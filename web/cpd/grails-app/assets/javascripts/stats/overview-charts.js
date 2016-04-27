@@ -66,6 +66,23 @@ window.mallotore = window.mallotore || {};
 		}
 	}
 
+	function createWhoList(server, whoListStats){
+		var ySeriesData = _.map(whoListStats, function(who) {
+			var begin =  moment(who.time, "YYYY-MM-DDTHH:mm:ss");
+			var end = moment();
+			var duration = moment.duration(end.diff(begin));
+			var hours = duration.asHours();
+			return [who.user, hours];
+		});
+		var xSeriesData = _.map(whoListStats, function(who) {
+			return [who.user];
+		});
+		var domId = 'whoList_' + server.id;
+		var name = 'Usuarios conectados';
+		var title = 'Usuarios conectados';
+		createColumnChart(domId, title, name, xSeriesData, ySeriesData);
+	}
+
 	function createPieChart(domId, title, name, seriesData){
 		new Highcharts.Chart({
 	        chart: {
@@ -105,6 +122,60 @@ window.mallotore = window.mallotore || {};
 	    });
 	}
 
+	function createColumnChart(domId, title, name, xSeriesData, ySeriesData){
+		new Highcharts.Chart({
+	        chart: {
+	        	renderTo : domId,
+	            type: 'column'
+	        },
+	        credits: {
+	    		enabled: false
+	  		},
+	        title: {
+	            text: title
+	        },
+	        xAxis: {
+	            type: 'Usuarios',
+	            categories: xSeriesData,
+	            labels: {
+	                rotation: -45,
+	                style: {
+	                    fontSize: '12px',
+	                    fontFamily: 'Verdana, sans-serif'
+	                }
+	            }
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: 'Duración de la sesión'
+	            }
+	        },
+	        legend: {
+	            enabled: false
+	        },
+	        tooltip: {
+	            pointFormat: '<b>{point.y: .1f} horas</b>'
+	        },
+	        series: [{
+		            name: name,
+		            data: ySeriesData,
+		            dataLabels: {
+		                enabled: true,
+		                rotation: -90,
+		                color: '#FFFFFF',
+		                align: 'right',
+		                format: '{point.y: .1f}',
+		                y: 10,
+		                style: {
+		                    fontSize: '13px',
+		                    fontFamily: 'Verdana, sans-serif'
+		                }
+		            }
+		        }]
+		    });
+	}
+
 	function OverviewStatsChartsPresenter(){
 
 		this.render = function(server, serverStats){
@@ -114,6 +185,7 @@ window.mallotore = window.mallotore || {};
 			createRamMemoryPercentage(server, serverStats.memStats);
 			createSwapMemoryPercentage(server, serverStats.memStats);
 			createCpuTotalsPercentage(server, serverStats.cpuStats.totals);
+			createWhoList(server, serverStats.wholistStats);
 		};
 	}
 

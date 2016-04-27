@@ -1,4 +1,5 @@
 //= require_tree ../lib/highcharts
+//= require ../lib/moment.min.js
 //= require_tree ../lib/react
 //= require_tree ../utils
 //= require overview-charts.js
