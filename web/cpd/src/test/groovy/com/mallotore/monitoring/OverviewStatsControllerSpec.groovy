@@ -6,7 +6,7 @@ import com.mallotore.configuration.ServerConfiguration
 import com.mallotore.configuration.ServerConfigurationService
 import com.mallotore.configuration.dto.ServerDto
 import com.mallotore.monitoring.repository.TemperatureRepository
-import com.mallotore.monitoring.repository.ServerStatsRepository
+import com.mallotore.monitoring.jmx.ServerGatherer
 import com.mallotore.monitoring.model.ServerStats
 import com.mallotore.monitoring.model.ServerStatsState
 import com.mallotore.monitoring.model.Temperature
@@ -17,7 +17,7 @@ class OverviewStatsControllerSpec extends Specification {
     def setup() {
         controller.serverConfigurationService = Mock(ServerConfigurationService)
         controller.temperatureRepository = Mock(TemperatureRepository)
-        controller.serverStatsRepository = Mock(ServerStatsRepository)
+        controller.serverGatherer = Mock(ServerGatherer)
     }
 
     def "shows overview"() {
@@ -37,12 +37,15 @@ class OverviewStatsControllerSpec extends Specification {
     def "finds server stats overview"(){
         when:
         request.method = 'GET'
-        controller.findServerStatsOverviewByIp("127.0.0.1")
+        controller.findServerStatsOverviewByIp("127.0.0.1", "1617")
 
         then:
         1 * controller
-            .serverStatsRepository
-            .findLastByIp("127.0.0.1") >> new ServerStats(new ServerStatsState(ip: "127.0.0.1"))
+            .serverGatherer
+            .gatherServerStats([ip:"127.0.0.1", port: "1617"]) >> [
+                                                    ip: "127.0.0.1",
+                                                    port: "1617"
+                                                ]
         response.json.serverStats.ip == '127.0.0.1'
     }
 

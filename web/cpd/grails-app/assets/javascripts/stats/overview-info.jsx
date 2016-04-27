@@ -54,8 +54,17 @@ window.mallotore = window.mallotore || {};
     var OverviewStatsUptime = React.createClass({
         render: function() {
             var uptime = this.props.serverStats.uptimeStats.uptime;
+            var divStyle = {
+              color: 'green'
+            };
+            if(!uptime){
+                divStyle.color = 'red';
+                return (
+                    <div style={divStyle}>({this.props.serverStats.uptimeStats.error})</div>
+                   );
+            }
             return (
-                    <div>(Uptime: {uptime})</div>
+                    <div style={divStyle}>(Uptime: {uptime})</div>
                    );
         }
     });

@@ -2,12 +2,13 @@ package com.mallotore.monitoring
 
 import com.mallotore.configuration.dto.ServerDto
 import grails.converters.JSON
+import com.mallotore.monitoring.model.ServerStats
 
 class OverviewStatsController {
 
 	def serverConfigurationService
 	def temperatureRepository
-	def serverStatsRepository
+    def serverGatherer
 
     static allowedMethods = [home: "GET", findServerStatsOverviewByIp: "GET", 
                             findTemperatureStatsOverview: "GET", findServers: "GET"]
@@ -20,8 +21,16 @@ class OverviewStatsController {
         render(findAllServers() as JSON)
     }
 
-    def findServerStatsOverviewByIp(String ip) { 
-    	def stats = serverStatsRepository.findLastByIp(ip)
+    def findServerStatsOverviewByIp(String ip, String port) { 
+        def serverStats = serverGatherer.gatherServerStats([ip: ip, port: port])
+        def stats = new ServerStats(serverStats.ip,
+                                    serverStats.os,
+                                    serverStats.diskRootsSpace,
+                                    serverStats.cpuStats,
+                                    serverStats.memStats,
+                                    serverStats.netStats,
+                                    serverStats.uptimeStats,
+                                    serverStats.wholistStats)
 
     	render([serverStats: stats.state()] as JSON)
     }

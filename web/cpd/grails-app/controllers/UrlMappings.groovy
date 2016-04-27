@@ -17,7 +17,7 @@ class UrlMappings {
         "/configuration/temperature/delete" (controller: "TemperatureConfiguration", action: "delete")
         name overviewstats:"/stats"(controller: "OverviewStats", action: "home")
         "/stats/overview/servers" (controller: "OverviewStats", action: "findServers")
-        "/stats/overview/servers/$ip" (controller: "OverviewStats", action: "findServerStatsOverviewByIp")
+        "/stats/overview/servers/$ip/$port" (controller: "OverviewStats", action: "findServerStatsOverviewByIp")
         "/stats/overview/temperature" (controller: "OverviewStats", action: "findTemperatureStatsOverview")
         "/error"(view:"/error")
         "500"(view:'/error')

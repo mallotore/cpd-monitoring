@@ -16,7 +16,9 @@ $(document).ready(function(){
 
 			function successCallback(servers){
 				_(servers).forEach(function(server) {
-					client.get("/stats/overview/servers/" + server.ip, {}, serverStatsSuccessCallback, serverStatsErrorCallback);
+					var url = "/stats/overview/servers/{ip}/{port}".replace("{ip}", server.ip)
+																   .replace("{port}", server.port);
+					client.get(url, {}, serverStatsSuccessCallback, serverStatsErrorCallback);
 				    
 				    function serverStatsSuccessCallback(data){
 				    	var serverStats = data.serverStats;
@@ -28,6 +30,7 @@ $(document).ready(function(){
 					}
 
 					function serverStatsErrorCallback(){
+						mallotore.stats.renderOverviewStatsUptime(server, {uptimeStats:{error: "Servidor o agente caido"}});
 						notifier.notifyError("Estadísticas", "Error recibiendo estadísticas del servidor");
 					}
 				});
