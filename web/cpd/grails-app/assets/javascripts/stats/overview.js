@@ -10,35 +10,56 @@ $(document).ready(function(){
 
 	function OverviewStatsPresenter(view, chartsPresenter, client, notifier){
 		var servers;
-		var overviewStatsInterval = function(){};
+		var overviewTemperatureStatsInterval = function(){};
+		var overviewServersStatsInterval = function(){};
 		view.subscribeToEditIntervalRequestedEvent(editIntervalRequestedHandler);
 
 		function editIntervalRequestedHandler(intervalInSeconds){
-			clearInterval(overviewStatsInterval);
-			updateStatsWithInterval(intervalInSeconds);
+			clearInterval(overviewServersStatsInterval);
+			clearInterval(overviewTemperatureStatsInterval);
+			updateServersStatsWithInterval(intervalInSeconds);
+			updateTemperatureStatsWithInterval(intervalInSeconds);
 			notifier.notifySuccess("Refresco", "Intervalo actualizado a " + intervalInSeconds + " segundos");
 		}
 		
-		function findServers(){
-			client.get("/stats/overview/servers", {}, successCallback, errorCallback);
+		function retrieveStats(){
+			retrieveServerStats();
+			retrieveTemperatureStats();
 
-			function successCallback(receivedServers){
-				servers = receivedServers;
-				var defaultIntervalInSeconds = view.getInterval();
-				updateStats();
-				updateStatsWithInterval(defaultIntervalInSeconds);
+			function retrieveServerStats(){
+				client.get("/stats/overview/servers", {}, successCallback, errorCallback);
+
+				function successCallback(receivedServers){
+					servers = receivedServers;
+					updateServersStats();
+					updateServersStatsWithInterval(view.getInterval());
+				}
+
+				function errorCallback(xhr){
+					notifier.notifyError("Estadísticas", "Error recibiendo los servidores");
+				}
 			}
 
-			function errorCallback(xhr){
-				notifier.notifyError("Estadísticas", "Error recibiendo los servidores");
+			function retrieveTemperatureStats(){
+				client.get("/stats/overview/temperature", {}, successCallback, errorCallback);
+
+				function successCallback(data){
+					var temperature = data.temperatureStats;
+					mallotore.stats.renderOverviewStatsTemperature(temperature);
+					updateTemperatureStatsWithInterval(view.getInterval());
+				}
+
+				function errorCallback(xhr){
+					notifier.notifyError("Estadísticas", "Error recibiendo la temperatura");
+				}
 			}
 		}
 
-		function updateStatsWithInterval(intervalInSeconds){
-			overviewStatsInterval = setInterval( updateStats, intervalInSeconds * 1000);
+		function updateServersStatsWithInterval(intervalInSeconds){
+			overviewServersStatsInterval = setInterval( updateServersStats, intervalInSeconds * 1000);
 		}
 
-		function updateStats(){
+		function updateServersStats(){
 			_(servers).forEach(function(server) {
 				var url = "/stats/overview/servers/{ip}/{port}".replace("{ip}", server.ip)
 															   .replace("{port}", server.port);
@@ -60,7 +81,24 @@ $(document).ready(function(){
 			});	
 		}
 
-		findServers();
+		function updateTemperatureStats(temperature){
+			client.get("/stats/overview/temperature", {}, temperatureStatsSuccessCallback, temperatureStatsErrorCallback);
+
+			function temperatureStatsSuccessCallback(data){
+				var temperature = data.temperatureStats;
+				mallotore.stats.renderOverviewStatsTemperature(temperature);
+			}
+
+			function temperatureStatsErrorCallback(xhr){
+				notifier.notifyError("Estadísticas", "Error recibiendo la temperatura");
+			}
+		}
+
+		function updateTemperatureStatsWithInterval(intervalInSeconds){
+			overviewTemperatureStatsInterval = setInterval( updateTemperatureStats, intervalInSeconds * 1000);
+		}
+
+		retrieveStats();
 	}
 
 	function OverviewStatsView(){

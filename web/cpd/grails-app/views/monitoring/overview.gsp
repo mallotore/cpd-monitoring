@@ -22,6 +22,14 @@
                                 </button>
                             </td>
                         </tr>
+                        <tr>
+                            <td style="border: none;" colspan="2">
+                                <h3>
+                                    <label style="font-family: Montserrat,Helvetica Neue,Helvetica,Arial,sans-serif;font-weight: bold; float: left;">Temperatura</label>
+                                    <div id="temperature" style="margin-left: 10px;float: left;"></div>
+                                </h3>
+                            </td>
+                        </tr>
                         <g:each var="server" in="${servers}">
                             <tr style="border-top:0px !important;">
                                 <td style="width: 50%; border: none;">

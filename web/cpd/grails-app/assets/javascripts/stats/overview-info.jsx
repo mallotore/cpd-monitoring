@@ -65,6 +65,35 @@ window.mallotore = window.mallotore || {};
         }
     });
 
+    var OverviewStatsTemperature = React.createClass({
+        render: function() {
+            var temperature = this.props.temperature;
+            var divStyle = {  
+                    background: 'red', 
+                    height: '25px', 
+                    width:'150px',
+                    fontFamily: 'Montserrat,Helvetica Neue,Helvetica,Arial,sans-serif',
+                    textAlign: 'center',
+                    fontweight: 'bold',
+                    background: 'green'
+            };
+
+            if(temperature > 27){
+                divStyle.background = 'red';
+                return buildDiv(divStyle, temperature);
+            }
+            if(temperature > 25){
+                divStyle.background = 'orange';
+                return buildDiv(divStyle, temperature);
+            }
+            return buildDiv(divStyle, temperature);
+
+            function buildDiv(style, message){
+                return <div style={style}>{message}ºC</div>;
+            }
+        }
+    });
+
     function renderOverviewNetStatsInformation(server, serverStats){
         ReactDOM.render(
             <OverviewNetStats server={server} serverStats={serverStats} />,
@@ -92,11 +121,19 @@ window.mallotore = window.mallotore || {};
             document.getElementById('uptime_' + server.id)
         );
     }
+
+    function renderOverviewStatsTemperature(temperature){
+        ReactDOM.render(
+            <OverviewStatsTemperature temperature={temperature}/>,
+            document.getElementById('temperature')
+        );
+    }
     
     mallotore.stats = mallotore.stats || {};
     mallotore.stats.renderOverviewNetStatsInformation = renderOverviewNetStatsInformation;
     mallotore.stats.renderOverviewOperatingSystemInfo = renderOverviewOperatingSystemInfo;
     mallotore.stats.renderOverviewStatsCreationDate = renderOverviewStatsCreationDate;
     mallotore.stats.renderOverviewStatsUptime = renderOverviewStatsUptime;
+    mallotore.stats.renderOverviewStatsTemperature = renderOverviewStatsTemperature;
 
 })(window.mallotore);
