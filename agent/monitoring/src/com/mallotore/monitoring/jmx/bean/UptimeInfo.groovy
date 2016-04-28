@@ -52,7 +52,7 @@ class UptimeInfo {
         int minutes, hours;
 
         if (days != 0) {
-            retval += days + " " + ((days > 1) ? "days" : "day") + ", "
+            retval += days + " " + ((days > 1) ? "días" : "día") + ", "
         }
 
         minutes = (int)uptime / 60;
@@ -61,10 +61,10 @@ class UptimeInfo {
         minutes %= 60;
 
         if (hours != 0) {
-            retval += hours + ":" + minutes;
+            retval += hours + "horas " + minutes + "minutos";
         }
         else {
-            retval += minutes + " min";
+            retval += minutes + " minutos";
         }
 
         return retval;
