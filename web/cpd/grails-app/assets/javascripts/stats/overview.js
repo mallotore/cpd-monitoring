@@ -44,7 +44,7 @@ $(document).ready(function(){
 				client.get("/stats/overview/temperature", {}, successCallback, errorCallback);
 
 				function successCallback(data){
-					var temperature = data.temperatureStats;
+					var temperature = data.temperatureStats.temperature;
 					mallotore.stats.renderOverviewStatsTemperature(temperature);
 					updateTemperatureStatsWithInterval(view.getInterval());
 				}
