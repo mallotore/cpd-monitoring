@@ -67,7 +67,7 @@ window.mallotore = window.mallotore || {};
 
     var OverviewStatsTemperature = React.createClass({
         render: function() {
-            var temperature = this.props.temperature;
+            var temperature = this.props.temperatureStats.temperature;
             var divStyle = {  
                     background: 'red', 
                     height: '25px', 
@@ -122,9 +122,9 @@ window.mallotore = window.mallotore || {};
         );
     }
 
-    function renderOverviewStatsTemperature(temperature){
+    function renderOverviewStatsTemperature(temperatureStats){
         ReactDOM.render(
-            <OverviewStatsTemperature temperature={temperature}/>,
+            <OverviewStatsTemperature temperatureStats={temperatureStats}/>,
             document.getElementById('temperature')
         );
     }

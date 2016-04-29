@@ -1,6 +1,7 @@
 //= require_tree ../lib/highcharts
 //= require ../lib/moment.min.js
-//= require_tree ../lib/react
+//= require ${grails.util.Environment.currentEnvironment.toString() == 'DEVELOPMENT' ? '../lib/react/1-react.js' : '../lib/react/1-react.min.js'}
+//= require ${grails.util.Environment.currentEnvironment.toString() == 'DEVELOPMENT' ? '../lib/react/2-react-dom.js' : '../lib/react/2-react-dom.min.js'}
 //= require_tree ../utils
 //= require overview-charts.js
 //= require ../dist/overview-info.min.js
@@ -44,8 +45,8 @@ $(document).ready(function(){
 				client.get("/stats/overview/temperature", {}, successCallback, errorCallback);
 
 				function successCallback(data){
-					var temperature = data.temperatureStats.temperature;
-					mallotore.stats.renderOverviewStatsTemperature(temperature);
+					var temperatureStats = data.temperatureStats;
+					mallotore.stats.renderOverviewStatsTemperature(temperatureStats);
 					updateTemperatureStatsWithInterval(view.getInterval());
 				}
 
