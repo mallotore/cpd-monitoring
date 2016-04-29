@@ -3,7 +3,6 @@
     <head>
         <meta name="layout" content="default">
         <parameter name="defMonitoringStats" value="1" />
-        <parameter name="defMonitoringStatsOverview" value="1" />
         <asset:stylesheet src="config/config.css"/>
         <asset:javascript src="stats/overview.js"/>
     </head>
@@ -11,7 +10,8 @@
         <div id="jGrowl-container" class="jGrowl top-right"></div>
         <section style="min-height: 721px;">
             <div class="container">
-                <table  class="table" > 
+                <g:render template="/monitoring/tabs" model="[selected: 'overview']"/>
+                <table class="table" > 
                     <tbody id="serverConfigurationTable">
                         <tr>
                             <td style="border: none;" colspan="2">

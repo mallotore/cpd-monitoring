@@ -14,7 +14,7 @@ class OverviewStatsController {
                             findTemperatureStatsOverview: "GET", findServers: "GET"]
 
     def home() { 
-        render view:'/monitoring/overview', model: [servers: findAllServers()]
+        render view:'/monitoring/overviewStats', model: [servers: findAllServers()]
     }
 
     def findServers(){

@@ -29,7 +29,7 @@ class OverviewStatsControllerSpec extends Specification {
         1 * controller.serverConfigurationService.findAllServers() >> [
             new ServerConfiguration(id: "uuid", name: "Sql-1", ip: "127.1.1.1", port: 1617, probeIntervalInSeconds: 60)
         ]
-        view == '/monitoring/overview'
+        view == '/monitoring/overviewStats'
         model.servers.size() == 1
         model.servers[0].id == "uuid"
     }
