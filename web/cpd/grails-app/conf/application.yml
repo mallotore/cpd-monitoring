@@ -177,8 +177,6 @@ quartz:
     pluginEnabled: true
     jdbcStore: true
     autoStartup: true
-    #jdbcStoreDataSource: MyDs# - jdbc data source alternate name
     waitForJobsToCompleteOnShutdown: true 
-    #exposeSchedulerInRepository: - expose Schedule in repository
     scheduler.instanceName:  MallotoreScheduler
-    purgeQuartzTablesOnStartup: true
+    purgeQuartzTablesOnStartup: false
