@@ -12,7 +12,7 @@ class ServerProbeJobService{
 	def probe(server){
 		try{
 	        def serverStats = serverGatherer.gatherServerStats(server)
-	        if(serverStats.error){
+	        if(serverStats.error && server.connectivityAlert){
 	        	sendConnectivityAlert(server, serverStats.error)
 	        	return;
 	        }
