@@ -208,6 +208,37 @@ header .intro-text .skills {
 
 .selected {
     background-color: rgba(255,255,255,.3);
+    border: none;
+}
+
+.subtab a{
+    background-color: #337ab7;
+    color: white !important;
+    border-bottom: none !important;
+}
+
+.subtab a:focus,
+.subtab a:active {
+    background-color: #0033FF !important;
+}
+
+.subtab a:hover {
+    background-color: #0033FF !important;
+}
+
+.selected-subtab a{
+    background-color: #000066 !important;
+    font-weight: bold !important;
+}
+
+.selected-subtab a:focus,
+.selected-subtab a:active {
+    font-weight: bold !important;
+    background-color: #000066 !important;
+}
+
+.selected-subtab a:hover {
+    background-color: #000066 !important;
 }
 
 @media(min-width:768px) {
