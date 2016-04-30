@@ -23,18 +23,23 @@ window.mallotore = window.mallotore || {};
             		{name: "idleTime", data: []},
             		{name: "sysTime", data: []},
             		{name: "softIrqTime", data: []},
-            		{name: "waitTime", data: []},
+            		{name: "waitTime", data: []}
+			];
+			var diskSpaceStats = [
+				{name: "Libre", data: []},
+            	{name: "Ocupado", data: []}
 			];
 			_.map(serverStatsCollection, function(serverStats){
 				var creationDate = dateToMilliseconds(serverStats.creationDate);
 				createRamStats(creationDate, serverStats);
 				createSwapStats(creationDate, serverStats);
 				createCpuStats(creationDate, serverStats);
+				createDiskSpaceStats(creationDate, serverStats);
 			});
 			createLineChart(("swap_" + server.id), "SWAP", swapStats, tooltipGbFormatter, 'GB');
 			createLineChart(("ram_" + server.id), "RAM", ramStats, tooltipGbFormatter, 'GB');
 			createLineChart(("cpu_" + server.id), "CPU", cpuStats, cpuPercentageFormatter, 'Porcentaje');
-			createLineChart(("diskSpace_" + server.id), "Espacio en disco", diskSpaceStats, cpuPercentageFormatter, 'GB');
+			createLineChart(("diskSpace_" + server.id), "Espacio en disco", diskSpaceStats, tooltipGbFormatter, 'GB');
 
 			function createRamStats(creationDate, serverStats){
 				ramStats[0].data.push([creationDate, formatToGB(serverStats.memStats.memFree)]);
@@ -60,6 +65,12 @@ window.mallotore = window.mallotore || {};
 				function formatCPUStats(value){
 					return value.replace("%", "") * 1;
 				}
+			}
+
+			function createDiskSpaceStats(creationDate, serverStats){
+				var usedSpace = serverStats.diskRootsSpace[0].totalSpace - serverStats.diskRootsSpace[0].freeSpace;
+				diskSpaceStats[0].data.push([creationDate, formatToGB(serverStats.diskRootsSpace[0].freeSpace)]);
+				diskSpaceStats[1].data.push([creationDate, formatToGB(usedSpace)]);
 			}
 
 			function cpuPercentageFormatter(chart){
