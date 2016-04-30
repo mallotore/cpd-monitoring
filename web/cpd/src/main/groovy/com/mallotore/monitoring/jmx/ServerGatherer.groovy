@@ -5,6 +5,7 @@ import javax.management.*
 import groovy.jmx.builder.*
 import com.mallotore.configuration.*
 import com.mallotore.monitoring.model.*
+import com.mallotore.monitoring.service.*
 
 class ServerGatherer {
     
@@ -32,8 +33,19 @@ class ServerGatherer {
     }
 
     def gatherServerStats(server){
-        def connection = jmxBuilder.client(port: server.port, host: server.ip)
-        connection.connect()
+        def connection
+        try{
+            connection = jmxBuilder.client(port: server.port, host: server.ip)
+            connection.connect()
+        }
+        catch(all){
+            def isReachableServer = PingService.pingToHost(server.ip)
+            if(!isReachableServer){
+                return [error: "server"]
+            }
+            return [error: "agent"];
+        }
+        
         def mbeanServerConnection = connection.MBeanServerConnection
         def osBean = new GroovyMBean(mbeanServerConnection, OPERATING_SYSTEM_BEAN_NAMESPACE)
         def cpuInfoBean = new GroovyMBean(mbeanServerConnection, CPU_INFO_BEAN_NAMESPACE)

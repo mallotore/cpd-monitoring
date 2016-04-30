@@ -12,6 +12,10 @@ class ServerProbeJobService{
 	def probe(server){
 		try{
 	        def serverStats = serverGatherer.gatherServerStats(server)
+	        if(serverStats.error){
+	        	sendConnectivityAlert(server, serverStats.error)
+	        	return;
+	        }
         	def stats = new ServerStats(serverStats.ip,
 			                            serverStats.os,
 			                            serverStats.diskRootsSpace,
@@ -28,6 +32,12 @@ class ServerProbeJobService{
 		}catch(all){
 			log.error("${all}")
 		}
+	}
+
+	private sendConnectivityAlert(server, error){
+		def errorType = error == "agent" ? 'Agente' : 'Servidor'
+		def message = "Problema de conectividad con el servidor ${server.ip}:${server.port}; ${errorType} caído"
+		alertSenderService.send(message)
 	}
 
 	private checkDiskSpaceAlert(server, diskRootsSpace){
