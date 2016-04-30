@@ -4,6 +4,23 @@ window.mallotore = window.mallotore || {};
 	
 	function HistoricalStatsChartsPresenter(){
 
+		this.renderTemperature = function(temperatureStats){
+			var temperature = [
+				{ name:  'Temperatura', data: [] }
+			];
+			_.map(temperatureStats, function(stats){
+				var creationDate = dateToMilliseconds(stats.creationDate);
+				temperature[0].data.push([creationDate, stats.temperature * 1]);
+			});
+
+			createLineChart(("temperature"), "Temperatura", temperature, formatter, 'ºC');
+
+			function formatter(chart) {	 
+	    		var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
+	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + chart.point.y + "ºC";
+		    }
+		};
+
 		this.render = function(server, serverStatsCollection){
 			var bytesFormatter = mallotore.utils.bytesFormatter;
 			var swapStats = [
@@ -83,15 +100,15 @@ window.mallotore = window.mallotore || {};
 	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + chart.point.y + "GB";
 		    }
 
-			function dateToMilliseconds(dateString){
-				return new Date(dateString).getTime(); 
-			}
-
 			function formatToGB(bytes){
 				//extract
 				return  parseFloat((bytes / 1073741824).toFixed(2));
 			}
 		};
+
+		function dateToMilliseconds(dateString){
+			return new Date(dateString).getTime(); 
+		}
 	}
 
 	function createLineChart(domId, title, seriesData, formatter, yAxisTitle){

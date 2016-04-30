@@ -30,7 +30,7 @@ class HistoricalStatsController {
 
     def findTemperatureStats(){
         def stats = temperatureRepository.findAll()
-        render([temperatureStats: stats.state()] as JSON)
+        render([temperatureStats: stats?.collect{it.state()}] as JSON)
     }
 
      private findAllServers(){
