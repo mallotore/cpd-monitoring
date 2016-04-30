@@ -33,6 +33,14 @@
                             </tr>
                             <tr>
                                 <td scope="row" style="width: 50%; border: none;">
+                                    <div id="cpu_${server.id}" style="height: 250px;"></div>
+                                </td>
+                                <td scope="row" style="width: 50%; border: none;">
+                                    <div id="diskSpace_${server.id}" style="height: 250px;"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td scope="row" style="width: 50%; border: none;">
                                     <div id="ram_${server.id}" style="height: 250px;"></div>
                                 </td>
                                 <td scope="row" style="width: 50%; border: none;">

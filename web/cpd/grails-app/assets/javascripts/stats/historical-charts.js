@@ -14,32 +14,76 @@ window.mallotore = window.mallotore || {};
 				{ name:  'RAM en uso', data: [] },
 				{ name: 'RAM libre', data: [] }
 			];
+			var cpuStats = [
+					{name: "irqTime", data: []},
+            		{name: "combined", data: []},
+            		{name: "userTime", data: []},
+            		{name: "stolenTime", data: []},
+            		{name: "niceTime", data: []},
+            		{name: "idleTime", data: []},
+            		{name: "sysTime", data: []},
+            		{name: "softIrqTime", data: []},
+            		{name: "waitTime", data: []},
+			];
 			_.map(serverStatsCollection, function(serverStats){
 				var creationDate = dateToMilliseconds(serverStats.creationDate);
-				swapStats[0].data.push([creationDate, formatToGB(serverStats.memStats.swapFree)]);
-				swapStats[1].data.push([creationDate, formatToGB(serverStats.memStats.swapUsed)]);
+				createRamStats(creationDate, serverStats);
+				createSwapStats(creationDate, serverStats);
+				createCpuStats(creationDate, serverStats);
+			});
+			createLineChart(("swap_" + server.id), "SWAP", swapStats, tooltipGbFormatter, 'GB');
+			createLineChart(("ram_" + server.id), "RAM", ramStats, tooltipGbFormatter, 'GB');
+			createLineChart(("cpu_" + server.id), "CPU", cpuStats, cpuPercentageFormatter, 'Porcentaje');
+			createLineChart(("diskSpace_" + server.id), "Espacio en disco", diskSpaceStats, cpuPercentageFormatter, 'GB');
+
+			function createRamStats(creationDate, serverStats){
 				ramStats[0].data.push([creationDate, formatToGB(serverStats.memStats.memFree)]);
 				ramStats[1].data.push([creationDate, formatToGB(serverStats.memStats.memUsed)]);
-			});
-			createLineChart(("swap_" + server.id), "SWAP", swapStats, formatter);
-			createLineChart(("ram_" + server.id), "RAM", ramStats, formatter);
+			}
+
+			function createSwapStats(creationDate, serverStats){
+				swapStats[0].data.push([creationDate, formatToGB(serverStats.memStats.swapFree)]);
+				swapStats[1].data.push([creationDate, formatToGB(serverStats.memStats.swapUsed)]);
+			}
+
+			function createCpuStats(creationDate, serverStats){
+				cpuStats[0].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.irqTime)]);
+				cpuStats[1].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.combined)]);
+				cpuStats[2].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.userTime)]);
+				cpuStats[3].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.stolenTime)]);
+				cpuStats[4].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.niceTime)]);
+				cpuStats[5].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.idleTime)]);
+				cpuStats[6].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.sysTime)]);
+				cpuStats[7].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.softIrqTime)]);
+				cpuStats[8].data.push([creationDate, formatCPUStats(serverStats.cpuStats.totals.waitTime)]);
+
+				function formatCPUStats(value){
+					return value.replace("%", "") * 1;
+				}
+			}
+
+			function cpuPercentageFormatter(chart){
+				var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
+	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + chart.point.y + "%";
+			}
+
+			function tooltipGbFormatter(chart) {	 
+	    		var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
+	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + chart.point.y + "GB";
+		    }
+
+			function dateToMilliseconds(dateString){
+				return new Date(dateString).getTime(); 
+			}
+
+			function formatToGB(bytes){
+				//extract
+				return  parseFloat((bytes / 1073741824).toFixed(2));
+			}
 		};
-
-		function formatter(chart) {	 
-    		var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
-            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + chart.point.y + "GB";
-	    }
-
-		function dateToMilliseconds(dateString){
-			return new Date(dateString).getTime(); 
-		}
-
-		function formatToGB(bytes){
-			return  parseFloat((bytes / 1073741824).toFixed(2));
-		}
 	}
 
-	function createLineChart(domId, title, seriesData, formatter){
+	function createLineChart(domId, title, seriesData, formatter, yAxisTitle){
 		new Highcharts.Chart({
 			chart: {
 				renderTo: domId,
@@ -58,12 +102,12 @@ window.mallotore = window.mallotore || {};
 	                year: '%b'
 	            },
 	            title: {
-	                text: 'Date'
+	                text: 'Fecha'
 	            }
 	        },
 	        yAxis: {
 	            title: {
-	                text: 'GB'
+	                text: yAxisTitle
 	            },
 	            min: 0
 	        },

@@ -14,17 +14,14 @@ $(document).ready(function(){
 
 			function successCallback(receivedServers){
 				servers = receivedServers;
-				console.log(servers);
 				updateServersStats();
 
 				function updateServersStats(){
 					_(servers).forEach(function(server) {
 						var url = "/stats/historical/servers/{ip}".replace("{ip}", server.ip);
-
 						client.get(url, {}, serverStatsSuccessCallback, serverStatsErrorCallback);
 					    
 					    function serverStatsSuccessCallback(data){
-					    	console.log(data);
 					    	var serverStats = data.serverStats;
 					    	chartsPresenter.render(server, serverStats);
 						}
