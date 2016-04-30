@@ -12,16 +12,8 @@ class ConfigurationController {
 	def findAll() { 
         def servers = serverConfigurationService.findAllServers()
         def temperature = temperatureConfigurationService.findProbeInterval()
+        def serversDto = ServerDto.CreateFromModels(servers)
 
-        def serversDto = servers?.collect{
-            new ServerDto(id: it.id,
-                        name: it.name,
-                        ip:it.ip,
-                        port: it.port,
-                        probeInterval: it.probeIntervalInSeconds,
-                        connectivityAlert: it.connectivityAlert,
-                        diskPercentageAlert: it.diskPercentageAlert)
-        }
         render view:'/config/config', 
                model: [servers: serversDto,
                         temperatureProbeIntervalInSeconds: temperature]

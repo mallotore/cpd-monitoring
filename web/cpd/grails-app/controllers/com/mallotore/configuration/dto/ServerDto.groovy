@@ -17,4 +17,16 @@ class ServerDto implements Validateable{
         probeInterval min: 30, max: Integer.MAX_VALUE
         diskPercentageAlert max: 99
     }
+
+    static CreateFromModels(servers){
+        servers?.collect{
+            new ServerDto(id: it.id,
+                        name: it.name,
+                        ip:it.ip,
+                        port: it.port,
+                        probeInterval: it.probeIntervalInSeconds,
+                        connectivityAlert: it.connectivityAlert,
+                        diskPercentageAlert: it.diskPercentageAlert)
+        }
+    }
 }

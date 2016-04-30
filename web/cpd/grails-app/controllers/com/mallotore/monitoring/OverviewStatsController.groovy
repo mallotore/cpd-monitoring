@@ -43,14 +43,6 @@ class OverviewStatsController {
 
     private findAllServers(){
         def servers = serverConfigurationService.findAllServers()
-        servers?.collect{
-            new ServerDto(id: it.id,
-                        name: it.name,
-                        ip:it.ip,
-                        port: it.port,
-                        probeInterval: it.probeIntervalInSeconds,
-                        connectivityAlert: it.connectivityAlert,
-                        diskPercentageAlert: it.diskPercentageAlert)
-        }
+        return ServerDto.CreateFromModels(servers)
     }
 }
