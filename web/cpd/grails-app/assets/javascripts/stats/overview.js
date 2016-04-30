@@ -68,6 +68,10 @@ $(document).ready(function(){
 			    
 			    function serverStatsSuccessCallback(data){
 			    	var serverStats = data.serverStats;
+			    	if(!serverStats.ip){
+			    		mallotore.stats.renderOverviewStatsUptime(server, {uptimeStats:{error: "Servidor o agente caido"}});
+			    		return;
+			    	}
 			    	chartsPresenter.render(server, serverStats);
 			    	mallotore.stats.renderOverviewNetStatsInformation(server, serverStats);
 			    	mallotore.stats.renderOverviewOperatingSystemInfo(server, serverStats);
