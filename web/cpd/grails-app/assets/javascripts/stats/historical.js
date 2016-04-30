@@ -14,9 +14,9 @@ $(document).ready(function(){
 
 			function successCallback(receivedServers){
 				servers = receivedServers;
-				updateServersStats();
+				renderServersStats();
 
-				function updateServersStats(){
+				function renderServersStats(){
 					_(servers).forEach(function(server) {
 						var url = "/stats/historical/servers/{ip}".replace("{ip}", server.ip);
 						client.get(url, {}, serverStatsSuccessCallback, serverStatsErrorCallback);
