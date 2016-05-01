@@ -3,6 +3,8 @@ package com.mallotore.configuration
 class Temperature {
 	int id
     int probeIntervalInSeconds
+    boolean connectivityAlert
+    int overTemperatureAlert
 
     static mapping =  {
 		version false

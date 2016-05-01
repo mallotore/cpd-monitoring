@@ -8,42 +8,57 @@ import spock.lang.Specification
 @Mock([Temperature])
 class TemperatureConfigurationServiceSpec extends Specification {
 
-    def "finds temperature probe interval"() {
+    def "finds temperature configuration"() {
         given:
-             new Temperature(probeIntervalInSeconds: 50)
+            new Temperature(probeIntervalInSeconds: 50,
+                            connectivityAlert:true,
+                            overTemperatureAlert:28)
                 .save(failOnError:true)
         when:
-        def interval = service.findProbeInterval()
+        def temperatureConfiguration = service.find()
 
         then:
-        interval == 50
+        temperatureConfiguration.class == com.mallotore.configuration.TemperatureConfiguration
+        temperatureConfiguration.probeIntervalInSeconds == 50
+        temperatureConfiguration.connectivityAlert == true
+        temperatureConfiguration.overTemperatureAlert == 28
     }
 
-    def "creates temperature probe interval"() {
+    def "creates temperature configuration"() {
         given:
-        def probeIntervalInSeconds = 30
+        def temperatureConfiguration =  new TemperatureConfiguration(probeIntervalInSeconds: 50,
+                                                                connectivityAlert:true,
+                                                                overTemperatureAlert:28)
         when:
-        service.create(probeIntervalInSeconds)
+        service.create(temperatureConfiguration)
 
         then:
         Temperature.findAll().size() == 1
-        Temperature.findAll()[0].probeIntervalInSeconds == 30
+        Temperature.findAll()[0].probeIntervalInSeconds == 50
+        Temperature.findAll()[0].connectivityAlert == true
+        Temperature.findAll()[0].overTemperatureAlert == 28
     }
 
-    def "edits temperature probe interval"() {
+    def "edits temperature configuration"() {
         given:
-        new Temperature(probeIntervalInSeconds: 50)
+        new Temperature(probeIntervalInSeconds: 50,
+                            connectivityAlert:true,
+                            overTemperatureAlert:28)
                 .save(failOnError:true)
         when:
-        def probeIntervalInSeconds = 30
+        def probeIntervalInSeconds = new TemperatureConfiguration(probeIntervalInSeconds: 30,
+                                                                connectivityAlert:false,
+                                                                overTemperatureAlert:32)
         service.edit(probeIntervalInSeconds)
 
         then:
         Temperature.findAll().size() == 1
         Temperature.findAll()[0].probeIntervalInSeconds == 30
+        Temperature.findAll()[0].connectivityAlert == false
+        Temperature.findAll()[0].overTemperatureAlert == 32
     }
 
-    def "deletes temperature probe interval"() {
+    def "deletes temperature configuration"() {
         given:
         new Temperature(probeIntervalInSeconds: 50)
                 .save(failOnError:true)

@@ -5,18 +5,25 @@ import grails.transaction.Transactional
 @Transactional
 class TemperatureConfigurationService {
 
-	def findProbeInterval() { 
-        findTemperatureConfiguration()?.probeIntervalInSeconds
-    }
-
-    def create(int temperatureProbeIntervalInSeconds){
-        def temperature = new Temperature([probeIntervalInSeconds: temperatureProbeIntervalInSeconds])
-        temperature.save(failOnError:true)
-    }
-
-    def edit(int temperatureProbeIntervalInSeconds){
+	def find() { 
         def temperature = findTemperatureConfiguration()
-        temperature.probeIntervalInSeconds = temperatureProbeIntervalInSeconds
+        new TemperatureConfiguration(probeIntervalInSeconds: temperature.probeIntervalInSeconds,
+                                    connectivityAlert:temperature.connectivityAlert,
+                                    overTemperatureAlert:temperature.overTemperatureAlert) 
+    }
+
+    def create(temperature){
+        def temperatureConfiguration = new Temperature([probeIntervalInSeconds: temperature.probeIntervalInSeconds,
+                                            connectivityAlert: temperature.connectivityAlert,
+                                            overTemperatureAlert: temperature.overTemperatureAlert])
+        temperatureConfiguration.save(failOnError:true)
+    }
+
+    def edit(temperatureConfiguration){
+        def temperature = findTemperatureConfiguration()
+        temperature.probeIntervalInSeconds = temperatureConfiguration.probeIntervalInSeconds
+        temperature.connectivityAlert = temperatureConfiguration.connectivityAlert
+        temperature.overTemperatureAlert = temperatureConfiguration.overTemperatureAlert
         temperature.save(failOnError:true)
     }
 
@@ -26,8 +33,8 @@ class TemperatureConfigurationService {
     }
 
     private findTemperatureConfiguration(){
-        def temperatureIntervals = Temperature.findAll()
-        if(temperatureIntervals)
-            return temperatureIntervals[0]
+        def temperatureConfigurations = Temperature.findAll()
+        if(temperatureConfigurations)
+            return temperatureConfigurations[0]
     }
 }
