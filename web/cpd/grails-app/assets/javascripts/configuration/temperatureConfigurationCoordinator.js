@@ -11,21 +11,29 @@ window.mallotore = window.mallotore || {};
 		view.subscribeToCancelCreationTemperatureIntervalRequested(cancelCreationTemperatureIntervalEventHandler);
 		view.subscribeToCancelEditionTemperatureIntervalRequested(cancelEditionTemperatureIntervalEventHandler);
 
-		function createdTemperatureIntervalEventHandler(interval){
+		function createdTemperatureIntervalEventHandler(temperature){
 			creator.hide();
 			view.hideCancelCreation();
 			view.disableShowCreation();
-			viewer.refresh(interval);
+			viewer.refresh({
+				intervalInSeconds: temperature.intervalInSeconds,
+		    	overTemperatureAlert: temperature.overTemperatureAlert || "Desactivada",
+		    	connectivityAlert: temperature.connectivityAlert ? "Activada" : "Desactivada"
+			});
 			viewer.show();
 			viewer.highlight();
 			view.enableShowEdition();
 			remover.show();
 		}
 
-		function editedTemperatureIntervalEventHandler(interval){
+		function editedTemperatureIntervalEventHandler(temperature){
 			editor.hide();
 			view.hideCancelEdition();
-			viewer.refresh(interval);
+			viewer.refresh({
+				intervalInSeconds: temperature.intervalInSeconds,
+		    	overTemperatureAlert: temperature.overTemperatureAlert || "Desactivada",
+		    	connectivityAlert: temperature.connectivityAlert ? "Activada" : "Desactivada"
+			});
 			viewer.show();
 			viewer.highlight();
 			view.enableShowEdition();
@@ -35,7 +43,11 @@ window.mallotore = window.mallotore || {};
 		function removedTemperatureIntervalEventHandler(){
 			remover.hide();
 			view.disableShowEdition();
-			viewer.refresh("Sin definir");
+			viewer.refresh({
+				intervalInSeconds: "Sin definir",
+		    	overTemperatureAlert: "Desactivada",
+		    	connectivityAlert: "Desactivada"
+			});
 			viewer.show();
 			viewer.highlight();
 			view.enableShowCreation();
@@ -49,10 +61,10 @@ window.mallotore = window.mallotore || {};
 		}
 
 		function showEditTemperatureIntervalEventHandler(){
-			var interval = viewer.getInterval();
+			var temperature = viewer.getTemperature();
 			viewer.hide();
 			remover.hide();
-			editor.show(interval);
+			editor.show(temperature);
 			view.disableShowEdition();
 			view.showCancelEdition();
 		}

@@ -13,9 +13,9 @@ class ConfigurationController {
         def servers = serverConfigurationService.findAllServers()
         def temperature = temperatureConfigurationService.find()
         def serversDto = ServerDto.CreateFromModels(servers)
-        def temperatureDto = new TemperatureDto(probeIntervalInSeconds: temperature.probeIntervalInSeconds,
-                                                connectivityAlert:temperature.connectivityAlert,
-                                                overTemperatureAlert:temperature.overTemperatureAlert)
+        def temperatureDto = new TemperatureDto(probeIntervalInSeconds: temperature?.probeIntervalInSeconds,
+                                                connectivityAlert:temperature?.connectivityAlert,
+                                                overTemperatureAlert:temperature?.overTemperatureAlert)
 
         render view:'/config/config', 
                model: [servers: serversDto,

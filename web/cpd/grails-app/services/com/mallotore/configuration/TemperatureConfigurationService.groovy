@@ -7,9 +7,9 @@ class TemperatureConfigurationService {
 
 	def find() { 
         def temperature = findTemperatureConfiguration()
-        new TemperatureConfiguration(probeIntervalInSeconds: temperature.probeIntervalInSeconds,
-                                    connectivityAlert:temperature.connectivityAlert,
-                                    overTemperatureAlert:temperature.overTemperatureAlert) 
+        new TemperatureConfiguration(probeIntervalInSeconds: temperature?.probeIntervalInSeconds,
+                                    connectivityAlert:temperature?.connectivityAlert,
+                                    overTemperatureAlert:temperature?.overTemperatureAlert) 
     }
 
     def create(temperature){

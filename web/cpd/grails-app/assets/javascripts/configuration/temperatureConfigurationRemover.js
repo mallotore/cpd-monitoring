@@ -58,6 +58,8 @@ window.mallotore = window.mallotore || {};
 
 		this.remove = function(){
 			$("#edit_temperature_interval_text").val("");
+			$("#edit_temperature_alert_text").val("");
+			$("#connectivity_alert_temperature_text").prop('checked', false);
 		};
 
 		this.subscribeEvents();

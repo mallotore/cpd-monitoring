@@ -6,15 +6,17 @@ window.mallotore = window.mallotore || {};
 		var createdTemperatureIntervalEventHandler = function(){};
 		view.subscribeToCreateTemperatureIntervalRequestedEvent(createTemperatureIntervalRequestedHandler);
 
-		function createTemperatureIntervalRequestedHandler(intervalInSeconds){
-			var temperature = {
-					probeIntervalInSeconds: intervalInSeconds
+		function createTemperatureIntervalRequestedHandler(temperature){
+			var temperatureRequest = {
+					probeIntervalInSeconds: temperature.intervalInSeconds,
+					overTemperatureAlert:temperature.overTemperatureAlert,
+					connectivityAlert: temperature.connectivityAlert
 			};
-			client.post("/configuration/temperature", temperature, successCallback, errorCallback);
+			client.post("/configuration/temperature", temperatureRequest, successCallback, errorCallback);
 			return;
 
 			function successCallback(data){
-				createdTemperatureIntervalEventHandler(intervalInSeconds);
+				createdTemperatureIntervalEventHandler(temperature);
                 notifier.notifySuccess("Temperatura", "Creado correctamente");
 			}
 
@@ -47,17 +49,30 @@ window.mallotore = window.mallotore || {};
 			$("#createTemperatureIntervalButton").on("click",function(event) {
 			    event.preventDefault();
 			    var intervalInSeconds = $("#create_temperature_interval_text").val();
-			    createTemperatureIntervalRequestedHandler(intervalInSeconds);
+			    var overTemperatureAlert = $("#create_temperature_alert_text").val();
+			    var connectivityAlert = $("#connectivity_alert_temperature_text").prop('checked');
+			    createTemperatureIntervalRequestedHandler(
+			    	{intervalInSeconds: intervalInSeconds,
+			    	overTemperatureAlert: overTemperatureAlert,
+			    	connectivityAlert: connectivityAlert
+			    });
 			});
 		};
 
 		this.show = function(){
 			$("#createTemperatureIntervalButton").show();
 			$("#create_temperature_interval_text").show();
+			$("#create_temperature_alert_text").show();
+			$("#connectivity_alert_temperature_text").prop('checked', false);
+			$("#connectivity_alert_temperature_text").show();
 		};
 
 		this.hide = function(){
-			$("#create_temperature_interval_text").val("")
+			$("#create_temperature_interval_text").val("");
+			$("#create_temperature_alert_text").val("");
+			$("#connectivity_alert_temperature_text").prop('checked', false);
+			$("#create_temperature_alert_text").hide();
+			$("#connectivity_alert_temperature_text").hide();
 			$("#create_temperature_interval_text").hide();
 			$("#createTemperatureIntervalButton").hide();
 		};
