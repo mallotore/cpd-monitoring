@@ -14,7 +14,7 @@ class ServerProbeJobService{
 	        def serverStats = serverGatherer.gatherServerStats(server)
 	        if(serverStats.error && server.connectivityAlert){
 	        	sendConnectivityAlert(server, serverStats.error)
-	        	return;
+	        	return
 	        }
         	def stats = new ServerStats(serverStats.ip,
 			                            serverStats.os,
