@@ -17,6 +17,8 @@ CREATE TABLE  `cpd`.`server_configuration` (
 CREATE TABLE  `cpd`.`temperature_configuration` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `probe_interval_in_seconds` int NOT NULL DEFAULT 0,
+  `over_temperature_alert` int NOT NULL DEFAULT 0,
+  `connectivity_alert` BOOLEAN NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
