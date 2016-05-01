@@ -11,15 +11,23 @@ class TemperatureConfigurationController {
     def temperatureProbeSchedulerService
 
     def create(TemperatureDto temperature){
-        temperatureConfigurationService.create(temperature.probeIntervalInSeconds)
-        temperatureProbeSchedulerService.schedule(temperature.probeIntervalInSeconds)
+        def temperatureConfiguration = new TemperatureConfiguration(
+                                                probeIntervalInSeconds: temperature.probeIntervalInSeconds,
+                                                connectivityAlert: temperature.connectivityAlert,
+                                                overTemperatureAlert: temperature.overTemperatureAlert)
+        temperatureConfigurationService.create(temperatureConfiguration)
+        temperatureProbeSchedulerService.schedule(temperatureConfiguration.probeIntervalInSeconds)
         render([result: 'ok'] as JSON)
     }
 
     def edit(TemperatureDto temperature){
+        def temperatureConfiguration = new TemperatureConfiguration(
+                                                probeIntervalInSeconds: temperature.probeIntervalInSeconds,
+                                                connectivityAlert: temperature.connectivityAlert,
+                                                overTemperatureAlert: temperature.overTemperatureAlert)
         temperatureProbeSchedulerService.unschedule()
-        temperatureProbeSchedulerService.schedule(temperature.probeIntervalInSeconds)
-        temperatureConfigurationService.edit(temperature.probeIntervalInSeconds)
+        temperatureProbeSchedulerService.schedule(temperatureConfiguration.probeIntervalInSeconds)
+        temperatureConfigurationService.edit(temperatureConfiguration)
         render([result: 'ok'] as JSON)
     }
 

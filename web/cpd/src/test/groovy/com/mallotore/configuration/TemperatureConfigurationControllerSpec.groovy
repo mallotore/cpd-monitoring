@@ -22,7 +22,9 @@ class TemperatureConfigurationControllerSpec  extends Specification {
         then:
         1 * controller
             .temperatureConfigurationService
-            .create(60)
+            .create(new TemperatureConfiguration(probeIntervalInSeconds: 60,
+                                                connectivityAlert:false,
+                                                overTemperatureAlert:0))
         1 * controller
         	.temperatureProbeSchedulerService
         	.schedule(60)
@@ -38,7 +40,9 @@ class TemperatureConfigurationControllerSpec  extends Specification {
         then:
         1 * controller
             .temperatureConfigurationService
-            .edit(60)
+            .edit(new TemperatureConfiguration(probeIntervalInSeconds: 60,
+                                            connectivityAlert:false,
+                                            overTemperatureAlert:0))
         1 * controller
             .temperatureProbeSchedulerService
             .unschedule()
