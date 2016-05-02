@@ -13,7 +13,7 @@ window.mallotore = window.mallotore || {};
 				temperature[0].data.push([creationDate, stats.temperature * 1]);
 			});
 
-			createLineChart(("temperature"), "Temperatura", temperature, formatter, 'ºC');
+			createLineChart(("temperature"), "Temperatura", temperature, formatter, 'Temperatura ºC');
 
 			function formatter(chart) {	 
 	    		var dateString = formatDateDDMMYYHHMMToString(chart.point.x);               
