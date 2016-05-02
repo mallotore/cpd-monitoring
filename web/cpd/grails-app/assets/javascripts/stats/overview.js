@@ -77,6 +77,7 @@ $(document).ready(function(){
 			    	mallotore.stats.renderOverviewOperatingSystemInfo(server, serverStats);
 			    	mallotore.stats.renderOverviewStatsCreationDate(server, serverStats);
 			    	mallotore.stats.renderOverviewStatsUptime(server, serverStats);
+			    	mallotore.stats.renderOverviewActiveServices(server, serverStats);
 				}
 
 				function serverStatsErrorCallback(){
