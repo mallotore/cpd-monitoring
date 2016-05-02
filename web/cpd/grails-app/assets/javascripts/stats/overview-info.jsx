@@ -25,18 +25,21 @@ window.mallotore = window.mallotore || {};
         render: function() {
             var operatingSystem = this.props.serverStats.operatingSystem;
             return (
-                    <ul>
-                        <li>vendorVersion: {operatingSystem.vendorVersion}</li>
-                        <li>vendor: {operatingSystem.vendor}</li>
-                        <li>dataModel: {operatingSystem.dataModel}</li>
-                        <li>arch: {operatingSystem.arch}</li>
-                        <li>version: {operatingSystem.version}</li>
-                        <li>vendorName: {operatingSystem.vendorName}</li>
-                        <li>patchLevel: {operatingSystem.patchLevel}</li>
-                        <li>description: {operatingSystem.description}</li>
-                        <li>name: {operatingSystem.name}</li>
-                        <li>cpuEndian: {operatingSystem.cpuEndian}</li>
-                    </ul>
+                    <div>
+                        <h5>Sistema operativo</h5>
+                        <ul>
+                            <li>vendorVersion: {operatingSystem.vendorVersion}</li>
+                            <li>vendor: {operatingSystem.vendor}</li>
+                            <li>dataModel: {operatingSystem.dataModel}</li>
+                            <li>arch: {operatingSystem.arch}</li>
+                            <li>version: {operatingSystem.version}</li>
+                            <li>vendorName: {operatingSystem.vendorName}</li>
+                            <li>patchLevel: {operatingSystem.patchLevel}</li>
+                            <li>description: {operatingSystem.description}</li>
+                            <li>name: {operatingSystem.name}</li>
+                            <li>cpuEndian: {operatingSystem.cpuEndian}</li>
+                        </ul>
+                    </div>
                    );
         }
     });
