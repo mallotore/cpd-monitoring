@@ -47,6 +47,16 @@ window.mallotore = window.mallotore || {};
             	{name: "Ocupado", data: []}
 			];
 			var whoListStatsForChart = [];
+			var activeServicesStats = [
+					{name: "mysql", data: []},
+            		{name: "sql", data: []},
+            		{name: "oracle", data: []},
+            		{name: "iis", data: []},
+            		{name: "apache2", data: []},
+            		{name: "tomcat", data: []},
+            		{name: "ftp", data: []},
+            		{name: "http", data: []}
+			];
 
 			_.map(serverStatsCollection, function(serverStats){
 				var creationDate = dateToMilliseconds(serverStats.creationDate);
@@ -55,12 +65,25 @@ window.mallotore = window.mallotore || {};
 				createCpuStats(creationDate, serverStats);
 				createDiskSpaceStats(creationDate, serverStats);
 				createWholistStats(creationDate, serverStats);
+				createActiveServicesStats(creationDate, serverStats);
 			});
 			createLineChart(("swap_" + server.id), "SWAP", swapStats, tooltipGbFormatter, 'GB');
 			createLineChart(("ram_" + server.id), "RAM", ramStats, tooltipGbFormatter, 'GB');
 			createLineChart(("cpu_" + server.id), "CPU", cpuStats, cpuPercentageFormatter, 'Porcentaje');
 			createLineChart(("diskSpace_" + server.id), "Espacio en disco", diskSpaceStats, tooltipGbFormatter, 'GB');
-			createLineChart(("wholist_" + server.id), "Usuarios conectados", whoListStatsForChart, wholistFormatter, 'Activo');
+			createLineChart(("wholist_" + server.id), "Usuarios conectados", whoListStatsForChart, activeFormatter, 'Activo');
+			createLineChart(("activeServices_" + server.id), "Servicios activos", activeServicesStats, activeFormatter, 'Activo');
+
+			function createActiveServicesStats(creationDate, serverStats){
+				activeServicesStats[0].data.push([creationDate, serverStats.activeServices.mysql ? 1 : 0]);
+				activeServicesStats[1].data.push([creationDate, serverStats.activeServices.sql ? 1 : 0]);
+				activeServicesStats[2].data.push([creationDate, serverStats.activeServices.oracle ? 1 : 0]);
+				activeServicesStats[3].data.push([creationDate, serverStats.activeServices.iis ? 1 : 0]);
+				activeServicesStats[4].data.push([creationDate, serverStats.activeServices.apche2 ? 1 : 0]);
+				activeServicesStats[5].data.push([creationDate, serverStats.activeServices.tomcat ? 1 : 0]);
+				activeServicesStats[6].data.push([creationDate, serverStats.activeServices.ftp ? 1 : 0]);
+				activeServicesStats[7].data.push([creationDate, serverStats.activeServices.http ? 1 : 0]);
+			}
 
 			function createWholistStats(creationDate, serverStats){
 				_(serverStats.wholistStats).forEach(function(wholist){
@@ -129,11 +152,11 @@ window.mallotore = window.mallotore || {};
 				return  parseFloat((bytes / 1073741824).toFixed(2));
 			}
 
-			function wholistFormatter(chart){
+			function activeFormatter(chart){
 				var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
-	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + formatWholist(chart.point.y);
+	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + formatPointY(chart.point.y);
 
-	            function formatWholist(value){
+	            function formatPointY(value){
 	            	return value == 1 ? 'Conectado' : 'Desconectado';
 	            }
 			}

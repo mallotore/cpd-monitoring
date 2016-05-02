@@ -51,6 +51,9 @@
                                 <td scope="row" style="width: 50%; border: none;">
                                     <div id="wholist_${server.id}" style="height: 250px;"></div>
                                 </td>
+                                <td scope="row" style="width: 50%; border: none;">
+                                    <div id="activeServices_${server.id}" style="height: 250px;"></div>
+                                </td>
                             </tr>
                         </g:each>
                     </tbody>
