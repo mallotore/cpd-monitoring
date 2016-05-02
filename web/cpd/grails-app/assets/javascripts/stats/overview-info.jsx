@@ -104,16 +104,19 @@ window.mallotore = window.mallotore || {};
         render: function() {
             var activeServices = this.props.serverStats.activeServices;
             return (
-                    <ul>
-                        <li>apache: {activeServices.apache ? 'Activado' : 'Desativado'}</li>
-                        <li>mysql: {activeServices.mysql ? 'Activado' : 'Desativado'}</li>
-                        <li>oracle: {activeServices.oracle ? 'Activado' : 'Desativado'}</li>
-                        <li>sql: {activeServices.sql ? 'Activado' : 'Desativado'}</li>
-                        <li>http: {activeServices.http ? 'Activado' : 'Desativado'}</li>
-                        <li>ftp: {activeServices.ftp ? 'Activado' : 'Desativado'}</li>
-                        <li>tomcat: {activeServices.tomcat ? 'Activado' : 'Desativado'}</li>
-                        <li>iis: {activeServices.iis ? 'Activado' : 'Desativado'}</li>
-                    </ul>
+                    <div>
+                        <h5>Servicios activos</h5>
+                        <ul>
+                            <li>apache: {activeServices.apache ? 'Activado' : 'Desativado'}</li>
+                            <li>mysql: {activeServices.mysql ? 'Activado' : 'Desativado'}</li>
+                            <li>oracle: {activeServices.oracle ? 'Activado' : 'Desativado'}</li>
+                            <li>sql: {activeServices.sql ? 'Activado' : 'Desativado'}</li>
+                            <li>http: {activeServices.http ? 'Activado' : 'Desativado'}</li>
+                            <li>ftp: {activeServices.ftp ? 'Activado' : 'Desativado'}</li>
+                            <li>tomcat: {activeServices.tomcat ? 'Activado' : 'Desativado'}</li>
+                            <li>iis: {activeServices.iis ? 'Activado' : 'Desativado'}</li>
+                        </ul>
+                    </div>
                    );
         }
     });
