@@ -69,9 +69,11 @@ $(document).ready(function(){
 			    function serverStatsSuccessCallback(data){
 			    	var serverStats = data.serverStats;
 			    	if(!serverStats.ip){
+			    		hideContainers();
 			    		mallotore.stats.renderOverviewStatsUptime(server, {uptimeStats:{error: "Servidor o agente caido"}});
 			    		return;
 			    	}
+			    	showContainers();
 			    	chartsPresenter.render(server, serverStats);
 			    	mallotore.stats.renderOverviewNetStatsInformation(server, serverStats);
 			    	mallotore.stats.renderOverviewOperatingSystemInfo(server, serverStats);
@@ -82,7 +84,25 @@ $(document).ready(function(){
 
 				function serverStatsErrorCallback(){
 					mallotore.stats.renderOverviewStatsUptime(server, {uptimeStats:{error: "Servidor o agente caido"}});
+					hideContainers();
 					notifier.notifyError("Estadísticas", "Error recibiendo estadísticas del servidor");
+				}
+
+				function hideContainers(){
+					$("#cpuPercentage_" + server.id).hide();
+					$("#diskPercentage_" + server.id).hide();
+					$("#ramPercentage_" + server.id).hide();
+					$("#swapPercentage_" + server.id).hide();
+					$("#whoList_" + server.id).hide();
+					$("#activeServices_" + server.id).hide();
+				}
+
+				function showContainers(){
+					$("#cpuPercentage_" + server.id).show();
+					$("#ramPercentage_" + server.id).show();
+					$("#swapPercentage_" + server.id).show();
+					$("#whoList_" + server.id).show();
+					$("#activeServices_" + server.id).show();
 				}
 			});	
 		}
