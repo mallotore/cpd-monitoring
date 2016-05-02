@@ -1,6 +1,9 @@
 //= require_tree ../lib/highcharts
 //= require ../lib/moment.min.js
+//= require ${grails.util.Environment.currentEnvironment.toString() == 'DEVELOPMENT' ? '../lib/react/1-react.js' : '../lib/react/1-react.min.js'}
+//= require ${grails.util.Environment.currentEnvironment.toString() == 'DEVELOPMENT' ? '../lib/react/2-react-dom.js' : '../lib/react/2-react-dom.min.js'}
 //= require_tree ../utils
+//= require ../dist/historical-info.min.js
 //= require historical-charts.js
 //= require_self
 
@@ -28,7 +31,9 @@ $(document).ready(function(){
 						    
 						    function serverStatsSuccessCallback(data){
 						    	var serverStats = data.serverStats;
-						    	chartsPresenter.render(server, serverStats);
+						    	mallotore.stats.renderHistoricalOperatingSystem(server, serverStats[0]);
+						    	mallotore.stats.renderHistoricalNetStatsInformation(server, serverStats[0]);
+						    	chartsPresenter.renderServerCharts(server, serverStats);
 							}
 
 							function serverStatsErrorCallback(){

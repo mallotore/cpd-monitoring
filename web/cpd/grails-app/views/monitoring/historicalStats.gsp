@@ -19,7 +19,7 @@
                             </td>
                         </tr>
                         <g:each var="server" in="${servers}">
-                              <tr style="border-top:0px !important;">
+                            <tr style="border-top:0px !important;">
                                 <td style="width: 50%; border: none;">
                                     <h3>
                                         <div style="float: left;">${server.name}</div>
@@ -29,6 +29,14 @@
                                     <h3>
                                         <div style="float: left">${server.ip}:${server.port}</div>
                                     </h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td scope="row" style="width: 50%; border: none;">
+                                    <div id="operatingSystem_${server.id}" style="height: 250px;"></div>
+                                </td>
+                                <td scope="row" style="width: 50%; border: none;">
+                                    <div id="netStats_${server.id}" style="height: 250px;"></div>
                                 </td>
                             </tr>
                             <tr>

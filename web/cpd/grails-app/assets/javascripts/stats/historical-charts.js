@@ -21,7 +21,7 @@ window.mallotore = window.mallotore || {};
 		    }
 		};
 
-		this.render = function(server, serverStatsCollection){
+		this.renderServerCharts = function(server, serverStatsCollection){
 			var swapStats = [
 				{ name:  'Swap en uso', data: [] },
 				{ name: 'Swap libre', data: [] }
@@ -144,7 +144,6 @@ window.mallotore = window.mallotore || {};
 						_.remove(diskSpaceStatsForChart, function(diskSpaceCharts) { 
 							return (diskSpaceCharts.name == diskRootUsedSpaceStats.name || diskSpaceCharts.name == diskRootFreeSpaceStats.name);
 						});
-
 						diskRootUsedSpaceStats.data.push([creationDate, bytesFormatter.formatToGB(usedSpace)]);
 						diskRootFreeSpaceStats.data.push([creationDate, bytesFormatter.formatToGB(diskRootSpace.freeSpace)]);
 						diskSpaceStatsForChart.push({'name': diskRootUsedSpaceStats.name, 'data': diskRootUsedSpaceStats.data});
