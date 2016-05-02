@@ -47,6 +47,11 @@
                                     <div id="swap_${server.id}" style="height: 250px;"></div>
                                 </td>
                             </tr>
+                            <tr>
+                                <td scope="row" style="width: 50%; border: none;">
+                                    <div id="wholist_${server.id}" style="height: 250px;"></div>
+                                </td>
+                            </tr>
                         </g:each>
                     </tbody>
                 </table>

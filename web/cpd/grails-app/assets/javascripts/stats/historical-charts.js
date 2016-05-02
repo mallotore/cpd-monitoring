@@ -46,17 +46,41 @@ window.mallotore = window.mallotore || {};
 				{name: "Libre", data: []},
             	{name: "Ocupado", data: []}
 			];
+			var whoListStatsForChart = [];
+
 			_.map(serverStatsCollection, function(serverStats){
 				var creationDate = dateToMilliseconds(serverStats.creationDate);
 				createRamStats(creationDate, serverStats);
 				createSwapStats(creationDate, serverStats);
 				createCpuStats(creationDate, serverStats);
 				createDiskSpaceStats(creationDate, serverStats);
+				createWholistStats(creationDate, serverStats);
 			});
 			createLineChart(("swap_" + server.id), "SWAP", swapStats, tooltipGbFormatter, 'GB');
 			createLineChart(("ram_" + server.id), "RAM", ramStats, tooltipGbFormatter, 'GB');
 			createLineChart(("cpu_" + server.id), "CPU", cpuStats, cpuPercentageFormatter, 'Porcentaje');
 			createLineChart(("diskSpace_" + server.id), "Espacio en disco", diskSpaceStats, tooltipGbFormatter, 'GB');
+			createLineChart(("wholist_" + server.id), "Usuarios conectados", whoListStatsForChart, wholistFormatter, 'Activo');
+
+			function createWholistStats(creationDate, serverStats){
+				_(serverStats.wholistStats).forEach(function(wholist){
+
+					var who = _.find(whoListStatsForChart, function(wholistForChart) { 
+									return _.find(wholistForChart, function(whoForChart) {
+										return whoForChart == (wholist.user + "-" + wholist.device); 
+									});
+					});
+					if(who){
+						_.remove(whoListStatsForChart, function(whoStats) { 
+							return whoStats.name == who.name;
+						});
+						who.data.push([creationDate, 1]);
+						whoListStatsForChart.push({'name': who.name, 'data':who.data})
+					}else{
+						whoListStatsForChart.push({'name': (wholist.user + "-" + wholist.device), 'data': [[creationDate, 1]]})
+					}
+				});
+			}
 
 			function createRamStats(creationDate, serverStats){
 				ramStats[0].data.push([creationDate, formatToGB(serverStats.memStats.memFree)]);
@@ -103,6 +127,15 @@ window.mallotore = window.mallotore || {};
 			function formatToGB(bytes){
 				//extract
 				return  parseFloat((bytes / 1073741824).toFixed(2));
+			}
+
+			function wholistFormatter(chart){
+				var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
+	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + formatWholist(chart.point.y);
+
+	            function formatWholist(value){
+	            	return value == 1 ? 'Conectado' : 'Desconectado';
+	            }
 			}
 		};
 
