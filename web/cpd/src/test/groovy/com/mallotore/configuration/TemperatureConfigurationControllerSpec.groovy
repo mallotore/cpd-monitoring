@@ -27,7 +27,9 @@ class TemperatureConfigurationControllerSpec  extends Specification {
                                                 overTemperatureAlert:0))
         1 * controller
         	.temperatureProbeSchedulerService
-        	.schedule(60)
+        	.schedule(new TemperatureConfiguration(probeIntervalInSeconds: 60,
+                                            connectivityAlert:false,
+                                            overTemperatureAlert:0))
         response.json.result == "ok"
     }
 
@@ -48,7 +50,9 @@ class TemperatureConfigurationControllerSpec  extends Specification {
             .unschedule()
         1 * controller
             .temperatureProbeSchedulerService
-            .schedule(60)
+            .schedule(new TemperatureConfiguration(probeIntervalInSeconds: 60,
+                                            connectivityAlert:false,
+                                            overTemperatureAlert:0))
         response.json.result == "ok"
     }
 

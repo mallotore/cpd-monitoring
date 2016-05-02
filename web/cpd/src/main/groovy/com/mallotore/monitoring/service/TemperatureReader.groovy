@@ -12,6 +12,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import com.mallotore.monitoring.repository.TemperatureRepository
 import com.mallotore.monitoring.model.Temperature
+import com.mallotore.configuration.TemperatureConfiguration
+import com.mallotore.monitoring.alert.AlertSenderService
 
 class TemperatureReader implements SerialPortEventListener {
 
@@ -30,15 +32,17 @@ class TemperatureReader implements SerialPortEventListener {
 	private static final int TIME_OUT = 2000
 	private static final int DATA_RATE = 9600
 	private TemperatureRepository temperatureRepository
-	private int intervalInSeconds
+	private TemperatureConfiguration configuration
+	private AlertSenderService alertSenderService
 
-	public TemperatureReader(TemperatureRepository temperatureRepository, int intervalInSeconds){
+	public TemperatureReader(TemperatureRepository temperatureRepository, TemperatureConfiguration configuration, AlertSenderService alertSenderService){
 		this.temperatureRepository = temperatureRepository
-		this.intervalInSeconds = intervalInSeconds
+		this.configuration = configuration
+		this.alertSenderService = alertSenderService
 	}
 
-	public void updateInterval(int intervalInSeconds){
-		this.intervalInSeconds = intervalInSeconds	
+	public void updateConfiguration(TemperatureConfiguration configuration){
+		this.configuration = configuration	
 	}
 
 	public void initialize() {
@@ -54,6 +58,7 @@ class TemperatureReader implements SerialPortEventListener {
 				serialPort.addEventListener(this)
 				serialPort.notifyOnDataAvailable(true)
 			} catch (Exception e) {
+				sendConnectivityAlertIfActivated("Problema de conectividad con el sensor de temperatura. Inicializando el listener del puerto serial")
 				LOG.error("Unhandled exception initializing serial port listener",e)
 			}
         }
@@ -66,8 +71,10 @@ class TemperatureReader implements SerialPortEventListener {
 			LOG.info("Connected to COM port ${portId.getName()}")
 			closure(portId)
 		}
-		else
+		else{
+			sendConnectivityAlertIfActivated("Problema de conectividad con el sensor de temperatura. No se puede encontrar el puerto COM")
 			LOG.error("Could not find COM port.")
+		}
 	}
 
 	private findAvailablePort(){
@@ -94,19 +101,36 @@ class TemperatureReader implements SerialPortEventListener {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
 				String temperature = inputReader.readLine()
+				def currentTemperature = Float.parseFloat(temperature)
+				if(configuration.overTemperatureAlert && currentTemperature > configuration.overTemperatureAlert){
+					alertSenderService.send("Peligro de temperatura. Actualmente es ${currentTemperature}")
+				}
 				temperatureRepository.save(new Temperature(temperature:temperature))
 			} catch (Exception e) {
+				sendConnectivityAlertIfActivated("Problema de conectividad con el sensor de temperatura. Error al tratar el evento del puerto serial")
 				LOG.error("Unhandled exception on serial port event",e)
 			}
 		}
 	}
 
-	public synchronized void writeData(String data) {
-	    LOG.info("Sent: ${data}")
+	public synchronized void writeData(int intervalInSeconds) {
+		def intervalInMilliSeconds = convertToMilliseconds(intervalInSeconds)
+	    LOG.info("Sent: ${intervalInMilliSeconds}")
 	    try {
-	        outputStream.write(data.getBytes())
+	        outputStream.write(intervalInMilliSeconds.getBytes())
 	    } catch (Exception e) {
+	    	sendConnectivityAlertIfActivated("Problema de conectividad con el sensor de temperatura. Error al enviar el nuevo intervalo de sondeo")
 	        LOG.error("Unhandled exception writing to port", e)
 	    }
+	}
+
+	private sendConnectivityAlertIfActivated(message){
+		if(configuration.connectivityAlert){
+			alertSenderService.send(message)
+		}
+	}
+
+	private convertToMilliseconds(intervalInSeconds){
+		"${intervalInSeconds * 1000}"
 	}
 }

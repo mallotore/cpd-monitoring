@@ -16,7 +16,7 @@ class TemperatureConfigurationController {
                                                 connectivityAlert: temperature.connectivityAlert,
                                                 overTemperatureAlert: temperature.overTemperatureAlert)
         temperatureConfigurationService.create(temperatureConfiguration)
-        temperatureProbeSchedulerService.schedule(temperatureConfiguration.probeIntervalInSeconds)
+        temperatureProbeSchedulerService.schedule(temperatureConfiguration)
         render([result: 'ok'] as JSON)
     }
 
@@ -26,7 +26,7 @@ class TemperatureConfigurationController {
                                                 connectivityAlert: temperature.connectivityAlert,
                                                 overTemperatureAlert: temperature.overTemperatureAlert)
         temperatureProbeSchedulerService.unschedule()
-        temperatureProbeSchedulerService.schedule(temperatureConfiguration.probeIntervalInSeconds)
+        temperatureProbeSchedulerService.schedule(temperatureConfiguration)
         temperatureConfigurationService.edit(temperatureConfiguration)
         render([result: 'ok'] as JSON)
     }
