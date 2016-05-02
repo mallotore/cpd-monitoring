@@ -155,12 +155,16 @@ class ServerGatherer {
     }
 
     private createDiskRootsSpace(diskRootsSpace){
-        return diskRootsSpace?.collect { rootSpace ->
-                    new DiskRootSpace(path: rootSpace?.path,
+        def rootSpace = diskRootsSpace?.collect { rootSpace ->
+                if(rootSpace.totalSpace > 0){
+                    return new DiskRootSpace(path: rootSpace?.path,
                                      totalSpace: rootSpace?.totalSpace,
                                      freeSpace: rootSpace?.freeSpace,
                                      usableSpace: rootSpace?.usableSpace)
+                    }
                 }
+        rootSpace.removeAll([null])
+        return rootSpace
     }
 
     private retrieveWinServicesStatus(server){

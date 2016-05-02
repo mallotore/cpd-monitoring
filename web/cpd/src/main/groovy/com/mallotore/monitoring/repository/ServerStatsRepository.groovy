@@ -40,8 +40,11 @@ class ServerStatsRepository {
         def operatingSystem = new OperatingSystem(dbStats.operatingSystem)
         def cpuStats = createCpuStats(dbStats?.cpuStats)
         def diskRootsSpace = dbStats?.diskRootsSpace?.collect { rootSpace ->
-            new DiskRootSpace(rootSpace)
+            if(rootSpace.totalSpace > 0){
+                new DiskRootSpace(rootSpace)    
+            }
         }
+        diskRootsSpace.removeAll([null])
         def state = new ServerStatsState(_id: dbStats._id, 
                                           ip: dbStats.ip, 
                                           operatingSystem: operatingSystem, 
