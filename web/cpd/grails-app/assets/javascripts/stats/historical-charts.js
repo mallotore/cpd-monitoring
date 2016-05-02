@@ -41,10 +41,7 @@ window.mallotore = window.mallotore || {};
             		{name: "softIrqTime", data: []},
             		{name: "waitTime", data: []}
 			];
-			var diskSpaceStats = [
-				{name: "Libre", data: []},
-            	{name: "Ocupado", data: []}
-			];
+			var diskSpaceStatsForChart = [];
 			var whoListStatsForChart = [];
 			var activeServicesStats = [
 					{name: "mysql", data: []},
@@ -69,7 +66,7 @@ window.mallotore = window.mallotore || {};
 			createLineChart(("swap_" + server.id), "SWAP", swapStats, tooltipGbFormatter, 'GB');
 			createLineChart(("ram_" + server.id), "RAM", ramStats, tooltipGbFormatter, 'GB');
 			createLineChart(("cpu_" + server.id), "CPU", cpuStats, cpuPercentageFormatter, 'Porcentaje');
-			createLineChart(("diskSpace_" + server.id), "Espacio en disco", diskSpaceStats, tooltipGbFormatter, 'GB');
+			createLineChart(("diskSpace_" + server.id), "Espacio en disco", diskSpaceStatsForChart, tooltipGbFormatter, 'GB');
 			createLineChart(("wholist_" + server.id), "Usuarios conectados", whoListStatsForChart, activeFormatter, 'Activo');
 			createLineChart(("activeServices_" + server.id), "Servicios activos", activeServicesStats, activeFormatter, 'Activo');
 
@@ -97,9 +94,9 @@ window.mallotore = window.mallotore || {};
 							return whoStats.name == who.name;
 						});
 						who.data.push([creationDate, 1]);
-						whoListStatsForChart.push({'name': who.name, 'data':who.data})
+						whoListStatsForChart.push({'name': who.name, 'data':who.data});
 					}else{
-						whoListStatsForChart.push({'name': (wholist.user + "-" + wholist.device), 'data': [[creationDate, 1]]})
+						whoListStatsForChart.push({'name': (wholist.user + "-" + wholist.device), 'data': [[creationDate, 1]]});
 					}
 				});
 			}
@@ -131,9 +128,33 @@ window.mallotore = window.mallotore || {};
 			}
 
 			function createDiskSpaceStats(creationDate, serverStats){
-				var usedSpace = serverStats.diskRootsSpace[0].totalSpace - serverStats.diskRootsSpace[0].freeSpace;
-				diskSpaceStats[0].data.push([creationDate, bytesFormatter.formatToGB(serverStats.diskRootsSpace[0].freeSpace)]);
-				diskSpaceStats[1].data.push([creationDate, bytesFormatter.formatToGB(usedSpace)]);
+				_(serverStats.diskRootsSpace).forEach(function(diskRootSpace){
+					var usedSpace = diskRootSpace.totalSpace - diskRootSpace.freeSpace;
+					var diskRootUsedSpaceStats = _.find(diskSpaceStatsForChart, function(diskSpaceForChart) { 
+													return _.find(diskSpaceForChart, function(diskSpace) {
+															return diskSpace == 'Ocupado en ' + diskRootSpace.path; 
+														});
+													});
+					var diskRootFreeSpaceStats = _.find(diskSpaceStatsForChart, function(diskSpaceForChart) { 
+													return _.find(diskSpaceForChart, function(diskSpace) {
+															return diskSpace == 'Libre en ' + diskRootSpace.path; 
+														});
+													});
+					if(diskRootUsedSpaceStats && diskRootFreeSpaceStats){
+						_.remove(diskSpaceStatsForChart, function(diskSpaceCharts) { 
+							return (diskSpaceCharts.name == diskRootUsedSpaceStats.name || diskSpaceCharts.name == diskRootFreeSpaceStats.name);
+						});
+
+						diskRootUsedSpaceStats.data.push([creationDate, bytesFormatter.formatToGB(usedSpace)]);
+						diskRootFreeSpaceStats.data.push([creationDate, bytesFormatter.formatToGB(diskRootSpace.freeSpace)]);
+						diskSpaceStatsForChart.push({'name': diskRootUsedSpaceStats.name, 'data': diskRootUsedSpaceStats.data});
+						diskSpaceStatsForChart.push({'name': diskRootFreeSpaceStats.name, 'data': diskRootFreeSpaceStats.data});
+						
+					}else{
+						diskSpaceStatsForChart.push({'name': 'Libre en ' + diskRootSpace.path, 'data': [[creationDate, bytesFormatter.formatToGB(diskRootSpace.freeSpace)]]});
+						diskSpaceStatsForChart.push({'name': 'Ocupado en ' + diskRootSpace.path, 'data': [[creationDate, bytesFormatter.formatToGB(usedSpace)]]});
+					}
+				});
 			}
 
 			function cpuPercentageFormatter(chart){
