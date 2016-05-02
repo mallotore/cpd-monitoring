@@ -2,7 +2,7 @@ window.mallotore = window.mallotore || {};
 
 (function(mallotore){
 	
-	function HistoricalStatsChartsPresenter(){
+	function HistoricalStatsChartsPresenter(bytesFormatter){
 
 		this.renderTemperature = function(temperatureStats){
 			var temperature = [
@@ -16,13 +16,12 @@ window.mallotore = window.mallotore || {};
 			createLineChart(("temperature"), "Temperatura", temperature, formatter, 'ºC');
 
 			function formatter(chart) {	 
-	    		var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
+	    		var dateString = formatDateDDMMYYHHMMToString(chart.point.x);               
 	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + chart.point.y + "ºC";
 		    }
 		};
 
 		this.render = function(server, serverStatsCollection){
-			var bytesFormatter = mallotore.utils.bytesFormatter;
 			var swapStats = [
 				{ name:  'Swap en uso', data: [] },
 				{ name: 'Swap libre', data: [] }
@@ -106,13 +105,13 @@ window.mallotore = window.mallotore || {};
 			}
 
 			function createRamStats(creationDate, serverStats){
-				ramStats[0].data.push([creationDate, formatToGB(serverStats.memStats.memFree)]);
-				ramStats[1].data.push([creationDate, formatToGB(serverStats.memStats.memUsed)]);
+				ramStats[0].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.memFree)]);
+				ramStats[1].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.memUsed)]);
 			}
 
 			function createSwapStats(creationDate, serverStats){
-				swapStats[0].data.push([creationDate, formatToGB(serverStats.memStats.swapFree)]);
-				swapStats[1].data.push([creationDate, formatToGB(serverStats.memStats.swapUsed)]);
+				swapStats[0].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.swapFree)]);
+				swapStats[1].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.swapUsed)]);
 			}
 
 			function createCpuStats(creationDate, serverStats){
@@ -133,27 +132,22 @@ window.mallotore = window.mallotore || {};
 
 			function createDiskSpaceStats(creationDate, serverStats){
 				var usedSpace = serverStats.diskRootsSpace[0].totalSpace - serverStats.diskRootsSpace[0].freeSpace;
-				diskSpaceStats[0].data.push([creationDate, formatToGB(serverStats.diskRootsSpace[0].freeSpace)]);
-				diskSpaceStats[1].data.push([creationDate, formatToGB(usedSpace)]);
+				diskSpaceStats[0].data.push([creationDate, bytesFormatter.formatToGB(serverStats.diskRootsSpace[0].freeSpace)]);
+				diskSpaceStats[1].data.push([creationDate, bytesFormatter.formatToGB(usedSpace)]);
 			}
 
 			function cpuPercentageFormatter(chart){
-				var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
+				var dateString = formatDateDDMMYYHHMMToString(chart.point.x);               
 	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + chart.point.y + "%";
 			}
 
 			function tooltipGbFormatter(chart) {	 
-	    		var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
+	    		var dateString = formatDateDDMMYYHHMMToString(chart.point.x);               
 	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + chart.point.y + "GB";
 		    }
 
-			function formatToGB(bytes){
-				//extract
-				return  parseFloat((bytes / 1073741824).toFixed(2));
-			}
-
 			function activeFormatter(chart){
-				var dateString = moment(chart.point.x).format("DD-MM-YYYY hh:mm");               
+				var dateString = formatDateDDMMYYHHMMToString(chart.point.x);               
 	            return  '<b>'+ chart.series.name + '</b><br>' + dateString + " " + formatPointY(chart.point.y);
 
 	            function formatPointY(value){
@@ -164,6 +158,10 @@ window.mallotore = window.mallotore || {};
 
 		function dateToMilliseconds(dateString){
 			return new Date(dateString).getTime(); 
+		}
+
+		function formatDateDDMMYYHHMMToString(value){
+			return moment(value).format("DD-MM-YYYY hh:mm");
 		}
 	}
 
@@ -213,7 +211,8 @@ window.mallotore = window.mallotore || {};
 	}
 
 	function createHistoricalStatsChartsPresenter(){
-		return new HistoricalStatsChartsPresenter(); 
+		var bytesFormatter = mallotore.utils.bytesFormatter;
+		return new HistoricalStatsChartsPresenter(bytesFormatter); 
 	}
 
 	mallotore.stats = mallotore.stats || {};

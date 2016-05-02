@@ -12,6 +12,10 @@ window.mallotore = window.mallotore || {};
 		   var i = Math.floor(Math.log(bytes) / Math.log(k));
 		   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 		};
+
+		this.formatToGB = function(bytes){
+			return  parseFloat((bytes / 1073741824).toFixed(2));
+		}
 	}
 
 	mallotore.utils = (mallotore.utils || {});
