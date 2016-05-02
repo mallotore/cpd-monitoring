@@ -6,17 +6,20 @@ window.mallotore = window.mallotore || {};
         render: function() {
             var netStats = this.props.serverStats.netStats;
             return (
-                    <ul>
-                        <li>Primary Net MAsk: {netStats.primaryNetMAsk}</li>
-                        <li>Primary Mac Address: {netStats.primaryMacAddress}</li>
-                        <li>Secondary Dns: {netStats.secondaryDns}</li>
-                        <li>Domain Name: {netStats.domainName}</li>
-                        <li>Default Gateway: {netStats.defaultGateway}</li>
-                        <li>Host Name: {netStats.hostName}</li>
-                        <li>Primary Dns: {netStats.primaryDns}</li>
-                        <li>Primary Ip Address: {netStats.primaryIpAddress}</li>
-                        <li>Primary Interface: {netStats.primaryInterface}</li>
-                    </ul>
+                    <div>
+                        <h5>Información de red</h5>
+                        <ul>
+                            <li>Primary Net MAsk: {netStats.primaryNetMAsk}</li>
+                            <li>Primary Mac Address: {netStats.primaryMacAddress}</li>
+                            <li>Secondary Dns: {netStats.secondaryDns}</li>
+                            <li>Domain Name: {netStats.domainName}</li>
+                            <li>Default Gateway: {netStats.defaultGateway}</li>
+                            <li>Host Name: {netStats.hostName}</li>
+                            <li>Primary Dns: {netStats.primaryDns}</li>
+                            <li>Primary Ip Address: {netStats.primaryIpAddress}</li>
+                            <li>Primary Interface: {netStats.primaryInterface}</li>
+                        </ul>
+                    </div>
                    );
         }
     });
