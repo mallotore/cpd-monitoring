@@ -8,6 +8,9 @@ class ServicesStatus {
     
     static final APACHE2 = '^(https?d.*|[Aa]pache2?)$'
     static final IIS = "W3SVC"
+    static final SQLSERVER = "MSSQL"
+    static final ORACLE_WIN = "ORCL"
+    static final ORACLE_LINUX = "oracle"
     static final MYSQL = "mysqld"
     static final TOMCAT = "org.apache.catalina"
     static final NOT_FOUND = -1
@@ -19,6 +22,10 @@ class ServicesStatus {
     long appacheTomcatProccesId
     long mysqlProccesId
     long iisProccesId
+    long ftpProccesId
+    long httpProccesId
+    long oracleProccesId
+    long sqlProccesId
 
     def ServicesStatus(){
         sigar = new Sigar()
@@ -54,6 +61,46 @@ class ServicesStatus {
             finder.findSingleProcess("State.Name.sw=java,Args.*.ct=${TOMCAT}")    
         }
         appacheTomcatProccesId
+    }
+
+    long getFtpProccesId(){
+        ftpProccesId = tryToFindProcess(){
+            //sin implementar
+            finder.findSingleProcess("State.Name.sw=java,Args.*.ct=${TOMCAT}")    
+        }
+        ftpProccesId
+    }
+
+    long getHttpProccesId(){
+        httpProccesId = tryToFindProcess(){
+            //sin implementar
+            finder.findSingleProcess("State.Name.sw=java,Args.*.ct=${TOMCAT}")    
+        }
+        httpProccesId
+    }
+
+    long getOracleProccesId(){
+        oracleProccesId = NOT_FOUND
+        if(org.hyperic.sigar.OperatingSystem.IS_WIN32){
+           oracleProccesId = tryToFindProcess(){
+                finder.findSingleProcess("Pid.Service.eq=${ORACLE_WIN}")    
+            }
+        }else{
+            oracleProccesId = tryToFindProcess(){
+                finder.findSingleProcess("State.Name.eq=${ORACLE_LINUX}")     
+            }
+        }
+        oracleProccesId
+    }
+
+    long getSqlProccesId(){
+        sqlProccesId = NOT_FOUND
+        if(org.hyperic.sigar.OperatingSystem.IS_WIN32){
+           sqlProccesId = tryToFindProcess(){
+                finder.findSingleProcess("Pid.Service.ct=${SQLSERVER}")    
+            }
+        }
+        sqlProccesId
     }
 
     private tryToFindProcess(Closure closure){
