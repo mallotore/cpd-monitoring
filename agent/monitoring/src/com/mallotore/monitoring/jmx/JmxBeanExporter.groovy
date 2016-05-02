@@ -104,9 +104,14 @@ class JmxBeanExporter {
                 attributes: [   "appache2ProccesId", \
                                 "appacheTomcatProccesId", \
                                 "iisProccesId", \
-                                "mysqlProccesId"],
+                                "mysqlProccesId", \
+                                "ftpProccesId", \
+                                "httpProccesId", \
+                                "oracleProccesId", \
+                                "sqlProccesId"],
                 operations: ["getApache2ProccessId","getApacheTomcatProccessId", 
-                            "getIISProccessId", "getMysqlProccessId"]
+                            "getIISProccessId", "getMysqlProccessId", "getFtpProccesId",
+                            "getHttpProccesId","getOracleProccesId","getSqlProccesId"]
             )
         } 
     }
