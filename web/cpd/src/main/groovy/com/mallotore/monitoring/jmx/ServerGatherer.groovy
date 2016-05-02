@@ -75,10 +75,10 @@ class ServerGatherer {
                             mysql: servicesBean.getMysqlProccessId() != -1 ? true : false,
                             iis: servicesBean.getIISProccessId() != -1 ? true : false,
                             tomcat: servicesBean.getApacheTomcatProccessId() != -1 ? true : false,
-                            ftp: false,
-                            http: false,
-                            oracle: false,
-                            sql: false)
+                            ftp: servicesBean.getFtpProccesId() != -1 ? true : false,
+                            http: servicesBean.getHttpProccesId() != -1 ? true : false,
+                            oracle: servicesBean.getOracleProccesId() != -1 ? true : false,
+                            sql: servicesBean.getSqlProccesId() != -1 ? true : false)
     }
 
     private createWholistStats(statsBean){
