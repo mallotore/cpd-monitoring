@@ -30,7 +30,8 @@ class OverviewStatsController {
                                     serverStats.memStats,
                                     serverStats.netStats,
                                     serverStats.uptimeStats,
-                                    serverStats.wholistStats)
+                                    serverStats.wholistStats,
+                                    serverStats.activeServices)
 
     	render([serverStats: stats.state()] as JSON)
     }

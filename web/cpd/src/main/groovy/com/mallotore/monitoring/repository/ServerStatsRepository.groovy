@@ -51,8 +51,20 @@ class ServerStatsRepository {
                                           netStats: createNetStats(dbStats.netStats),
                                           uptimeStats: createUptimeStats(dbStats.uptimeStats),
                                           wholistStats: createWholistStats(dbStats.wholistStats),
+                                          activeServices: createActiveServices(dbStats.activeServices),
                                           creationDate: DateTools.convertToYYYYMMDDHHMMSS(dbStats.creationDate))
         return new ServerStats(state)
+    }
+
+    private createActiveServices(dbActiveServices){
+        new ActiveServices(apache: dbActiveServices.apache,
+                            mysql: dbActiveServices.mysql,
+                            iis: dbActiveServices.iis,
+                            tomcat: dbActiveServices.tomcat,
+                            ftp: dbActiveServices.ftp,
+                            http: dbActiveServices.http,
+                            oracle: dbActiveServices.oracle,
+                            sql: dbActiveServices.sql)
     }
 
     private createWholistStats(dbStats){

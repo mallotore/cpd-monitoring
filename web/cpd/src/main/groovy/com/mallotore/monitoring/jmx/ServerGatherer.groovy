@@ -61,17 +61,24 @@ class ServerGatherer {
             port: server.port,
             os: createOperatingSystem(osBean),
             diskRootsSpace: createDiskRootsSpace(diskRootsSpace),
-            apache2Id: servicesBean.getApache2ProccessId(),
-            mysqlId: servicesBean.getMysqlProccessId(),
-            iisId: servicesBean.getIISProccessId(),
-            tomcatId: servicesBean.getApacheTomcatProccessId(),
-            winServicesStatus: retrieveWinServicesStatus(mbeanServerConnection),
+            activeServices: createActiveServices(servicesBean),
             cpuStats: createCpuStats(cpuInfoBean.getStats()),
             memStats: createMemStats(memInfoBean.getStats()),
             netStats: createNetStats(netInfoBean.getStats()),
             uptimeStats: createUptimeStats(uptimeInfoBean.getStats()),
             wholistStats: createWholistStats(wholistInfoBean.getStats())
         ]
+    }
+
+    private createActiveServices(servicesBean){
+        new ActiveServices(apache: servicesBean.getApache2ProccessId() != -1 ? true : false,
+                            mysql: servicesBean.getMysqlProccessId() != -1 ? true : false,
+                            iis: servicesBean.getIISProccessId() != -1 ? true : false,
+                            tomcat: servicesBean.getApacheTomcatProccessId() != -1 ? true : false,
+                            ftp: false,
+                            http: false,
+                            oracle: false,
+                            sql: false)
     }
 
     private createWholistStats(statsBean){

@@ -82,9 +82,21 @@ class ServerStatsRepositorySpec extends Specification {
                               createMemStats(),
                               createNetStats(),
                               createUptimeStats(),
-                              createWholistStats())
+                              createWholistStats(),
+                              createActiveServices())
         stats.creationDate = Date.parse( "yyyy-MM-dd'T'HH:mm:ss", "2016-03-04T19:${creationDateMinute}:00" )
         return stats
+    }
+
+    private createActiveServices(){
+        new ActiveServices(apache: false,
+                            mysql: false,
+                            iis: false,
+                            tomcat: false,
+                            ftp: false,
+                            http: false,
+                            oracle: false,
+                            sql: false)
     }
 
     private createWholistStats(){
