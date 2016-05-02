@@ -75,7 +75,7 @@ window.mallotore = window.mallotore || {};
 			return [who.user, hours];
 		});
 		var xSeriesData = _.map(whoListStats, function(who) {
-			return [who.user];
+			return [(who.user + "-" + who.device)];
 		});
 		var domId = 'whoList_' + server.id;
 		var name = 'Usuarios conectados';
