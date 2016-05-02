@@ -15,7 +15,7 @@
                     <tbody id="serverConfigurationTable">
                         <tr>
                             <td style="border: none;" colspan="2">
-                                <div style="margin-left: 10px; float: left;" id="temperature"></div>
+                                <div id="temperature" style="height: 250px;"></div>
                             </td>
                         </tr>
                         <g:each var="server" in="${servers}">
