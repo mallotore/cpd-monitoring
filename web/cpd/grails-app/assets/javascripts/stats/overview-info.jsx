@@ -107,14 +107,14 @@ window.mallotore = window.mallotore || {};
                     <div>
                         <h5>Servicios activos</h5>
                         <ul>
-                            <li>apache: {activeServices.apache ? 'Activado' : 'Desativado'}</li>
-                            <li>mysql: {activeServices.mysql ? 'Activado' : 'Desativado'}</li>
-                            <li>oracle: {activeServices.oracle ? 'Activado' : 'Desativado'}</li>
-                            <li>sql: {activeServices.sql ? 'Activado' : 'Desativado'}</li>
-                            <li>http: {activeServices.http ? 'Activado' : 'Desativado'}</li>
-                            <li>ftp: {activeServices.ftp ? 'Activado' : 'Desativado'}</li>
-                            <li>tomcat: {activeServices.tomcat ? 'Activado' : 'Desativado'}</li>
-                            <li>iis: {activeServices.iis ? 'Activado' : 'Desativado'}</li>
+                            <li><strong>Apache: </strong><span style={{background: activeServices.apache ? 'green' : 'red'}}>{activeServices.apache ? 'Activado' : 'Desativado'}</span></li>
+                            <li><strong>Mysql: </strong><span style={{background: activeServices.mysql ? 'green' : 'red'}}>{activeServices.mysql ? 'Activado' : 'Desativado'}</span></li>
+                            <li><strong>Oracle: </strong> <span style={{background: activeServices.oracle ? 'green' : 'red'}}>{activeServices.oracle ? 'Activado' : 'Desativado'}</span></li>
+                            <li><strong>SQL Server: </strong> <span style={{background: activeServices.sql ? 'green' : 'red'}}>{activeServices.sql ? 'Activado' : 'Desativado'}</span></li>
+                            <li><strong>Http: </strong> <span style={{background: activeServices.http ? 'green' : 'red'}}>{activeServices.http ? 'Activado' : 'Desativado'}</span></li>
+                            <li><strong>Ftp: </strong> <span style={{background: activeServices.ftp ? 'green' : 'red'}}>{activeServices.ftp ? 'Activado' : 'Desativado'}</span></li>
+                            <li><strong>Tomcat: </strong> <span style={{background: activeServices.tomcat ? 'green' : 'red'}}>{activeServices.tomcat ? 'Activado' : 'Desativado'}</span></li>
+                            <li><strong>IIS: </strong> <span style={{background: activeServices.iis ? 'green' : 'red'}}>{activeServices.iis ? 'Activado' : 'Desativado'}</span></li>
                         </ul>
                     </div>
                    );
