@@ -107,8 +107,7 @@ class ServerStatsRepositorySpec extends Specification {
     }
 
     private createUptimeStats(){
-        return new UptimeStats(uptime:"34",
-                            loadAverage: "12")
+        return new UptimeStats(uptime:"34")
     }
 
 

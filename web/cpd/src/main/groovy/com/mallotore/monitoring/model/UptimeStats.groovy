@@ -5,5 +5,4 @@ import groovy.transform.Immutable
 @Immutable(copyWith = true)
 class UptimeStats {
     String uptime
-    String loadAverage
 }

@@ -91,8 +91,7 @@ class ServerGatherer {
     }
 
     private createUptimeStats(stats){
-        return new UptimeStats(uptime: stats.uptime,
-                            loadAverage: stats.loadAverage)
+        return new UptimeStats(uptime: stats.uptime)
     }
 
     private createNetStats(stats){

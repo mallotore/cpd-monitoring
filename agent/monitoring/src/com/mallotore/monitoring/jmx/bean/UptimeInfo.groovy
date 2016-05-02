@@ -28,21 +28,7 @@ class UptimeInfo {
 
     void refreshInformation(){
         double uptime = sigar.getUptime().getUptime()
-        stats = new UptimeStats(uptime: formatUptime(uptime),
-                            loadAverage: loadAverage())
-    }
-
-    private loadAverage(){
-        double[] avg = sigar.getLoadAverage()
-        try {
-            def loadAvg
-            loadAvg[0] = new Double(avg[0])
-            loadAvg[1] = new Double(avg[1])
-            loadAvg[2] = new Double(avg[2])
-            return loadAvg
-        }catch(all){
-             return "(load average unknown)"
-        }
+        stats = new UptimeStats(uptime: formatUptime(uptime))
     }
 
     private static String formatUptime(double uptime) {
