@@ -4,6 +4,8 @@ import org.hyperic.sigar.ProcMem
 import org.hyperic.sigar.Sigar
 import org.hyperic.sigar.ptql.ProcessFinder
 
+import  com.mallotore.monitoring.jmx.service.*
+
 class ServicesStatus {
     
     static final APACHE2 = '^(https?d.*|[Aa]pache2?)$'
@@ -13,10 +15,15 @@ class ServicesStatus {
     static final ORACLE_LINUX = "oracle"
     static final MYSQL = "mysqld"
     static final TOMCAT = "org.apache.catalina"
+    static final LOCALHOST = "127.0.0.1"
+    static final HTTP_PORT = 80
+    static final FTP_PORT = 21
+    static final FOUND = 1111
     static final NOT_FOUND = -1
     
     private final sigar
     private final finder
+    private final listeningPortChecker
 
     long appache2ProccesId
     long appacheTomcatProccesId
@@ -30,6 +37,7 @@ class ServicesStatus {
     def ServicesStatus(){
         sigar = new Sigar()
         finder = new ProcessFinder(sigar)
+        listeningPortChecker = new ListeningPortChecker()
     }
     
     long getApache2ProccessId(){
@@ -65,16 +73,14 @@ class ServicesStatus {
 
     long getFtpProccesId(){
         ftpProccesId = tryToFindProcess(){
-            //sin implementar
-            finder.findSingleProcess("State.Name.sw=java,Args.*.ct=${TOMCAT}")    
+            listeningPortChecker.serverListening(LOCALHOST, FTP_PORT) ? FOUND : NOT_FOUND
         }
         ftpProccesId
     }
 
     long getHttpProccesId(){
         httpProccesId = tryToFindProcess(){
-            //sin implementar
-            finder.findSingleProcess("State.Name.sw=java,Args.*.ct=${TOMCAT}")    
+            listeningPortChecker.serverListening(LOCALHOST, HTTP_PORT) ? FOUND : NOT_FOUND
         }
         httpProccesId
     }
@@ -111,5 +117,3 @@ class ServicesStatus {
         }
     }
 }
-
-
