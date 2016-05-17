@@ -12,9 +12,11 @@ class ServerProbeJobService{
 	def probe(server){
 		try{
 	        def serverStats = serverGatherer.gatherServerStats(server)
-	        if(serverStats.error && server.connectivityAlert){
-	        	sendConnectivityAlert(server, serverStats.error)
-	        	return
+	        if(serverStats.error){
+	        	if(server.connectivityAlert){
+		        	sendConnectivityAlert(server, serverStats.error)
+		        }
+		        return
 	        }
         	def stats = new ServerStats(serverStats.ip,
 			                            serverStats.os,
@@ -30,6 +32,7 @@ class ServerProbeJobService{
         	if(server.diskPercentageAlert){
         		checkDiskSpaceAlert(server, stats.diskRootsSpace)
         	}
+
 		}catch(all){
 			log.error("${all}")
 		}
