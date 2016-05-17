@@ -102,13 +102,13 @@ window.mallotore = window.mallotore || {};
 			}
 
 			function createRamStats(creationDate, serverStats){
-				ramStats[0].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.memFree)]);
-				ramStats[1].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.memUsed)]);
+				ramStats[0].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.memUsed)]);
+				ramStats[1].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.memFree)]);
 			}
 
 			function createSwapStats(creationDate, serverStats){
-				swapStats[0].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.swapFree)]);
-				swapStats[1].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.swapUsed)]);
+				swapStats[0].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.swapUsed)]);
+				swapStats[1].data.push([creationDate, bytesFormatter.formatToGB(serverStats.memStats.swapFree)]);
 			}
 
 			function createCpuStats(creationDate, serverStats){
