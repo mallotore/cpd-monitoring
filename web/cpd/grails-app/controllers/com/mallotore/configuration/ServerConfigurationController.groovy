@@ -11,6 +11,11 @@ class ServerConfigurationController {
     def serverProbeSchedulerService
 
     def create(ServerDto serverDto){
+        if (!serverDto.validate()) {
+            response.status = 400
+            render([errors: serverDto.errors.allErrors] as JSON)
+            return
+        }
 		def server = new ServerConfiguration([name: serverDto.name,
 											ip:serverDto.ip,
 											port: serverDto.port,
@@ -32,6 +37,11 @@ class ServerConfigurationController {
     }
 
     def edit(ServerDto serverDto){
+        if (!serverDto.validate()) {
+            response.status = 400
+            render([errors: serverDto.errors.allErrors] as JSON)
+            return
+        }
     	def server = new ServerConfiguration([id: serverDto.id,
 											name: serverDto.name,
 											ip:serverDto.ip,
