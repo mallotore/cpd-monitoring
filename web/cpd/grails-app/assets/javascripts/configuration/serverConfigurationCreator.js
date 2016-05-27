@@ -3,6 +3,7 @@ window.mallotore = window.mallotore || {};
 (function(mallotore){
 
 	function ServerConfigurationCreator(view, notifier, client){
+		var validator = mallotore.servers.createServerConfigurationValidator();
 		var addedServerHandler = function(){};
 		view.subscribeToAddServerRequestedEvent(addServerRequestedHandler);
 		view.subscribeToShowAddServerRequestedEvent(showAddServerRequestedHandler);
@@ -13,6 +14,9 @@ window.mallotore = window.mallotore || {};
 		};
 
 		function addServerRequestedHandler(server){
+			if(!validator.validate(server)){
+				return;
+			}
 			client.post("/configuration/servers", server, successCallback, errorCallback);
 			return;
 
@@ -103,7 +107,7 @@ window.mallotore = window.mallotore || {};
 					probeInterval: $("#probeInterval_addNewServer").val(),
 					diskPercentageAlert: $("#diskSpaceAlert_addNewServer").val(),
 					connectivityAlert: $("#connectivityAlert_addNewServer").prop('checked')
-				}
+				};
 				addServerRequestedHandler(server);
 			});
 		}

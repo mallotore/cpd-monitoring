@@ -3,6 +3,7 @@ window.mallotore = window.mallotore || {};
 (function(mallotore){
 
 	function ServerConfigurationEditor(editableView, readOnlyView, notifier, client){
+		var validator = mallotore.servers.createServerConfigurationValidator();
 		editableView.subscribeToShowEditServerRequestedEvent(showEditHandler);
 		editableView.subscribeToEditServerRequestedEvent(editServerHandler);
 		editableView.subscribeToDeleteServerRequestedEvent(deleteServerHandler);
@@ -20,6 +21,9 @@ window.mallotore = window.mallotore || {};
 		}
 		function editServerHandler(id){
 			var server = editableView.getServerConfiguration(id);
+			if(!validator.validate(server)){
+				return;
+			}
 			client.put("/configuration/servers/edit".replace("${id}", id), server, successCallback, errorCallback);
 			return;
 
