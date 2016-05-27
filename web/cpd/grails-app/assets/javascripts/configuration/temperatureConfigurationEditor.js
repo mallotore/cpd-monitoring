@@ -3,6 +3,7 @@ window.mallotore = window.mallotore || {};
 (function(mallotore){
 
 	function TemperatureConfigurationEditorPresenter(view, notifier, client){
+		var validator = mallotore.temperature.createTemperatureConfigurationValidator();
 		var editedTemperatureIntervalEventHandler = function(){};
 		view.subscribeToEditTemperatureIntervalRequestedEvent(editTemperatureIntervalHandler);
 
@@ -12,6 +13,9 @@ window.mallotore = window.mallotore || {};
 				overTemperatureAlert: temperature.overTemperatureAlert,
 			    connectivityAlert: temperature.connectivityAlert
 			};
+			if(!validator.validate(temperatureRequest)){
+				return;
+			}
 			client.put("/configuration/temperature/edit", temperatureRequest, successCallback, errorCallback);
 			return;
 
