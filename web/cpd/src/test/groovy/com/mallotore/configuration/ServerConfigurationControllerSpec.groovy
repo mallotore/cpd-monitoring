@@ -13,6 +13,22 @@ class ServerConfigurationControllerSpec extends Specification {
         controller.serverProbeSchedulerService = Mock(ServerProbeSchedulerService)
     }
 
+    def "response is bad request when configuration creation is not valid"() {
+        when:
+        request.method = 'POST'
+        def serverDto = new ServerDto(name: "local", 
+                                    ip: "127.0.0.1", 
+                                    port: 1617, 
+                                    probeInterval: 0,
+                                    connectivityAlert: false,
+                                    diskPercentageAlert: 20)
+        controller.create(serverDto)
+
+        then:
+        response.status == 400
+        response.json.errors != null
+    }
+
     def "creates a server scheduling a server probe"() {
         when:
         request.method = 'POST'
@@ -48,6 +64,22 @@ class ServerConfigurationControllerSpec extends Specification {
         response.json.server.probeInterval == 60
         response.json.server.connectivityAlert == false
         response.json.server.diskPercentageAlert == 20
+    }
+
+    def "response is bad request when configuration edition is not valid"() {
+        when:
+        request.method = 'PUT'
+        def serverDto = new ServerDto(name: "local", 
+                                    ip: "127.0.0.1", 
+                                    port: 1617, 
+                                    probeInterval: 0,
+                                    connectivityAlert: false,
+                                    diskPercentageAlert: 20)
+        controller.edit(serverDto)
+
+        then:
+        response.status == 400
+        response.json.errors != null
     }
 
     def "edits a server"() {

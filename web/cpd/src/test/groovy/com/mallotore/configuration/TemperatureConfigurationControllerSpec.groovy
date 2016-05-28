@@ -13,6 +13,17 @@ class TemperatureConfigurationControllerSpec  extends Specification {
         controller.temperatureProbeSchedulerService = Mock(TemperatureProbeSchedulerService)
     }
 
+    def "response is bad request when configuration creation is not valid"() {
+        when:
+        request.method = 'POST'
+        def dto = new TemperatureDto(probeIntervalInSeconds: 0)
+        controller.create(dto)
+
+        then:
+        response.status == 400
+        response.json.errors != null
+    }
+
     def "creates a temperature probe interval"() {
         when:
         request.method = 'POST'
@@ -31,6 +42,17 @@ class TemperatureConfigurationControllerSpec  extends Specification {
                                             connectivityAlert:false,
                                             overTemperatureAlert:0))
         response.json.result == "ok"
+    }
+
+    def "response is bad request when configuration edition is not valid"() {
+        when:
+        request.method = 'PUT'
+        def dto = new TemperatureDto(probeIntervalInSeconds: 0)
+        controller.edit(dto)
+
+        then:
+        response.status == 400
+        response.json.errors != null
     }
 
     def "edits a temperature probe interval"() {

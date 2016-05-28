@@ -11,6 +11,11 @@ class TemperatureConfigurationController {
     def temperatureProbeSchedulerService
 
     def create(TemperatureDto temperature){
+        if (!temperature.validate()) {
+            response.status = 400
+            render([errors: temperature.errors.allErrors] as JSON)
+            return
+        }
         def temperatureConfiguration = new TemperatureConfiguration(
                                                 probeIntervalInSeconds: temperature.probeIntervalInSeconds,
                                                 connectivityAlert: temperature.connectivityAlert,
@@ -21,6 +26,11 @@ class TemperatureConfigurationController {
     }
 
     def edit(TemperatureDto temperature){
+        if (!temperature.validate()) {
+            response.status = 400
+            render([errors: temperature.errors.allErrors] as JSON)
+            return
+        }
         def temperatureConfiguration = new TemperatureConfiguration(
                                                 probeIntervalInSeconds: temperature.probeIntervalInSeconds,
                                                 connectivityAlert: temperature.connectivityAlert,

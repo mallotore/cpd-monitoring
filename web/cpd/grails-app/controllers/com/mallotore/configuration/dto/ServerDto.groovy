@@ -12,6 +12,7 @@ class ServerDto implements Validateable{
     int diskPercentageAlert
 
     static constraints = {
+        id nullable: true
         name blank: false, unique: true
         ip blank: false, unique: true
         probeInterval min: 30, max: Integer.MAX_VALUE
